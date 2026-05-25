@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delyar – Fitness Master Plan 2026–2027</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero-tag">MASTER FITNESS PLAN — Delyar — 2026→2027</div>
+    <h1>Delyar FITNESS</h1>
+    <div class="hero-sub" id="hero-sub">خطتك الكاملة | الصالة + كاليستانيكس + ماراتون</div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val gym">94</div><div class="stat-lbl">KG CURRENT</div></div>
+    <div class="stat"><div class="stat-val cal">31.4</div><div class="stat-lbl">BMI</div></div>
+    <div class="stat"><div class="stat-val run">11</div><div class="stat-lbl">MONTHS TO MARATHON</div></div>
+    <div class="stat"><div class="stat-val food">~75</div><div class="stat-lbl">KG TARGET</div></div>
+    <div class="stat"><div class="stat-val gym">173</div><div class="stat-lbl">CM HEIGHT</div></div>
+    <div class="stat"><div class="stat-val run">42.2</div><div class="stat-lbl">KM MARATHON</div></div>
+  </div>
+
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('ar', this)">🇸🇦 عربي</button>
+    <button class="lang-btn" onclick="setLang('de', this)">🇩🇪 Deutsch</button>
+    <button class="lang-btn" onclick="setLang('en', this)">🇬🇧 English</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="setTab('overview')" id="tab-overview">
+      <span data-lang-inline="ar" class="show">نظرة عامة</span>
+      <span data-lang-inline="de">Überblick</span>
+      <span data-lang-inline="en">Overview</span>
+    </button>
+    <button class="tab" onclick="setTab('weekly')" id="tab-weekly">
+      <span data-lang-inline="ar" class="show">الجدول الأسبوعي</span>
+      <span data-lang-inline="de">Wochenplan</span>
+      <span data-lang-inline="en">Weekly Schedule</span>
+    </button>
+    <button class="tab" onclick="setTab('exercises')" id="tab-exercises">
+      <span data-lang-inline="ar" class="show">التمارين</span>
+      <span data-lang-inline="de">Übungen</span>
+      <span data-lang-inline="en">Exercises</span>
+    </button>
+    <button class="tab" onclick="setTab('nutrition')" id="tab-nutrition">
+      <span data-lang-inline="ar" class="show">التغذية</span>
+      <span data-lang-inline="de">Ernährung</span>
+      <span data-lang-inline="en">Nutrition</span>
+    </button>
+    <button class="tab" onclick="setTab('marathon')" id="tab-marathon">
+      <span data-lang-inline="ar" class="show">الماراثون</span>
+      <span data-lang-inline="de">Marathon</span>
+      <span data-lang-inline="en">Marathon</span>
+    </button>
+    <button class="tab" onclick="setTab('budget')" id="tab-budget">
+      <span data-lang-inline="ar" class="show">الميزانية</span>
+      <span data-lang-inline="de">Budget</span>
+      <span data-lang-inline="en">Budget</span>
+    </button>
+  </div>
+
+  <div class="section active" id="sec-overview">
+    <div class="content">
+      <div class="show" data-lang="ar">
+        <div class="sec-title">المراحل الأربع</div>
+        <div class="sec-sub">خطتك مقسمة على 4 مراحل تدريجية على مدى 11 شهراً</div>
+        <div class="timeline">
+          <div class="phase p1">
+            <div class="phase-num">01</div>
+            <div class="phase-label">المرحلة الأولى</div>
+            <h3>إعادة التأهيل</h3>
+            <p>مايو – يوليو 2026 (3 أشهر)<br>إعادة الجسم للتمرين، بناء قاعدة عضلية، خسارة أولى للدهون. 4 أيام في الأسبوع.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--gym)"></div></div>
+          </div>
+          <div class="phase p2">
+            <div class="phase-num">02</div>
+            <div class="phase-label">المرحلة الثانية</div>
+            <h3>البناء + الجري</h3>
+            <p>أغسطس – أكتوبر 2026 (3 أشهر)<br>تكثيف الكاليستانيكس، إضافة الجري 3×/أسبوع، 5 أيام تدريب.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--cal)"></div></div>
+          </div>
+          <div class="phase p3">
+            <div class="phase-num">03</div>
+            <div class="phase-label">المرحلة الثالثة</div>
+            <h3>التحضير للماراثون</h3>
+            <p>نوفمبر 2026 – فبراير 2027 (4 أشهر)<br>التركيز على الجري التدريجي، الحجم الأسبوعي يرتفع من 25 إلى 45 كم.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--run)"></div></div>
+          </div>
+          <div class="phase p4">
+            <div class="phase-num">04</div>
+            <div class="phase-label">المرحلة الرابعة</div>
+            <h3>التحديد والسباق</h3>
+            <p>مارس – أبريل 2027 (2 شهر)<br>تقليل الحجم، الحفاظ على القوة، التحضير النفسي والغذائي للماراثون.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--food)"></div></div>
+          </div>
+        </div>
+        <div class="sec-title">المبادئ الأساسية</div>
+        <div class="tip"><div class="tip-icon">🔥</div><div class="tip-text"><strong>عجز السعرات:</strong> هدفك خسارة 0.5-0.8 كغ في الأسبوع. لا تقل عن 1800 سعرة يومياً لأن التدريب عالٍ.</div></div>
+        <div class="tip"><div class="tip-icon">💧</div><div class="tip-text"><strong>الماء:</strong> 3-4 لتر يومياً على الأقل. في أيام الجري ارفع إلى 4-5 لتر مع إلكتروليت.</div></div>
+        <div class="tip"><div class="tip-icon">😴</div><div class="tip-text"><strong>النوم:</strong> 7-9 ساعات إلزامية. عضلاتك تنمو أثناء النوم، لا أثناء التمرين.</div></div>
+        <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>القياسات:</strong> زن نفسك مرة بالأسبوع صباح الإثنين على معدة فارغة. قس محيط البطن كل شهر.</div></div>
+        <div class="tip"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>الألم:</strong> تعب العضلة = طبيعي. ألم في المفاصل أو الأوتار = توقف وراجع طبيباً. الفرق مهم جداً.</div></div>
+      </div>
+      <div data-lang="de">
+        <div class="sec-title">DIE VIER PHASEN</div>
+        <div class="sec-sub">Dein Plan ist in 4 progressive Phasen über 11 Monate aufgeteilt</div>
+        <div class="timeline">
+          <div class="phase p1">
+            <div class="phase-num">01</div>
+            <div class="phase-label">Phase 1</div>
+            <h3>Rehabilitation</h3>
+            <p>Mai – Juli 2026 (3 Monate)<br>Körper ans Training gewöhnen, Muskelgrundlage aufbauen, erster Fettverlust. 4 Tage/Woche.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--gym)"></div></div>
+          </div>
+          <div class="phase p2">
+            <div class="phase-num">02</div>
+            <div class="phase-label">Phase 2</div>
+            <h3>Aufbau + Laufen</h3>
+            <p>Aug – Okt 2026 (3 Monate)<br>Calisthenics intensivieren, Laufen 3×/Woche hinzufügen, 5 Trainingstage.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--cal)"></div></div>
+          </div>
+          <div class="phase p3">
+            <div class="phase-num">03</div>
+            <div class="phase-label">Phase 3</div>
+            <h3>Marathon-Vorbereitung</h3>
+            <p>Nov 2026 – Feb 2027 (4 Monate)<br>Fokus auf progressives Laufen, Wochenvolumen steigt von 25 auf 45 km.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--run)"></div></div>
+          </div>
+          <div class="phase p4">
+            <div class="phase-num">04</div>
+            <div class="phase-label">Phase 4</div>
+            <h3>Tapering & Rennen</h3>
+            <p>März – April 2027 (2 Monate)<br>Volumen pflegen, Kraft erhalten, mentale und ernährungstechnische Vorbereitung.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--food)"></div></div>
+          </div>
+        </div>
+        <div class="sec-title">GRUNDPRINZIPIEN</div>
+        <div class="tip"><div class="tip-icon">🔥</div><div class="tip-text"><strong>Kaloriendefizit:</strong> Ziel: 0,5-0,8 kg Verlust pro Woche. Niemals unter 1800 kcal/Tag, da das Training intensiv ist.</div></div>
+        <div class="tip"><div class="tip-icon">💧</div><div class="tip-text"><strong>Wasser:</strong> Mindestens 3-4 Liter täglich. An Lauftagen 4-5 Liter mit Elektrolyten.</div></div>
+        <div class="tip"><div class="tip-icon">😴</div><div class="tip-text"><strong>Schlaf:</strong> 7-9 Stunden sind Pflicht. Muskeln wachsen im Schlaf, nicht beim Training.</div></div>
+        <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>Messungen:</strong> Jeden Montag morgens nüchtern wiegen. Bauchumfang monatlich messen.</div></div>
+        <div class="tip"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>Schmerz:</strong> Muskelermüdung = normal. Gelenk- oder Sehnenschmerz = stoppen und Arzt aufsuchen. Der Unterschied ist extrem wichtig.</div></div>
+      </div>
+      <div data-lang="en">
+        <div class="sec-title">THE FOUR PHASES</div>
+        <div class="sec-sub">Your plan is split into 4 progressive phases over 11 months</div>
+        <div class="timeline">
+          <div class="phase p1">
+            <div class="phase-num">01</div>
+            <div class="phase-label">Phase 1</div>
+            <h3>Rehabilitation</h3>
+            <p>May – Jul 2026 (3 months)<br>Re-introduce body to training, build muscle base, initial fat loss. 4 days/week.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--gym)"></div></div>
+          </div>
+          <div class="phase p2">
+            <div class="phase-num">02</div>
+            <div class="phase-label">Phase 2</div>
+            <h3>Build + Run</h3>
+            <p>Aug – Oct 2026 (3 months)<br>Intensify calisthenics, add running 3×/week, 5 training days.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--cal)"></div></div>
+          </div>
+          <div class="phase p3">
+            <div class="phase-num">03</div>
+            <div class="phase-label">Phase 3</div>
+            <h3>Marathon Prep</h3>
+            <p>Nov 2026 – Feb 2027 (4 months)<br>Focus on progressive running, weekly volume rises from 25 to 45 km.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--run)"></div></div>
+          </div>
+          <div class="phase p4">
+            <div class="phase-num">04</div>
+            <div class="phase-label">Phase 4</div>
+            <h3>Taper & Race</h3>
+            <p>Mar – Apr 2027 (2 months)<br>Reduce volume, maintain strength, mental and nutritional marathon prep.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--food)"></div></div>
+          </div>
+        </div>
+        <div class="sec-title">CORE PRINCIPLES</div>
+        <div class="tip"><div class="tip-icon">🔥</div><div class="tip-text"><strong>Calorie deficit:</strong> Target 0.5-0.8 kg loss per week. Never go below 1800 kcal/day given high training load.</div></div>
+        <div class="tip"><div class="tip-icon">💧</div><div class="tip-text"><strong>Water:</strong> 3-4 liters daily minimum. On running days push to 4-5 liters with electrolytes.</div></div>
+        <div class="tip"><div class="tip-icon">😴</div><div class="tip-text"><strong>Sleep:</strong> 7-9 hours mandatory. Muscles grow during sleep, not during training.</div></div>
+        <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>Measurements:</strong> Weigh every Monday morning fasted. Measure waist circumference monthly.</div></div>
+        <div class="tip"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>Pain:</strong> Muscle fatigue = normal. Joint or tendon pain = stop and see a doctor. The difference is vital.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-weekly">
+    <div class="content">
+      <div class="show" data-lang="ar">
+        <div class="sec-title">المرحلة 1: الجدول الأسبوعي</div>
+        <div class="sec-sub">مايو – يوليو 2026 · 4 أيام تمرين + 3 راحة</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session gym">🏋️ صالة<br>صدر + ترايسبس</span></div></div>
+          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>تمهيدي</span></div></div>
+          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session rest">😴 راحة نشطة<br>مشي 30 دق</span></div></div>
+          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session gym">🏋️ صالة<br>ظهر + بايسبس</span></div></div>
+          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session gym">🏋️ صالة<br>أرجل + أكتاف</span></div></div>
+          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
+          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة / تمدد</span></div></div>
+        </div>
+        <div class="sec-title">المرحلة 2: الجدول الأسبوعي</div>
+        <div class="sec-sub">أغسطس – أكتوبر 2026 · 5 أيام تمرين</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session gym">🏋️ صالة<br>أعلى الجسم</span></div></div>
+          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session run">🏃 جري<br>5-8 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>متوسط</span></div></div>
+          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session run">🏃 جري<br>6-10 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session gym">🏋️ صالة<br>أسفل الجسم</span></div></div>
+          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session run">🏃 جري طويل<br>12-16 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
+        </div>
+        <div class="sec-title">المرحلة 3: الجدول الأسبوعي</div>
+        <div class="sec-sub">نوفمبر 2026 – فبراير 2027 · التركيز على الجري</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session rest">😴 راحة نشطة</span></div></div>
+          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session run">🏃 جري متوسط<br>8-12 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session gym">🏋️ صالة<br>قوة (خفيف)</span></div></div>
+          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session run">🏃 إيقاع سريع<br>6-8 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>للمحافظة</span></div></div>
+          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session run">🏃 الجري الطويل<br>18-32 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
+        </div>
+        <div class="sec-title">المرحلة 4: الجدول الأسبوعي</div>
+        <div class="sec-sub">مارس – أبريل 2027 · تقليل الحجم والتحضير</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session rest">😴 راحة نشطة</span></div></div>
+          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session run">🏃 جري قصير<br>6-8 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session gym">🏋️ صالة<br>قوة خفيفة</span></div></div>
+          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session run">🏃 جري إيقاعي<br>6 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>المحافظة</span></div></div>
+          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session run">🏃 جري متوسط<br>10-18 كم</span></div></div>
+          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
+        </div>
+      </div>
+      <div data-lang="de">
+        <div class="sec-title">PHASE 1: WOCHENPLAN</div>
+        <div class="sec-sub">Mai – Juli 2026 · 4 Trainingstage + 3 Ruhetage</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Brust + Trizeps</span></div></div>
+          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Anfänger</span></div></div>
+          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session rest">😴 Aktive Erholung<br>30 Min Spazieren</span></div></div>
+          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Rücken + Bizeps</span></div></div>
+          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Beine + Schultern</span></div></div>
+          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
+          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Ruhe / Dehnen</span></div></div>
+        </div>
+        <div class="sec-title">PHASE 2: WOCHENPLAN</div>
+        <div class="sec-sub">August – Oktober 2026 · 5 Trainingstage</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Oberkörper</span></div></div>
+          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session run">🏃 Laufen<br>5-8 km</span></div></div>
+          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Mittel</span></div></div>
+          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session run">🏃 Laufen<br>6-10 km</span></div></div>
+          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Unterkörper</span></div></div>
+          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session run">🏃 Langer Lauf<br>12-16 km</span></div></div>
+          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
+        </div>
+        <div class="sec-title">PHASE 3: WOCHENPLAN</div>
+        <div class="sec-sub">Nov 2026 – Feb 2027 · Fokus Laufen</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session rest">😴 Aktive Erholung</span></div></div>
+          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session run">🏃 Laufen<br>8-12 km</span></div></div>
+          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Kraft (leicht)</span></div></div>
+          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session run">🏃 Tempo<br>6-8 km</span></div></div>
+          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Erhaltung</span></div></div>
+          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session run">🏃 Langer Lauf<br>18-32 km</span></div></div>
+          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
+        </div>
+        <div class="sec-title">PHASE 4: WOCHENPLAN</div>
+        <div class="sec-sub">März – April 2027 · Tapering / Erholung</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session rest">😴 Aktive Erholung</span></div></div>
+          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session run">🏃 Kurzer Lauf<br>6-8 km</span></div></div>
+          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Kraft (leicht)</span></div></div>
+          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session run">🏃 Kurzer Tempo<br>6 km</span></div></div>
+          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Erhaltung</span></div></div>
+          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session run">🏃 Mittlerer Lauf<br>10-18 km</span></div></div>
+          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
+        </div>
+      </div>
+      <div data-lang="en">
+        <div class="sec-title">PHASE 1: WEEKLY SCHEDULE</div>
+        <div class="sec-sub">May – July 2026 · 4 training days + 3 rest days</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Chest + Triceps</span></div></div>
+          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Beginner</span></div></div>
+          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session rest">😴 Active Rest<br>30 min walk</span></div></div>
+          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Back + Biceps</span></div></div>
+          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Legs + Shoulders</span></div></div>
+          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
+          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Rest / Stretch</span></div></div>
+        </div>
+        <div class="sec-title">PHASE 2: WEEKLY SCHEDULE</div>
+        <div class="sec-sub">August – October 2026 · 5 training days</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Upper Body</span></div></div>
+          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session run">🏃 Run<br>5-8 km</span></div></div>
+          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Intermediate</span></div></div>
+          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session run">🏃 Run<br>6-10 km</span></div></div>
+          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Lower Body</span></div></div>
+          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session run">🏃 Long Run<br>12-16 km</span></div></div>
+          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
+        </div>
+        <div class="sec-title">PHASE 3: WEEKLY SCHEDULE</div>
+        <div class="sec-sub">Nov 2026 – Feb 2027 · Focus on running</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session rest">😴 Active Rest</span></div></div>
+          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session run">🏃 Run<br>8-12 km</span></div></div>
+          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Strength (light)</span></div></div>
+          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session run">🏃 Tempo Run<br>6-8 km</span></div></div>
+          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Maintenance</span></div></div>
+          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session run">🏃 Long Run<br>18-32 km</span></div></div>
+          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
+        </div>
+        <div class="sec-title">PHASE 4: WEEKLY SCHEDULE</div>
+        <div class="sec-sub">Mar – Apr 2027 · Tapering / Recovery</div>
+        <div class="week-grid">
+          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session rest">😴 Active Rest</span></div></div>
+          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session run">🏃 Short Run<br>6-8 km</span></div></div>
+          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Strength (light)</span></div></div>
+          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session run">🏃 Short Tempo<br>6 km</span></div></div>
+          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Maintenance</span></div></div>
+          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session run">🏃 Medium Run<br>10-18 km</span></div></div>
+          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-exercises">
+    <div class="content">
+      <div class="show" data-lang="ar">
+        <div class="sec-title">تمارين الصالة</div>
+        <div class="sec-sub">المرحلة الأولى – ابدأ بأوزان خفيفة وركز على التقنية الصحيحة</div>
+        <div class="ex-grid">
+          <div class="ex-card"><div class="ex-type gym">صالة · صدر</div><div class="ex-name">بنش برس بالبار</div><div class="ex-detail">التمرين الأساسي للصدر. ظهرك على المقعد، قدماك على الأرض. انزل ببطء 3 ثوان، ادفع بقوة.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 تكرار</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · صدر</div><div class="ex-name">بنش برس بالدامبل</div><div class="ex-detail">مثل البار لكن بدامبل لمدى أعمق. مناسب لتصحيح عدم التوازن بين الجانبين.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 تكرار</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · ظهر</div><div class="ex-name">تجديف بالبار (Bent Row)</div><div class="ex-detail">انحنِ إلى 45 درجة، اسحب البار نحو السرة. حافظ على ظهر مستقيم. تمرين ملك الظهر.</div><div class="ex-sets"><span class="set-badge gym">4 × 8 تكرار</span><span class="set-badge gym">راحة 2 دق</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · ظهر</div><div class="ex-name">لات بول داون</div><div class="ex-detail">اسحب البار نحو الصدر لا نحو الرقبة. أهم تمرين لتوسيع الظهر وبناء V-shape.</div><div class="ex-sets"><span class="set-badge gym">4 × 10 تكرار</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · أرجل</div><div class="ex-name">سكوات بالبار</div><div class="ex-detail">الملك. ركبتيك على نفس اتجاه أصابع قدميك. انزل حتى الفخذ الموازي للأرض. الظهر دائماً مستقيم.</div><div class="ex-sets"><span class="set-badge gym">4 × 8 تكرار</span><span class="set-badge gym">راحة 2 دق</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · أرجل</div><div class="ex-name">ليغ برس</div><div class="ex-detail">بديل أسهل للسكوات في البداية. تذكر لا تقفل الركبة بالكامل في أعلى الحركة.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 تكرار</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · أكتاف</div><div class="ex-name">أوفرهيد برس</div><div class="ex-detail">اضغط الدامبل فوق الرأس. لا تقوس ظهرك للخلف. تمرين كامل للأكتاف والتريبس.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 تكرار</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">صالة · باي</div><div class="ex-name">كيبل كيرل</div><div class="ex-detail">اسحب الكيبل ببطء، عصر العضلة في الأعلى. لا تتأرجح بجسمك. تركيز كامل.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 تكرار</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
+        </div>
+        <div class="sec-title">تمارين الكاليستانيكس</div>
+        <div class="sec-sub">ابدأ بالإصدار التمهيدي وتقدم تدريجياً</div>
+        <div class="ex-grid">
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · صدر/ترايسبس</div><div class="ex-name">بوش آب (تدريجي)</div><div class="ex-detail">المرحلة 1: على الركب. المرحلة 2: قدم مرفوعة. المرحلة 3: بوش آب عادي. المرحلة 4: بطيء 3-1-3.</div><div class="ex-sets"><span class="set-badge cali">3-5 × ماكس</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · ظهر/باي</div><div class="ex-name">بول آب (تدريجي)</div><div class="ex-detail">المرحلة 1: تعليق 30 ثا. المرحلة 2: بول آب بمساعدة حزام. المرحلة 3: بول آب كامل. الهدف: 10 تكرارات.</div><div class="ex-sets"><span class="set-badge cali">4 × قدر المستطاع</span><span class="set-badge cali">راحة 2 دق</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كتف/ترايسبس</div><div class="ex-name">ديبس على الأرجل</div><div class="ex-detail">المرحلة 1: ديبس على كرسي مع قدم منحنية. المرحلة 2: قدم مستقيمة. المرحلة 3: بين قضيبين (بارالل بار).</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · أرجل</div><div class="ex-name">بيستول سكوات (تدريجي)</div><div class="ex-detail">المرحلة 1: سكوات على رجل واحدة ممسكاً بجدار. المرحلة 2: مع كرسي. المرحلة 3: بيستول كامل.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-10 كل رجل</span><span class="set-badge cali">راحة 2 دق</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">L-Sit (تدريجي)</div><div class="ex-detail">المرحلة 1: تعليق الركبتين. المرحلة 2: رجل واحدة ممدودة. المرحلة 3: L-Sit كامل. يقوي الكور والكتف.</div><div class="ex-sets"><span class="set-badge cali">3 × 10-30 ثا</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">بلانك تقدمي</div><div class="ex-detail">المرحلة 1: بلانك عادي. المرحلة 2: بلانك على يد واحدة. المرحلة 3: بلانك متحرك (أب ووك اوت).</div><div class="ex-sets"><span class="set-badge cali">3 × 30-60 ثا</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">رفع الساقين معلق</div><div class="ex-detail">المرحلة 1: رفع الركبتين. المرحلة 2: ساقان ممدودتان. المرحلة 3: رفع الساقين متحكمًا. يقوي أسفل البطن والورك.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
+        </div>
+      </div>
+      <div data-lang="de">
+        <div class="sec-title">KRAFTÜBUNGEN (GYM)</div>
+        <div class="sec-sub">Phase 1 – Mit leichten Gewichten beginnen, Technik perfektionieren</div>
+        <div class="ex-grid">
+          <div class="ex-card"><div class="ex-type gym">Gym · Brust</div><div class="ex-name">Bankdrücken (Langhantel)</div><div class="ex-detail">Rücken auf der Bank, Füße am Boden. 3 Sek. langsam runter, explosiv hoch. Grundübung Nummer 1.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 Wdh</span><span class="set-badge gym">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Brust</div><div class="ex-name">Bankdrücken (Kurzhantel)</div><div class="ex-detail">Ähnlich wie die Langhantel, aber mit Kurzhanteln für einen tieferen Bewegungsradius. Gut zum Ausgleichen von Asymmetrien.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 Wdh</span><span class="set-badge gym">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Rücken</div><div class="ex-name">Langhantelrudern (Bent Row)</div><div class="ex-detail">45° vorgebeugt, Stange zur Hüfte ziehen. Rücken immer gerade halten. König der Rückenübungen.</div><div class="ex-sets"><span class="set-badge gym">4 × 8 Wdh</span><span class="set-badge gym">2 Min Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Rücken</div><div class="ex-name">Latzug (Lat Pulldown)</div><div class="ex-detail">Stange zur Brust, nicht zum Nacken. Wichtigste Übung für breiten Rücken und V-Form.</div><div class="ex-sets"><span class="set-badge gym">4 × 10 Wdh</span><span class="set-badge gym">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Beine</div><div class="ex-name">Kniebeuge (Squat)</div><div class="ex-detail">Knie in Richtung Zehenspitzen. Oberschenkel parallel zum Boden. Rücken immer neutral. Die Königsübung.</div><div class="ex-sets"><span class="set-badge gym">4 × 8 Wdh</span><span class="set-badge gym">2 Min Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Beine</div><div class="ex-name">Beinpresse (Leg Press)</div><div class="ex-detail">Einfachere Alternative zum Squat am Anfang. Knie am Ende nie vollständig strecken.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 Wdh</span><span class="set-badge gym">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Schultern</div><div class="ex-name">Schulterdrücken (OHP)</div><div class="ex-detail">Hanteln über den Kopf drücken. Hohlkreuz vermeiden. Vollständige Schulter- und Trizepsaktivierung.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 Wdh</span><span class="set-badge gym">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Bizeps</div><div class="ex-name">Kabel-Curls</div><div class="ex-detail">Das Kabel langsam hochziehen, den Muskel oben anspannen. Nicht mit dem Körper schwingen. Voller Fokus.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 Wdh</span><span class="set-badge gym">60 Sek Pause</span></div></div>
+        </div>
+        <div class="sec-title">CALISTHENICS-ÜBUNGEN</div>
+        <div class="ex-grid">
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Brust</div><div class="ex-name">Liegestütze (progressiv)</div><div class="ex-detail">Stufe 1: Auf Knien. Stufe 2: Normaler Liegestütz. Stufe 3: 3-1-3 Tempo. Stufe 4: Archer Liegestütz.</div><div class="ex-sets"><span class="set-badge cali">3-5 × Max</span><span class="set-badge cali">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Rücken</div><div class="ex-name">Klimmzüge (progressiv)</div><div class="ex-detail">Stufe 1: 30 Sek hängen. Stufe 2: Mit Band. Stufe 3: Voller Klimmzug. Ziel: 10 Wiederholungen.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">2 Min Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Dips</div><div class="ex-name">Dips (progressiv)</div><div class="ex-detail">Stufe 1: Stuhldips mit angewinkeltem Bein. Stufe 2: Gestrecktes Bein. Stufe 3: Parallettes/zwischen Stangen. Fokus auf Brust/Trizeps.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Beine</div><div class="ex-name">Pistol Squat (progressiv)</div><div class="ex-detail">Stufe 1: Wandunterstützt. Stufe 2: Box-Pistol. Stufe 3: Voller Pistol Squat. Single-leg Stärke.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-10 pro Bein</span><span class="set-badge cali">2 Min Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">L-Sit (progressiv)</div><div class="ex-detail">Stufe 1: Knie angehängt. Stufe 2: Ein Bein gestreckt. Stufe 3: Voller L-Sit. Stärkt Core und Schultern.</div><div class="ex-sets"><span class="set-badge cali">3 × 10-30 Sek</span><span class="set-badge cali">90 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Progressive Plank</div><div class="ex-detail">Stufe 1: normale Plank. Stufe 2: einarmige Plank. Stufe 3: dynamische Plank (Auf- und Abwalk).</div><div class="ex-sets"><span class="set-badge cali">3 × 30-60 Sek</span><span class="set-badge cali">60 Sek Pause</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Hängendes Beinheben</div><div class="ex-detail">Stufe 1: Knieheben. Stufe 2: gestreckte Beine. Stufe 3: kontrolliertes Beinheben. Stärkt die unteren Bauchmuskeln und Hüftbeuger.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">60 Sek Pause</span></div></div>
+        </div>
+      </div>
+      <div data-lang="en">
+        <div class="sec-title">GYM EXERCISES</div>
+        <div class="sec-sub">Phase 1 – Start light, focus on perfect technique</div>
+        <div class="ex-grid">
+          <div class="ex-card"><div class="ex-type gym">Gym · Chest</div><div class="ex-name">Barbell Bench Press</div><div class="ex-detail">Back on bench, feet flat. Lower 3 seconds, drive explosively. The king of chest exercises.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 reps</span><span class="set-badge gym">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Chest</div><div class="ex-name">Dumbbell Bench Press</div><div class="ex-detail">Similar to the barbell version, but using dumbbells for a deeper range of motion. Great for fixing imbalances.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 reps</span><span class="set-badge gym">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Back</div><div class="ex-name">Bent-Over Barbell Row</div><div class="ex-detail">45° hinge, pull bar to navel. Neutral spine always. The king of back exercises.</div><div class="ex-sets"><span class="set-badge gym">4 × 8 reps</span><span class="set-badge gym">2 min rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Back</div><div class="ex-name">Lat Pulldown</div><div class="ex-detail">Pull bar to chest, not neck. Most important exercise for building back width and V-taper.</div><div class="ex-sets"><span class="set-badge gym">4 × 10 reps</span><span class="set-badge gym">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Legs</div><div class="ex-name">Barbell Back Squat</div><div class="ex-detail">Knees track over toes. Thigh parallel to floor. Neutral spine. The ultimate compound movement.</div><div class="ex-sets"><span class="set-badge gym">4 × 8 reps</span><span class="set-badge gym">2 min rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Legs</div><div class="ex-name">Leg Press</div><div class="ex-detail">Easier squat alternative early on. Never fully lock the knee at the top of the movement.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 reps</span><span class="set-badge gym">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Shoulders</div><div class="ex-name">Overhead Press (OHP)</div><div class="ex-detail">Press dumbbells overhead. Avoid excessive lower back arch. Full shoulder and triceps activation.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 reps</span><span class="set-badge gym">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type gym">Gym · Biceps</div><div class="ex-name">Cable Curl</div><div class="ex-detail">Pull the cable up slowly, squeeze the muscle at the top. Do not swing your body. Full concentration.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 reps</span><span class="set-badge gym">60 sec rest</span></div></div>
+        </div>
+        <div class="sec-title">CALISTHENICS EXERCISES</div>
+        <div class="ex-grid">
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Push</div><div class="ex-name">Push-Up (Progressive)</div><div class="ex-detail">Level 1: Knee push-ups. Level 2: Full push-ups. Level 3: 3-1-3 tempo. Level 4: Archer push-ups.</div><div class="ex-sets"><span class="set-badge cali">3-5 × Max</span><span class="set-badge cali">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Pull</div><div class="ex-name">Pull-Up (Progressive)</div><div class="ex-detail">Level 1: Dead hang 30s. Level 2: Band-assisted. Level 3: Full pull-up. Goal: 10 clean reps.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">2 min rest</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Dips</div><div class="ex-name">Dips (Progressive)</div><div class="ex-detail">Level 1: Chair dips with bent leg. Level 2: straight leg. Level 3: parallel bar dips. Focus: chest/triceps.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Legs</div><div class="ex-name">Pistol Squat (Progressive)</div><div class="ex-detail">Level 1: Wall-assisted. Level 2: Box pistol. Level 3: Full pistol squat. Elite single-leg strength.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-10 each</span><span class="set-badge cali">2 min rest</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">L-Sit (Progressive)</div><div class="ex-detail">Level 1: Tuck hold. Level 2: One leg extended. Level 3: Full L-sit. Builds core and shoulder stability.</div><div class="ex-sets"><span class="set-badge cali">3 × 10-30 sec</span><span class="set-badge cali">90 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Progressive Plank</div><div class="ex-detail">Level 1: regular plank. Level 2: one-arm plank. Level 3: moving plank (walk-outs).</div><div class="ex-sets"><span class="set-badge cali">3 × 30-60 sec</span><span class="set-badge cali">60 sec rest</span></div></div>
+          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Hanging Leg Raise</div><div class="ex-detail">Level 1: knee raise. Level 2: straight legs. Level 3: controlled leg raise. Strengthens lower abs and hips.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">60 sec rest</span></div></div>
+        </div>
+        <div class="sec-title">EQUIPMENT (WITH YOUR BUDGET)</div>
+        <ul class="checklist">
+          <li><strong>Running shoes:</strong> The most important item. Invest €80-120. Decathlon or Zalando sales are good. Bad shoes = higher injury risk.</li>
+          <li><strong>Socks:</strong> Running socks (no cotton) from Decathlon €5-10. Prevent blisters.</li>
+          <li><strong>Phone:</strong> Cheap armband or wireless earphones. Music improves performance.</li>
+          <li><strong>Free app:</strong> Strava or Nike Run Club. Track every run and watch progress.</li>
+          <li><strong>Local marathon:</strong> Look for Ruhr Marathon or Essen Marathon — entry €30-60.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-nutrition">
+    <div class="content">
+      <div class="show" data-lang="ar">
+        <div class="sec-title">خطة التغذية اليومية</div>
+        <div class="sec-sub">مبني على ميزانيتك · ~1800-2000 سعرة · اقتصادي وصحي</div>
+        <div class="tip"><div class="tip-icon">💰</div><div class="tip-text"><strong>ميزانية الطعام:</strong> في ألمانيا يمكنك الأكل صحياً بـ 150-180 يورو/شهر. ليدل (LIDL) وألدي (ALDI) هم أفضل خيار. البروتين الرخيص: بيض، تونة، دجاج، كواركه (Quark)، بقوليات.</div></div>
+        <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>الماكروز اليومية:</strong> بروتين 150-170 غ | كربوهيدرات 180-220 غ | دهون 50-70 غ | مجموع ~1900 سعرة</div></div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏋️ يوم التمرين في الصالة</h3><div class="meal-kcal">~2000 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">07:00 · الفطور</div><div class="meal-name">شوفان + بيض</div><div class="meal-desc">80غ شوفان بالماء أو الحليب الخالي الدسم + 3 بيضات مسلوقة أو مقلية بدون زبدة + كوب قهوة بدون سكر</div><div class="kcal-badge">~520 kcal · 35g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">10:00 · سناك</div><div class="meal-name">كواركه + موزة</div><div class="meal-desc">200غ Magerquark (0% دهون) من ليدل + موزة واحدة + ملعقة صغيرة عسل اختياري</div><div class="kcal-badge">~280 kcal · 28g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">13:00 · الغداء</div><div class="meal-name">دجاج + أرز + خضار</div><div class="meal-desc">200غ صدر دجاج مشوي أو مسلوق + 150غ أرز بسمتي مطبوخ + سلطة خضار أو خضار مطبوخ (بروكلي، جزر)</div><div class="kcal-badge">~650 kcal · 48g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">16:00 · قبل التمرين</div><div class="meal-name">موزة + قهوة</div><div class="meal-desc">موزة أو تفاحة + كوب قهوة. الكافيين يحسن الأداء بنسبة 10-15%. تناولهم 30-45 دقيقة قبل التمرين.</div><div class="kcal-badge">~120 kcal</div></div>
+            <div class="meal-item"><div class="meal-time">19:30 · بعد التمرين</div><div class="meal-name">تونة + خبز كامل</div><div class="meal-desc">علبة تونة (185غ) بدون زيت + شريحتان خبز قمح كامل + طماطم + خيار. أو بروتين شيك إذا عندك.</div><div class="kcal-badge">~420 kcal · 42g بروتين</div></div>
+          </div>
+        </div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>😴 يوم الراحة</h3><div class="meal-kcal">~1700 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">08:00 · الفطور</div><div class="meal-name">بيض + خبز</div><div class="meal-desc">3 بيضات مخفوقة بالخضار (فلفل، بصل) + شريحتان خبز قمح كامل + طماطم</div><div class="kcal-badge">~450 kcal · 30g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">13:00 · الغداء</div><div class="meal-name">عدس + سلاطة</div><div class="meal-desc">200غ عدس أحمر مطبوخ مع توابل + سلطة كبيرة (طماطم، خيار، بصل، ليمون، زيتون) + خبز كامل</div><div class="kcal-badge">~520 kcal · 22g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">16:00 · سناك</div><div class="meal-name">مكسرات + تفاحة</div><div class="meal-desc">30غ مكسرات غير محمصة وغير مملحة (لوز أو جوز) + تفاحة واحدة</div><div class="kcal-badge">~230 kcal · 6g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">19:00 · العشاء</div><div class="meal-name">سمك + بطاطا</div><div class="meal-desc">150غ سمك أبيض (تيلابيا أو بولاك من ليدل، رخيص) + 200غ بطاطا مسلوقة + خضار مشوية</div><div class="kcal-badge">~480 kcal · 35g بروتين</div></div>
+          </div>
+        </div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏃 يوم الجري (من المرحلة الثانية)</h3><div class="meal-kcal">~2200 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">07:00 · الفطور</div><div class="meal-name">شوفان محمل بالطاقة</div><div class="meal-desc">100غ شوفان + موزة + ملعقة كبيرة زبدة فول سوداني + 3 بيضات. وجبة الطاقة الكاملة.</div><div class="kcal-badge">~700 kcal · 38g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">10:00 · قبل الجري</div><div class="meal-name">تمر + ماء</div><div class="meal-desc">3-5 حبات تمر (سريع الامتصاص) + 500مل ماء. ارتدِ ولا تجري على معدة فارغة أو ممتلئة.</div><div class="kcal-badge">~120 kcal</div></div>
+            <div class="meal-item"><div class="meal-time">13:30 · بعد الجري</div><div class="meal-name">وجبة الاسترداد</div><div class="meal-desc">200غ دجاج + 200غ أرز + خضار. أو بروتين شيك + موزة فوراً بعد الجري، ثم وجبة حقيقية بعد ساعة.</div><div class="kcal-badge">~750 kcal · 50g بروتين</div></div>
+            <div class="meal-item"><div class="meal-time">19:00 · العشاء</div><div class="meal-name">مكرونة + تونة</div><div class="meal-desc">150غ مكرونة كاملة + علبتا تونة + صلصة طماطم بدون سكر + زيت زيتون. لتعبئة الغليكوجين.</div><div class="kcal-badge">~620 kcal · 45g بروتين</div></div>
+          </div>
+        </div>
+        <div class="sec-title">قائمة التسوق الأسبوعية</div>
+        <div class="sec-sub">~35-40 يورو في الأسبوع · ليدل أو ألدي</div>
+        <ul class="checklist">
+          <li><strong>بروتين رخيص:</strong> 10 بيضات (1.5€) + علبتا تونة (1.5€) + 1 كغ صدر دجاج (4.5€) + 500غ Magerquark (0.89€)</li>
+          <li><strong>كربوهيدرات:</strong> 1 كغ شوفان (1.5€) + 1 كغ أرز بسمتي (1.5€) + خبز قمح كامل (1.2€)</li>
+          <li><strong>خضار وفواكه:</strong> موز (1.5€) + تفاح (1.5€) + طماطم + خيار + بروكلي + جزر (5€ مجموع)</li>
+          <li><strong>بقوليات:</strong> 500غ عدس أو فاصوليا (0.80€) + سمك مجمد (3€)</li>
+          <li><strong>إضافات:</strong> زيت زيتون بكر (4€ يكفي أسابيع) + توابل متنوعة</li>
+        </ul>
+      </div>
+      <div data-lang="de">
+        <div class="sec-title">ERNÄHRUNGSPLAN</div>
+        <div class="sec-sub">Budget-freundlich · ~1800-2000 kcal/Tag · Lebensmittel von LIDL/ALDI</div>
+        <div class="tip"><div class="tip-icon">💰</div><div class="tip-text"><strong>Ernährungsbudget:</strong> Gesund essen in Deutschland kostet 150-180 €/Monat. LIDL und ALDI sind die beste Wahl. Günstiges Protein: Eier, Thunfisch, Hähnchenbrust, Magerquark, Hülsenfrüchte.</div></div>
+        <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Tägliche Makros:</strong> Protein 150-170 g | Kohlenhydrate 180-220 g | Fett 50-70 g | Gesamt ~1900 kcal</div></div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏋️ Trainingstag (Gym)</h3><div class="meal-kcal">~2000 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">07:00 · Frühstück</div><div class="meal-name">Haferflocken + Eier</div><div class="meal-desc">80g Haferflocken mit Wasser oder fettarmer Milch + 3 hartgekochte oder fettfrei gebratene Eier + schwarzer Kaffee ohne Zucker</div><div class="kcal-badge">~520 kcal · 35g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">10:00 · Snack</div><div class="meal-name">Magerquark + Banane</div><div class="meal-desc">200g Magerquark (0% Fett) von LIDL + 1 Banane + optional 1 TL Honig</div><div class="kcal-badge">~280 kcal · 28g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">13:00 · Mittagessen</div><div class="meal-name">Hähnchen + Reis + Gemüse</div><div class="meal-desc">200g gegrillte oder gekochte Hähnchenbrust + 150g gekochter Basmatireis + gemischter Salat oder gedünstetes Gemüse (Brokkoli, Karotten)</div><div class="kcal-badge">~650 kcal · 48g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">16:00 · Vor dem Training</div><div class="meal-name">Banane + Kaffee</div><div class="meal-desc"> Eine Banane oder ein Apfel + eine Tasse schwarzer Kaffee. Koffein steigert die Leistung um 10-15%. 30-45 Min. vor dem Workout einnehmen.</div><div class="kcal-badge">~120 kcal</div></div>
+            <div class="meal-item"><div class="meal-time">19:30 · Nach dem Training</div><div class="meal-name">Thunfisch + Vollkornbrot</div><div class="meal-desc">1 Dose Thunfisch im eigenen Saft (185g) + 2 Scheiben Vollkornbrot + Tomate + Gurke. Oder ein Proteinshake, falls vorhanden.</div><div class="kcal-badge">~420 kcal · 42g Protein</div></div>
+          </div>
+        </div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>😴 Ruhetag</h3><div class="meal-kcal">~1700 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">08:00 · Frühstück</div><div class="meal-name">Eier + Brot</div><div class="meal-desc">3 Rühreier mit Gemüse (Paprika, Zwiebel) + 2 Scheiben Vollkornbrot + Tomaten</div><div class="kcal-badge">~450 kcal · 30g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">13:00 · Mittag</div><div class="meal-name">Linsen + Salat</div><div class="meal-desc">200g gekochte rote Linsen mit Gewürzen + großer Salat (Tomate, Gurke, Zwiebel, Zitrone, Oliven) + Vollkornbrot</div><div class="kcal-badge">~520 kcal · 22g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">16:00 · Snack</div><div class="meal-name">Nüsse + Apfel</div><div class="meal-desc">30g ungeröstete, ungesalzene Nüsse (Mandeln oder Walnüsse) + 1 Apfel</div><div class="kcal-badge">~230 kcal · 6g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">19:00 · Abend</div><div class="meal-name">Fisch + Kartoffeln</div><div class="meal-desc">150g weißer Fisch (z.B. Pangasius oder Kabeljau von LIDL, günstig) + 200g Salzkartoffeln + Ofengemüse</div><div class="kcal-badge">~480 kcal · 35g Protein</div></div>
+          </div>
+        </div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏃 Lauftag (ab Phase 2)</h3><div class="meal-kcal">~2200 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">07:00 · Frühstück</div><div class="meal-name">Energie-Hafer</div><div class="meal-desc">100g Haferflocken + Banane + 1 EL Erdnussbutter + 3 Eier. Perfekter Power-Start in den Tag.</div><div class="kcal-badge">~700 kcal · 38g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">10:00 · Vor dem Lauf</div><div class="meal-name">Datteln + Wasser</div><div class="meal-desc">3-5 Datteln (schnell resorbierbare Carbs) + 500ml Wasser. Nicht mit komplett leerem oder übervollem Magen laufen.</div><div class="kcal-badge">~120 kcal</div></div>
+            <div class="meal-item"><div class="meal-time">13:30 · Nach dem Lauf</div><div class="meal-name">Erholungsmahlzeit</div><div class="meal-desc">200g Hähnchen + 200g Reis + Gemüse. Oder direkt danach ein Proteinshake + Banane und die feste Mahlzeit 1 Std. später.</div><div class="kcal-badge">~750 kcal · 50g Protein</div></div>
+            <div class="meal-item"><div class="meal-time">19:00 · Abend</div><div class="meal-name">Pasta + Thunfisch</div><div class="meal-desc">150g Vollkornpasta + 1 Dose Thunfisch + Tomatensauce ohne Zucker + Olivenöl. Optimal zum Auffüllen der Glykogenspeicher.</div><div class="kcal-badge">~620 kcal · 45g Protein</div></div>
+          </div>
+        </div>
+        <div class="sec-title">WÖCHENTLICHE EINKAUFSLISTE</div>
+        <ul class="checklist">
+          <li><strong>Günstiges Protein:</strong> 10 Eier (1,50€) + 2 Thunfischdosen (1,50€) + 1 kg Hähnchenbrust (4,50€) + 500g Magerquark (0,89€)</li>
+          <li><strong>Kohlenhydrate:</strong> 1 kg Haferflocken (1,50€) + 1 kg Basmatireis (1,50€) + Vollkornbrot (1,20€)</li>
+          <li><strong>Obst & Gemüse:</strong> Bananen (1,50€) + Äpfel (1,50€) + Tomaten, Gurken, Brokkoli, Karotten (~5€)</li>
+          <li><strong>Hülsenfrüchte:</strong> 500g rote Linsen (0,80€) + Tiefkühlfisch (3€)</li>
+          <li><strong>Extras:</strong> Olivenöl (natives extra, hält wochenlang ~4€) + verschiedene Gewürze</li>
+        </ul>
+      </div>
+      <div data-lang="en">
+        <div class="sec-title">NUTRITION PLAN</div>
+        <div class="sec-sub">Budget-friendly · ~1800-2000 kcal/day · LIDL/ALDI shopping</div>
+        <div class="tip"><div class="tip-icon">💰</div><div class="tip-text"><strong>Food budget:</strong> You can eat healthy in Germany for 150-180 €/month. LIDL and ALDI are your best friends. Cheap protein sources: eggs, canned tuna, chicken breast, Magerquark (low-fat curd), legumes.</div></div>
+        <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Daily macros:</strong> Protein 150-170g | Carbs 180-220g | Fat 50-70g | Total ~1900 kcal</div></div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏋️ Training Day (Gym)</h3><div class="meal-kcal">~2000 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">07:00 · Breakfast</div><div class="meal-name">Oats + Eggs</div><div class="meal-desc">80g oats with water or low-fat milk + 3 hard-boiled or fat-free fried eggs + black coffee without sugar</div><div class="kcal-badge">~520 kcal · 35g protein</div></div>
+            <div class="meal-item"><div class="meal-time">10:00 · Snack</div><div class="meal-name">Quark + Banana</div><div class="meal-desc">200g Magerquark (0% fat curd) from LIDL + 1 banana + optional 1 tsp of honey</div><div class="kcal-badge">~280 kcal · 28g protein</div></div>
+            <div class="meal-item"><div class="meal-time">13:00 · Lunch</div><div class="meal-name">Chicken + Rice + Veg</div><div class="meal-desc">200g grilled or boiled chicken breast + 150g cooked basmati rice + side salad or steamed veggies (broccoli, carrots)</div><div class="kcal-badge">~650 kcal · 48g protein</div></div>
+            <div class="meal-item"><div class="meal-time">16:00 · Pre-Workout</div><div class="meal-name">Banana + Coffee</div><div class="meal-desc">One banana or apple + a cup of black coffee. Caffeine improves physical performance by 10-15%. Consume 30-45 mins before your session.</div><div class="kcal-badge">~120 kcal</div></div>
+            <div class="meal-item"><div class="meal-time">19:30 · Post-Workout</div><div class="meal-name">Tuna + Wholegrain Bread</div><div class="meal-desc">1 can of tuna in water (185g) + 2 slices of wholegrain bread + tomato + cucumber. Or a protein shake if available.</div><div class="kcal-badge">~420 kcal · 42g protein</div></div>
+          </div>
+        </div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>😴 Rest Day</h3><div class="meal-kcal">~1700 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">08:00 · Breakfast</div><div class="meal-name">Eggs + Bread</div><div class="meal-desc">3 scrambled eggs with chopped veggies (bell pepper, onion) + 2 slices of wholegrain bread + tomatoes</div><div class="kcal-badge">~450 kcal · 30g protein</div></div>
+            <div class="meal-item"><div class="meal-time">13:00 · Lunch</div><div class="meal-name">Lentils + Salad</div><div class="meal-desc">200g cooked red lentils with spices + large salad (tomato, cucumber, onion, lemon, olives) + whole wheat bread</div><div class="kcal-badge">~520 kcal · 22g protein</div></div>
+            <div class="meal-item"><div class="meal-time">16:00 · Snack</div><div class="meal-name">Nuts + Apple</div><div class="meal-desc">30g raw, unsalted nuts (almonds or walnuts) + 1 fresh apple</div><div class="kcal-badge">~230 kcal · 6g protein</div></div>
+            <div class="meal-item"><div class="meal-time">19:00 · Dinner</div><div class="meal-name">Fish + Potatoes</div><div class="meal-desc">150g white fish (e.g., pollack from LIDL, cheap source) + 200g boiled potatoes + roasted vegetables</div><div class="kcal-badge">~480 kcal · 35g protein</div></div>
+          </div>
+        </div>
+        <div class="meal-day">
+          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏃 Running Day (from Phase 2)</h3><div class="meal-kcal">~2200 kcal <span class="arrow">▼</span></div></div>
+          <div class="meal-body">
+            <div class="meal-item"><div class="meal-time">07:00 · Breakfast</div><div class="meal-name">High-Energy Oats</div><div class="meal-desc">100g oats + 1 banana + 1 tbsp peanut butter + 3 eggs. Ultimate sustained energy meal.</div><div class="kcal-badge">~700 kcal · 38g protein</div></div>
+            <div class="meal-item"><div class="meal-time">10:00 · Pre-Run</div><div class="meal-name">Dates + Water</div><div class="meal-desc">3-5 dates (quick absorb glycogen) + 500ml water. Do not run on a completely empty or stuffed stomach.</div><div class="kcal-badge">~120 kcal</div></div>
+            <div class="meal-item"><div class="meal-time">13:30 · Post-Run</div><div class="meal-name">Recovery Meal</div><div class="meal-desc">200g chicken + 200g rice + veg. Or take a protein shake + banana immediately, followed by a solid meal 1 hour later.</div><div class="kcal-badge">~750 kcal · 50g protein</div></div>
+            <div class="meal-item"><div class="meal-time">19:00 · Dinner</div><div class="meal-name">Pasta + Tuna</div><div class="meal-desc">150g whole wheat pasta + 1 can of tuna + sugar-free tomato sauce + 1 tbsp olive oil. Perfect for refueling glycogen stores.</div><div class="kcal-badge">~620 kcal · 45g protein</div></div>
+          </div>
+        </div>
+        <div class="sec-title">WEEKLY SHOPPING LIST</div>
+        <div class="sec-sub">~€35-40 per week · LIDL or ALDI</div>
+        <ul class="checklist">
+          <li><strong>Cheap protein:</strong> 10 eggs (~€1.50) + 2 cans tuna (~€1.50) + 1 kg chicken breast (~€4.50) + 500g Magerquark (~€0.89)</li>
+          <li><strong>Carbs:</strong> 1 kg oats (~€1.50) + 1 kg basmati rice (~€1.50) + wholegrain bread (~€1.20)</li>
+          <li><strong>Fruits & veg:</strong> bananas (~€1.50) + apples (~€1.50) + tomatoes, cucumber, broccoli, carrots (~€5 total)</li>
+          <li><strong>Legumes & Fish:</strong> 500g lentils (~€0.80) + frozen white fish (~€3)</li>
+          <li><strong>Extras:</strong> extra virgin olive oil (€4 bottle lasts weeks) + assorted spices</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-marathon">
+    <div class="content">
+      <div class="show" data-lang="ar">
+        <div class="sec-title">خطة الماراتون</div>
+        <div class="sec-sub">أبريل 2027 · 42.2 كم · 11 شهراً للتحضير</div>
+        <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>هدف واقعي:</strong> بما أن عمرك 25 وبدأت من الصفر، الهدف الأول هو <strong>إنهاء الماراثون</strong> في 5-6 ساعات. لا تركز على السرعة الآن، ركز على إنهاء المسافة.</div></div>
+        <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>قاعدة 80/20:</strong> 80% من تمارين الجري بوتيرة سهلة (تقدر تتحدث) و20% بوتيرة سريعة. معظم الناس يرتكبون خطأ الجري السريع دائماً.</div></div>
+        <div class="marathon-timeline">
+          <div class="mt-item">
+            <div class="mt-month">مايو – يوليو 2026</div>
+            <div class="mt-focus">المرحلة التأسيسية · بناء القاعدة</div>
+            <div class="mt-detail">المشي السريع 30-45 دقيقة 3 مرات بالأسبوع. في الأسابيع الأخيرة ابدأ بالجري الخفيف 5 دقائق / مشي 5 دقائق (تناوب). الهدف: تعويد الأوتار والمفاصل على الضغط تدريجياً. تجنب الإفراط!</div>
+            <div class="mt-km">5-15 كم/أسبوع</div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-month">أغسطس – أكتوبر 2026</div>
+            <div class="mt-focus">بناء القدرة الهوائية</div>
+            <div class="mt-detail">جري مستمر 3 مرات بالأسبوع. مسافة أسبوع تدريجية: 15←25 كم. أطول جرية واحدة في الأسبوع تصل 12-14 كم. ابدأ بتعلم "الجري البطيء" – سرعتك يجب أن تسمح لك بالحديث.</div>
+            <div class="mt-km">20-30 كم/أسبوع</div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-month">نوفمبر 2026</div>
+            <div class="mt-focus">نصف ماراثون تجريبي</div>
+            <div class="mt-detail">في نهاية نوفمبر اجرِ 21 كم للمرة الأولى! ليس بسرعة - مجرد إكمال المسافة. هذه لحظة مهمة نفسياً ستثبت لك أن الماراثون ممكن.</div>
+            <div class="mt-km">أول 21 كم 🎉</div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-month">ديسمبر 2026 – فبراير 2027</div>
+            <div class="mt-focus">بناء الحجم الأقصى</div>
+            <div class="mt-detail">الجرية الطويلة الأسبوعية: 22→28→32→35 كم. الحجم الأسبوعي الكلي: 40-50 كم. أضف تغذية أثناء الجري (جيل جلوكوز كل 45 دقيقة في الجريات فوق ساعة).</div>
+            <div class="mt-km">40-50 كم/أسبوع</div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-month">مارس 2027</div>
+            <div class="mt-focus">التخفيف التدريجي (Tapering)</div>
+            <div class="mt-detail">قلل الحجم بمقدار 30-40%. آخر جرية طويلة 28 كم في بداية مارس. الأسبوع قبل الأخير: 25 كم فقط. الأسبوع الأخير: 10 كم فقط جري خفيف. جسمك يحتاج راحة لا تدريباً أكثر.</div>
+            <div class="mt-km">25-30 كم/أسبوع</div>
+          </div>
+          <div class="mt-item">
+            <div class="mt-month">أبريل 2027 🏁</div>
+            <div class="mt-focus">يوم الماراثون!</div>
+            <div class="mt-detail">يوم السباق: فطور كربوهيدرات خفيف 3 ساعات قبل. جل ماراثون كل 45 دقيقة. ابدأ ببطء الـ10 كم الأولى! أسرع من المخطط = تعب مبكر. أنهِ الماراثون بفخر!</div>
+            <div class="mt-km">42.2 كم 🎊</div>
+          </div>
+        </div>
+        <div class="sec-title">معدات الجري (بميزانيتك)</div>
+        <ul class="checklist">
+          <li><strong>الحذاء:</strong> الأهم على الإطلاق. استثمر 80-120€. جرب Nike, Asics, Brooks من Decathlon أو zalandoسيل. حذاء سيء = إصابات مضمونة.</li>
+          <li><strong>الجوارب:</strong> جوارب رياضية (لا قطن!) من Decathlon بـ5-10€. تمنع النفاطات (Blasen).</li>
+          <li><strong>تطبيق مجاني:</strong> Strava أو Nike Run Club. تتبع كل جرية، ترى تقدمك، يحفزك.</li>
+          <li><strong>الهاتف:</strong> حامل ذراع رخيص أو سماعات لاسلكية. الموسيقى تحسن الأداء.</li>
+          <li><strong>ماراثون بوخوم/NRW:</strong> ابحث عن "Ruhr Marathon" أو "Essen Marathon" - قريب منك وبالغ التسجيل 30-60€.</li>
+        </ul>
+      </div>
+      <div data-lang="de">
+        <div class="sec-title">MARATHON-PLAN</div>
+        <div class="sec-sub">April 2027 · 42,2 km · 11 Monate Vorbereitung</div>
+        <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Realistisches Ziel:</strong> Da du bei Null anfängst, ist das erste Ziel, den Marathon in 5-6 Stunden zu <strong>beenden</strong>. Fokus auf Distanz, nicht auf Tempo.</div></div>
+        <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>80/20-Regel:</strong> 80% des Trainings in einfachem Tempo (du kannst dabei reden), 20% schnell. Fehler Nr. 1 bei Anfängern: immer zu schnell laufen.</div></div>
+        <div class="marathon-timeline">
+          <div class="mt-item"><div class="mt-month">Mai – Juli 2026</div><div class="mt-focus">Aufbauphase · Grundlage legen</div><div class="mt-detail">Zügiges Gehen 30-45 Min, 3×/Woche. Letzte Wochen: 5 Min laufen / 5 Min gehen (Intervalle). Sehnen und Gelenke langsam ans Training gewöhnen. Vermeide Überlastung!</div><div class="mt-km">5-15 km/Woche</div></div>
+          <div class="mt-item"><div class="mt-month">Aug – Okt 2026</div><div class="mt-focus">Aerobe Kapazität aufbauen</div><div class="mt-detail">Kontinuierliches Laufen 3×/Woche. Wochenkilometer progressiv steigern: 15←25 km. Der längste Einzellauf pro Woche erreicht 12-14 km. Lerne "langsam zu laufen" – dein Tempo sollte Gespräche ohne Atemnot erlauben.</div><div class="mt-km">20-30 km/Woche</div></div>
+          <div class="mt-item"><div class="mt-month">November 2026</div><div class="mt-focus">Erster Halbmarathon-Test</div><div class="mt-detail">Ende November läufst du zum ersten Mal die 21 km komplett durch! Vergiss die Geschwindigkeit – das bloße Erreichen der Ziellinie zählt. Ein massiver mentaler Meilenstein, der beweist: Der Marathon ist möglich.</div><div class="mt-km">Erster 21 km 🎉</div></div>
+          <div class="mt-item"><div class="mt-month">Dez 2026 – Feb 2027</div><div class="mt-focus">Maximales Volumen aufbauen</div><div class="mt-detail">Die wöchentlichen langen Läufe eskalieren schrittweise: 22→28→32→35 km. Gesamtvolumen pro Woche: 40-50 km. Integriere Verpflegung während des Laufs (Kohlenhydrat-Gels alle 45 Min. bei Läufen über 60 Min.).</div><div class="mt-km">40-50 km/Woche</div></div>
+          <div class="mt-item"><div class="mt-month">März 2027</div><div class="mt-focus">Tapering (Reduktionsphase)</div><div class="mt-detail">Volumen um 30-40% reduzieren. Letzter langer Lauf (28 km) Anfang März. Vorletzte Woche: nur noch 25 km Gesamtvolumen. Letzte Woche: 10 km reines, lockeres Joggen. Dein Körper benötigt jetzt Erholung, kein zusätzliches Training mehr.</div><div class="mt-km">25-30 km/Woche</div></div>
+          <div class="mt-item"><div class="mt-month">April 2027 🏁</div><div class="mt-focus">Der Marathontag!</div><div class="mt-detail">Wettkampftag: Leichtes Carbo-Frühstück 3 Stunden vor dem Start. Alle 45 Minuten ein Energie-Gel. Die ersten 10 km STRENG LANGSAM laufen! Zu schnelles Anlaufen rächt sich frühzeitig. Beende das Rennen voller Stolz!</div><div class="mt-km">42,2 km 🎊</div></div>
+        </div>
+        <div class="sec-title">AUSRÜSTUNG (MIT DEINEM BUDGET)</div>
+        <ul class="checklist">
+          <li><strong>Laufschuhe:</strong> Das Wichtigste überhaupt. Investiere 80-120€. Nike, Asics, Brooks beim Decathlon oder im Zalando-Sale ausprobieren. Schlechte Schuhe = garantierte Verletzungen.</li>
+          <li><strong>Socks:</strong> Spezielle Laufsocken (keine Baumwolle!) von Decathlon für 5-10€. Verhindern Blasenbildung (Blasen).</li>
+          <li><strong>App (kostenlos):</strong> Strava oder Nike Run Club. Jeden Lauf tracken, Fortschritt visualisieren, Motivation sichern.</li>
+          <li><strong>Telefon:</strong> Günstige Oberarmtasche oder kabellose Kopfhörer. Musik optimiert die Performance.</li>
+          <li><strong>Marathon in der Nähe:</strong> Halte Ausschau nach dem "Ruhr Marathon" (Essen) oder dem lokalen Bochum-Lauf. Startgebühren liegen meist bei 30-60€.</li>
+        </ul>
+      </div>
+      <div data-lang="en">
+        <div class="sec-title">MARATHON PLAN</div>
+        <div class="sec-sub">April 2027 · 42.2 km · 11 months preparation</div>
+        <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Realistic goal:</strong> Starting from zero, your initial milestone is simply to <strong>finish</strong> the marathon within 5-6 hours. Focus purely on completing the distance, not on your split times.</div></div>
+        <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>80/20 Rule:</strong> 80% of your runs should be at an easy, conversational pace, and only 20% at a fast tempo. The absolute #1 mistake beginners make is running too fast, too often.</div></div>
+        <div class="marathon-timeline">
+          <div class="mt-item"><div class="mt-month">May – July 2026</div><div class="mt-focus">Foundation Phase · Base Building</div><div class="mt-detail">Brisk walking for 30-45 mins, 3×/week. During the final weeks, initiate light run/walk intervals (5 mins run / 5 mins walk). Target: Gradually condition your tendons and joints to the load. Avoid overtraining!</div><div class="mt-km">5-15 km/week</div></div>
+          <div class="mt-item"><div class="mt-month">Aug – Oct 2026</div><div class="mt-focus">Aerobic Base Expansion</div><div class="mt-detail">Continuous, steady running 3×/week. Scale up weekly totals: 15←25 km. Your weekly long run should max out around 12-14 km. Master the art of the "slow run" – your pace must allow you to talk comfortably.</div><div class="mt-km">20-30 km/week</div></div>
+          <div class="mt-item"><div class="mt-month">November 2026</div><div class="mt-focus">Experimental Half Marathon</div><div class="mt-detail">At the end of November, hit the 21 km mark for the very first time! Disregard speed completely — simply finish the distance. This is a massive psychological breakthrough that proves the full marathon is within reach.</div><div class="mt-km">First 21 km 🎉</div></div>
+          <div class="mt-item"><div class="mt-month">Dec 2026 – Feb 2027</div><div class="mt-focus">Peak Volume Accumulation</div><div class="mt-detail">Your weekly long run escalates: 22→28→32→35 km. Total weekly mileage: 40-50 km. Start practicing mid-run fueling (take a glucose gel every 45 mins on any run exceeding 1 hour).</div><div class="mt-km">40-50 km/week</div></div>
+          <div class="mt-item"><div class="mt-month">March 2027</div><div class="mt-focus">The Taper Phase</div><div class="mt-detail">Cut down mileage volume by 30-40%. Execute your final long run (28 km) in early March. Second-to-last week: 25 km total. Final week: 10 km max of easy jogging. Your body needs rest now, not more stress.</div><div class="mt-km">25-30 km/week</div></div>
+          <div class="mt-item"><div class="mt-month">April 2027 🏁</div><div class="mt-focus">Race Day!</div><div class="mt-detail">Race day: Light carb-loading breakfast 3 hours before start. Take an endurance gel every 45 minutes. Force yourself to run the first 10 km SLOWLY! Going out too fast leads to early bonking. Cross the finish line with pride!</div><div class="mt-km">42.2 km 🎊</div></div>
+        </div>
+        <div class="sec-title">EQUIPMENT (WITH YOUR BUDGET)</div>
+        <ul class="checklist">
+          <li><strong>Running shoes:</strong> The absolute single most critical item. Invest €80-120. Test pairs from Nike, Asics, or Brooks via Decathlon or Zalando sales. Bad shoes = guaranteed injury.</li>
+          <li><strong>Socks:</strong> Specialized sports socks (no cotton allowed!) from Decathlon for €5-10. These prevent painful blisters.</li>
+          <li><strong>Free app:</strong> Strava or Nike Run Club. Track every run to analyze your progress and stay disciplined.</li>
+          <li><strong>Phone:</strong> Grab a cheap running armband or wireless earbuds. Music or podcasts will heavily boost performance.</li>
+          <li><strong>Local events:</strong> Look up the "Ruhr Marathon" (Essen) or the local Bochum run. Early bird registration is usually €30-60.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec-budget">
+    <div class="content">
+      <div class="show" data-lang="ar">
+        <div class="sec-title">خطة الميزانية</div>
+        <div class="sec-sub">دخل 1100€ · التزامات 150€ تأمين + 80€ عقود + 700€ دين هذا الشهر فقط</div>
+        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>هذا الشهر (مع الدين):</strong> 1100 - 150 - 80 - 700 = <strong>170€ متاحة</strong>. ضيق لكن ممكن! الجزء الأكبر على الطعام.</div></div>
+        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>الأشهر التالية (بدون الدين):</strong> 1100 - 150 - 80 = <strong>870€ متاحة</strong>. هنا يمكنك الاستثمار في معدات لازمة.</div></div>
+        <div class="budget-grid" id="budget-grid-ar">
+          <div class="budget-item" data-cat="هذا الشهر · طعام" data-val="120€"><div class="budget-cat">هذا الشهر · طعام</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">120€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">ليدل/ألدي · أساسيات · لا رفاهيات</div></div>
+          <div class="budget-item" data-cat="هذا الشهر · نادي" data-val="0-20€"><div class="budget-cat">هذا الشهر · نادي</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">0-20€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">ابدأ بكاليستانيكس في الحديقة مجاناً، أو أرخص نادي (McFit/FitX: 15-20€)</div></div>
+          <div class="budget-item" data-cat="الشهر 2 · حذاء جري" data-val="80€"><div class="budget-cat">الشهر 2 · حذاء جري</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">80€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">أهم استثمار. Decathlon أو Zalando Sale. لا تتهاون.</div></div>
+          <div class="budget-item" data-cat="الشهر 3 · مكملات" data-val="30€"><div class="budget-cat">الشهر 3 · مكملات</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">بروتين واي رخيص (Amazon/Lidl أحياناً) + مغنيسيوم للنوم والعضلات</div></div>
+          <div class="budget-item" data-cat="نادي رياضي شهري" data-val="15-25€"><div class="budget-cat">نادي رياضي شهري</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">15-25€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">McFit أو FitX في بوخوم · أرخص النوادي في ألمانيا</div></div>
+          <div class="budget-item" data-cat="تسجيل الماراثون" data-val="30-60€"><div class="budget-cat">تسجيل الماراثون</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30-60€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">سجّل مبكراً · أرخص دائماً · Ruhr Marathon أو Bochum Lauf</div></div>
+        </div>
+        <div class="budget-controls" id="budget-controls-ar">
+          <button class="budget-add-btn" onclick="showSuggestions('ar', this)">+ اقتراح إضافي</button>
+          <button class="budget-save-btn" onclick="saveBudgetChanges()">💾 حفظ التغييرات</button>
+        </div>
+        <div class="budget-suggestions" id="suggestions-ar" style="display:none;">
+          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'نقل/مواصلات', '20-30€', 'مواصلات شهرية أو ركوب دراجة')">نقل</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'هاتف/إنترنت', '15-20€', 'خطة هاتفية + إنترنت منزلي')">الهاتف</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'ملابس رياضية', '40€', 'شورتات + كنزة + جوارب تدريب')">ملابس</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'حقيبة/حذاء إضافي', '25€', 'حقيبة صالة + حذاء عادي إضافي')">حقيبة</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'حبل/معدات', '15€', 'أجهزة تمرين صغيرة محمولة')">معدات</button>
+        </div>
+      </div>
+      <div data-lang="de">
+        <div class="sec-title">BUDGETPLAN</div>
+        <div class="sec-sub">1100€ Einkommen · Verpflichtungen 150€ + 80€ + 700€ Schulden (nur diesen Monat)</div>
+        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>Diesen Monat (mit Schulden):</strong> 1100 - 150 - 80 - 700 = <strong>170€ verfügbar</strong>. Eng aber machbar. Hauptposten ist Essen.</div></div>
+        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>Nächste Monate (ohne Schulden):</strong> 1100 - 150 - 80 = <strong>870€ verfügbar</strong>. Jetzt kannst du in notwendige Ausrüstung investieren.</div></div>
+        <div class="budget-grid" id="budget-grid-de">
+          <div class="budget-item" data-cat="Diesen Monat · Lebensmittel" data-val="120€"><div class="budget-cat">Diesen Monat · Lebensmittel</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">120€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">LIDL/ALDI · Basics · Keine Extras</div></div>
+          <div class="budget-item" data-cat="Diesen Monat · Gym" data-val="0-20€"><div class="budget-cat">Diesen Monat · Gym</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">0-20€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Calisthenics im Park kostenlos, oder McFit/FitX: 15-20€</div></div>
+          <div class="budget-item" data-cat="Monat 2 · Laufschuhe" data-val="80€"><div class="budget-cat">Monat 2 · Laufschuhe</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">80€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Wichtigste Investition. Decathlon oder Zalando Sale. Nicht sparen!</div></div>
+          <div class="budget-item" data-cat="Gym Monatsbeitrag" data-val="15-25€"><div class="budget-cat">Gym Monatsbeitrag</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">15-25€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">McFit oder FitX in Bochum · Günstigste Studios in DE</div></div>
+          <div class="budget-item" data-cat="Marathon Anmeldung" data-val="30-60€"><div class="budget-cat">Marathon Anmeldung</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30-60€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Früh anmelden · günstiger · Ruhr Marathon / Bochum</div></div>
+          <div class="budget-item" data-cat="Supplemente (optional)" data-val="30€"><div class="budget-cat">Supplemente (optional)</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Günstiges Whey-Protein + Magnesium für Schlaf und Muskeln</div></div>
+        </div>
+        <div class="budget-controls" id="budget-controls-de">
+          <button class="budget-add-btn" onclick="showSuggestions('de', this)">+ Vorschlag hinzufügen</button>
+          <button class="budget-save-btn" onclick="saveBudgetChanges()">💾 Änderungen speichern</button>
+        </div>
+        <div class="budget-suggestions" id="suggestions-de" style="display:none;">
+          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Verkehr/Transport', '20-30€', 'Monatliche Fahrkarte oder Fahrrad')">Transport</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Handy/Internet', '15-20€', 'Handyvertrag + Heiminternet')">Handy</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Sportkleidung', '40€', 'Shorts + Hoodie + Socken')">Kleidung</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Tasche/Schuhe', '25€', 'Sporttasche + Freizeitschuhe')">Tasche</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Ausrüstung', '15€', 'Kleine tragbare Trainingsgeräte')">Ausrüstung</button>
+        </div>
+      </div>
+      <div data-lang="en">
+        <div class="sec-title">BUDGET PLAN</div>
+        <div class="sec-sub">€1100 income · Obligations €150 + €80 + €700 debt (this month only)</div>
+        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>This month (with debt):</strong> 1100 - 150 - 80 - 700 = <strong>€170 available</strong>. Tight but possible. Food is the largest expense.</div></div>
+        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>Next months (without debt):</strong> 1100 - 150 - 80 = <strong>€870 available</strong>. You can now invest in necessary equipment.</div></div>
+        <div class="budget-grid" id="budget-grid-en">
+          <div class="budget-item" data-cat="This Month · Food" data-val="€120"><div class="budget-cat">This Month · Food</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€120</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">LIDL/ALDI · Basics only · No luxuries</div></div>
+          <div class="budget-item" data-cat="This Month · Gym" data-val="€0-20"><div class="budget-cat">This Month · Gym</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€0-20</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Free calisthenics in parks, or McFit/FitX: €15-20</div></div>
+          <div class="budget-item" data-cat="Month 2 · Running Shoes" data-val="€80"><div class="budget-cat">Month 2 · Running Shoes</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€80</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Most important investment. Decathlon or Zalando sale. Do not skimp!</div></div>
+          <div class="budget-item" data-cat="Monthly Gym Fee" data-val="€15-25"><div class="budget-cat">Monthly Gym Fee</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€15-25</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">McFit or FitX in Bochum · Cheapest gyms in Germany</div></div>
+          <div class="budget-item" data-cat="Marathon Registration" data-val="€30-60"><div class="budget-cat">Marathon Registration</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€30-60</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Register early for cheapest price · Ruhr Marathon nearby</div></div>
+          <div class="budget-item" data-cat="Supplements (optional)" data-val="€30"><div class="budget-cat">Supplements (optional)</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€30</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Cheap whey protein + magnesium for sleep and muscle recovery</div></div>
+        </div>
+        <div class="budget-controls" id="budget-controls-en">
+          <button class="budget-add-btn" onclick="showSuggestions('en', this)">+ Add suggestion</button>
+          <button class="budget-save-btn" onclick="saveBudgetChanges()">💾 Save changes</button>
+        </div>
+        <div class="budget-suggestions" id="suggestions-en" style="display:none;">
+          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Transport/Commute', '€20-30', 'Monthly bus pass or bike')">Transport</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Phone/Internet', '€15-20', 'Phone contract + home internet')">Phone</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Sports Gear', '€40', 'Shorts + hoodie + socks')">Clothing</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Gym Bag/Extra', '€25', 'Gym bag + casual shoes')">Bag</button>
+          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Equipment', '€15', 'Portable training gear')">Equipment</button>
+        </div>
+      </div>
+
+      <div class="sec-title" data-lang="ar">نوادي رياضية في بوخوم</div>
+      <div class="sec-title" data-lang="de">FITNESSSTUDIOS IN BOCHUM</div>
+      <div class="sec-title" data-lang="en">GYMS IN BOCHUM</div>
+      <ul class="checklist">
+        <li><strong>McFit Bochum:</strong> ~15€/Monat · <span data-lang="ar">الأرخص · 24/7 · معدات كافية تماماً لخطتك</span><span data-lang="de">Günstigste Option · 24/7 · Ausreichend für deinen Plan</span><span data-lang="en">Cheapest option · 24/7 · Perfectly sufficient hardware for your plan</span></li>
+        <li><strong>FitX Bochum:</strong> ~20€/Monat · <span data-lang="ar">أفضل من McFit قليلاً · نوادي متعددة</span><span data-lang="de">Etwas besser ausgestattet · Mehrere Standorte</span><span data-lang="en">Slightly better vibe/equipment · Multiple gym access across Germany</span></li>
+        <li><strong>Stadtbad / Freibad:</strong> <span data-lang="ar">للسباحة (تعافي ممتاز) · ~5€/دخول</span><span data-lang="de">Zum Schwimmen (hervorragende aktive Regeneration) · ~5€/Eintritt</span><span data-lang="en">For swimming (excellent muscle recovery) · ~5€ per entry</span></li>
+        <li><strong>Free:</strong> <span data-lang="ar">حدائق بوخوم للجري + أجهزة الكاليستانيكس في الأماكن العامة (ابحث "Outdoor Fitness Bochum")</span><span data-lang="de">Parkanlagen für Laufen + Outdoor Fitness Bochum (Calisthenics im Freien, suche nach "Outdoor Fitness Bochum")</span><span data-lang="en">Local parks for outdoor cardio + public calisthenics rigs (search for "Outdoor Fitness Bochum")</span></li>
+      </ul>
+      <div class="sec-title" data-lang="ar">نصيحة الدين</div>
+      <div class="sec-title" data-lang="de">WICHTIGER TIPP</div>
+      <div class="sec-title" data-lang="en">IMPORTANT ADVICE</div>
+      <div class="tip">
+        <div class="tip-icon">💡</div>
+        <div class="tip-text">
+          <span data-lang="ar">بعد سداد الـ700€ هذا الشهر، دخلك المتاح سيرتفع لـ870€. استثمر 150-180€ في طعام صحي + 20€ نادي = <strong>700€ يتبقى للإيجار والمعيشة</strong>. الصحة ليست ترفاً، هي استثمار في حياتك ومستقبلك.</span>
+          <span data-lang="de">Nach Abzahlung der 700€ erhöht sich dein verfügbares Einkommen auf 870€. Investiere 150-180€ in gesunde Lebensmittel + 20€ Gym = <strong>700€ verbleibend für Miete und Lebenshaltung</strong>. Gesundheit ist kein Luxus, sondern eine Investition in dein Leben und deine Zukunft.</span>
+          <span data-lang="en">After you pay off the €700 debt this month, your available income rises to €870. Invest €150-180 in healthy food + €20 gym = <strong>€700 left for rent and living expenses</strong>. Health is not a luxury — it's an investment in your life and future.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Delyar FITNESS MASTER PLAN · 2026–2027 · BOCHUM, GERMANY · BUILT WITH ❤️</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
