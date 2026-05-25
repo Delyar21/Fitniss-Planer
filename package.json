@@ -1,0 +1,22 @@
+{
+  "name": "delyar-fitness-planner",
+  "version": "1.0.0",
+  "description": "Interactive multi-lingual Fitness & Marathon Master Plan dashboard",
+  "main": "index.html",
+  "scripts": {
+    "start": "browser-sync start --server --files '*.html, *.css, *.js'",
+    "build": "echo 'No build step required for static native JS project'"
+  },
+  "keywords": [
+    "fitness",
+    "marathon",
+    "calisthenics",
+    "dashboard",
+    "bochum"
+  ],
+  "author": "Delyar",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^3.0.3"
+  }
+}

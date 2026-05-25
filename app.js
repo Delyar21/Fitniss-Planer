@@ -1,13 +1,13 @@
 let currentLang = 'ar';
 let currentTab = 'overview';
 
-// SPRACHSTEUERUNG
+// SPRACHSTEUERUNG (LANGUAGE CONTROLLER)
 function setLang(lang, btn) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   
-  // Sprachblöcke anzeigen/verbergen
+  // Toggle Visibility of targeted translation nodes
   document.querySelectorAll('[data-lang]').forEach(el => {
     el.classList.toggle('show', el.dataset.lang === lang);
   });
@@ -15,7 +15,7 @@ function setLang(lang, btn) {
     el.classList.toggle('show', el.dataset.langInline === lang);
   });
   
-  // Hero-Untertitel dynamisch anpassen
+  // Update Hero Headline Dynamic Strings
   const subs = {
     ar: 'خطتك الكاملة | الصالة + كاليستانيكس + ماراتون', 
     de: 'Dein kompletter Plan | Gym + Calisthenics + Marathon', 
@@ -23,12 +23,12 @@ function setLang(lang, btn) {
   };
   document.getElementById('hero-sub').textContent = subs[lang];
   
-  // Textrichtung des Dokuments anpassen (RTL für Arabisch, LTR für andere)
+  // Set reading orientation layout rules
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lang;
 }
 
-// TAB-WECHSEL
+// TAB-WECHSEL (TAB SWITCHER CONTROLLER)
 function setTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -37,7 +37,7 @@ function setTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-// AKKORDION FÜR ERNÄHRUNGS-MAHLZEITEN
+// AKKORDION FÜR ERNÄHRUNGS-MAHLZEITEN (ACCORDION TOGGLER)
 function toggleMeal(head) {
   const body = head.nextElementSibling;
   const isOpen = body.classList.contains('open');
@@ -45,11 +45,11 @@ function toggleMeal(head) {
   head.classList.toggle('open-head', !isOpen);
 }
 
-// BUDGET EDITIER-MODUS (IN-LINE EDIT)
+// BUDGET EDITIER-MODUS (IN-LINE EDIT CAPABILITIES)
 function editBudget(el) {
   const valSpan = el.parentElement;
   const currentVal = el.textContent;
-  if (valSpan.querySelector('.budget-edit-input')) return; // Bereits im Edit-Modus
+  if (valSpan.querySelector('.budget-edit-input')) return; // Exit if input already mounted
   
   const input = document.createElement('input');
   input.className = 'budget-edit-input';
@@ -72,13 +72,13 @@ function saveBudgetValue(input, el, oldVal) {
   el.style.display = 'inline-block';
 }
 
-// VORSCHLÄGE ANZEIGEN
+// VORSCHLÄGE ANZEIGEN (TOGGLE SUGGESTIONS DOM PANELS)
 function showSuggestions(lang, btn) {
   const suggestionsDiv = document.getElementById('suggestions-' + lang);
   suggestionsDiv.style.display = suggestionsDiv.style.display === 'none' ? 'grid' : 'none';
 }
 
-// NEUEN BUDGET-EINTRAG HINZUFÜGEN
+// NEUEN BUDGET-EINTRAG HINZUFÜGEN (APPEND CHILD DOM ELEMENT)
 function addBudgetItem(lang, cat, val, desc) {
   const grid = document.getElementById('budget-grid-' + lang);
   const item = document.createElement('div');
@@ -101,7 +101,7 @@ function removeBudgetItem(btn) {
   btn.closest('.budget-item').remove();
 }
 
-// LOCALSTORAGE PERSISTENZ FÜR BUDGET DATA
+// LOCALSTORAGE PERSISTENZ FÜR BUDGET DATA (DATA WAREHOUSE OPERATIONS)
 function saveBudgetChanges() {
   const budgetData = {};
   ['ar', 'de', 'en'].forEach(lang => {
@@ -114,7 +114,7 @@ function saveBudgetChanges() {
   });
   localStorage.setItem('budgetData', JSON.stringify(budgetData));
   
-  // Sprachabhängiges Alert-Feedback
+  // Native localization messaging triggers
   alert(currentLang === 'ar' ? '✅ تم حفظ التغييرات!' : currentLang === 'de' ? '✅ Änderungen gespeichert!' : '✅ Changes saved!');
 }
 
@@ -126,6 +126,7 @@ function loadBudgetChanges() {
   ['ar', 'de', 'en'].forEach(lang => {
     if (!budgetData[lang]) return;
     const grid = document.getElementById('budget-grid-' + lang);
+    if (!grid) return; // Fail-safe structural layout guard
     grid.innerHTML = '';
     budgetData[lang].forEach(item => {
       const div = document.createElement('div');
@@ -144,10 +145,10 @@ function loadBudgetChanges() {
   });
 }
 
-// INITIALISIERUNG BEIM LADEN DER SEITE
+// INITIALISIERUNG BEIM LADEN DER SEITE (LOAD LIFECYCLE HOOKS)
 window.addEventListener('load', () => {
   loadBudgetChanges();
-  // Animiert die Ladebalken im Overview-Tab sanft beim Start
+  // Smooth CSS transform micro-animations inside overview panels
   setTimeout(() => {
     document.querySelectorAll('.progress-fill').forEach(bar => {
       const w = bar.style.width;
