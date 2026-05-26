@@ -527,85 +527,94 @@ body::before {
 .meal-head.open-head .arrow { transform:rotate(180deg); }
 
 /* STORAGE ENGINE AND ENGINE UTILITIES STYLING */
-.budget-item { position:relative; transition: background .2s; }
-.budget-item:hover { background: var(--surface2); }
-.budget-val-text { cursor:pointer; padding: .3rem .5rem; border-radius: 2px; display: inline-block; }
-.budget-val-text:hover { background: rgba(60,255,180,.1); }
+  .budget-item { position:relative; transition: background .2s; }
+  .budget-item:hover { background: var(--surface2); }
+  .budget-val-text { cursor:pointer; padding: .3rem .5rem; border-radius: 2px; display: inline-block; }
+  .budget-val-text:hover { background: rgba(60,255,180,.1); }
+  .budget-edit-input {
+    padding: .3rem .5rem;
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    color: var(--accent2);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    border-radius: 2px;
+    width: 120px;
+    text-align: center;
+  }
+  .budget-controls {
+    display: flex;
+    gap: .5rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .budget-add-btn, .budget-save-btn {
+    padding: .6rem 1rem;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Cairo', sans-serif;
+    transition: opacity .2s;
+    font-size: .85rem;
+  }
+  .budget-add-btn:hover, .budget-save-btn:hover { opacity: .8; }
+  .budget-add-btn.hidden { display: none; }
 
-.budget-edit-input {
-  padding: .3rem .5rem;
-  background: var(--bg);
-  border: 1px solid var(--accent);
-  color: var(--accent2);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem;
-  border-radius: 2px;
-  width: 120px;
-  text-align: center;
-}
+  
+  .budget-suggestions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: .5rem;
+    margin-top: 1rem;
+  }
+  .suggestion-btn {
+    padding: .4rem .6rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: .75rem;
+    transition: all .2s;
+    font-family: 'Cairo', sans-serif;
+  }
+  .suggestion-btn:hover { 
+    background: rgba(232,255,60,.1); 
+    border-color: var(--cal);
+    color: var(--cal);
+  }
+  .remove-budget-btn {
+    margin-left: auto;
+    padding: .3rem .6rem;
+    background: rgba(255,107,60,.1);
+    border: 1px solid rgba(255,107,60,.2);
+    color: var(--run);
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: .65rem;
+    transition: all .2s;
+    font-family: 'Cairo', sans-serif;
+    display: none;
+  }
+  .budget-item.editable .remove-budget-btn { display: inline-block; }
+  .remove-budget-btn:hover { 
+    background: rgba(255,107,60,.2); 
+    border-color: var(--run);
+  }
 
-.budget-controls {
-  display: flex;
-  gap: .5rem;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-}
-
-.budget-suggestions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: .5rem;
-  margin-top: 1rem;
-}
-
-.suggestion-btn {
-  padding: .4rem .6rem;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  cursor: pointer;
-  border-radius: 2px;
-  font-size: .75rem;
-  transition: all .2s;
-  font-family: 'Cairo', sans-serif;
-}
-
-.suggestion-btn:hover { 
-  background: rgba(232,255,60,.1); 
-  border-color: var(--cal);
-  color: var(--cal);
-}
-
-.remove-budget-btn {
-  margin-left: auto;
-  padding: .3rem .6rem;
-  background: rgba(255,107,60,.1);
-  border: 1px solid rgba(255,107,60,.2);
-  color: var(--run);
-  cursor: pointer;
-  border-radius: 2px;
-  font-size: .65rem;
-  transition: all .2s;
-  font-family: 'Cairo', sans-serif;
-  display: none;
-}
-
-.budget-item.editable .remove-budget-btn { display: inline-block; }
-.remove-budget-btn:hover { 
-  background: rgba(255,107,60,.2); 
-  border-color: var(--run);
-}
-
-footer {
-  text-align:center;
-  padding:3rem 1rem;
-  color: var(--muted);
-  font-size:.72rem;
-  font-family:'IBM Plex Mono', monospace;
-  letter-spacing:2px;
-  border-top:1px solid var(--border);
-  margin-top:3rem;
-}
+  footer {
+    text-align:center;
+    padding:3rem 1rem;
+    color: var(--muted);
+    font-size:.72rem;
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:2px;
+    border-top:1px solid var(--border);
+    margin-top:3rem;
+  }
