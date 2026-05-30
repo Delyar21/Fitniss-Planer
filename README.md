@@ -1,4 +1,4 @@
-# 🏋️‍♂️ Delyar FITNESS — Master Plan 2026–2027
+# 🏋️‍♂️ FITNESS — Master Plan 
 
 An interactive, premium multi-lingual (Arabic, German, English) web dashboard built to track a progressive 11-month athletic transition: combining Gym Hypertrophy, Calisthenics progressions, and an optimized Marathon preparation chronology tailored for Bochum, Germany.
 
