@@ -618,3 +618,55 @@ body::before {
     border-top:1px solid var(--border);
     margin-top:3rem;
   }
+/* MUSCLE GROUP SECTION HEADERS */
+.muscle-group-header {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 3px;
+  padding: .6rem 1rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  border-left: 4px solid var(--gym);
+  background: linear-gradient(90deg, rgba(60,255,180,.08) 0%, transparent 100%);
+  color: var(--gym);
+  text-transform: uppercase;
+}
+
+.muscle-group-header.gym-header {
+  border-left-color: var(--gym);
+  color: var(--gym);
+  background: linear-gradient(90deg, rgba(60,255,180,.08) 0%, transparent 100%);
+}
+
+/* RTL support for muscle headers */
+[dir="rtl"] .muscle-group-header {
+  border-left: none;
+  border-right: 4px solid var(--gym);
+  background: linear-gradient(270deg, rgba(60,255,180,.08) 0%, transparent 100%);
+}
+
+/* Budget controls styling */
+.budget-add-btn,
+.budget-save-btn {
+  padding: .5rem 1rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: 'Cairo', sans-serif;
+  font-size: .8rem;
+  transition: all .2s;
+}
+
+.budget-add-btn:hover {
+  border-color: var(--cal);
+  color: var(--cal);
+  background: rgba(232,255,60,.05);
+}
+
+.budget-save-btn:hover {
+  border-color: var(--accent2);
+  color: var(--accent2);
+  background: rgba(60,255,180,.05);
+}
