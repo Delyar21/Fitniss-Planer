@@ -85,6 +85,7 @@ body::before {
 .stats-bar {
   display: flex;
   flex-wrap:wrap;
+  direction: ltr;
   gap:1px;
   background: var(--border);
   border-bottom: 1px solid var(--border);
@@ -114,6 +115,7 @@ body::before {
 .lang-bar {
   display:flex;
   justify-content:center;
+  direction: ltr;
   gap:.5rem;
   padding:1rem;
   background: var(--surface2);
@@ -153,6 +155,7 @@ body::before {
   border-bottom:1px solid var(--border);
   overflow-x:auto;
   scrollbar-width:none;
+  direction:rtl ;
 }
 
 .tabs::-webkit-scrollbar { display:none; }
@@ -669,4 +672,343 @@ body::before {
   border-color: var(--accent2);
   color: var(--accent2);
   background: rgba(60,255,180,.05);
+}
+/* ============================================================
+   EDIT MODE SYSTEM — appended to Style.css
+   ============================================================ */
+
+/* FLOATING EDIT TOOLBAR */
+#edit-toolbar {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: .5rem;
+  z-index: 10000;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,.5));
+}
+
+[dir="rtl"] #edit-toolbar {
+  right: auto;
+  left: 2rem;
+}
+
+#edit-toggle-btn {
+  padding: .7rem 1.4rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all .2s;
+  white-space: nowrap;
+}
+
+#edit-toggle-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#edit-toggle-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+#reset-btn {
+  padding: .7rem 1rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: .85rem;
+  transition: all .2s;
+}
+
+#reset-btn:hover {
+  border-color: var(--run);
+  color: var(--run);
+}
+
+/* TOAST NOTIFICATION */
+#edit-toast {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 2rem;
+  padding: .6rem 1.2rem;
+  background: var(--surface2);
+  border: 1px solid var(--accent2);
+  color: var(--accent2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .75rem;
+  border-radius: 2px;
+  z-index: 10001;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all .3s ease;
+  pointer-events: none;
+}
+
+[dir="rtl"] #edit-toast {
+  right: auto;
+  left: 2rem;
+}
+
+#edit-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* EDIT MODE BODY INDICATOR */
+body.edit-mode {
+  outline: 2px solid rgba(232,255,60,.15);
+  outline-offset: -2px;
+}
+
+body.edit-mode::after {
+  content: 'EDIT MODE';
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #000;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: .2rem .8rem;
+  z-index: 10000;
+  border-radius: 0 0 3px 3px;
+}
+
+/* EDITABLE TEXT FIELDS */
+.editable-text {
+  outline: none;
+  border-radius: 1px;
+  transition: background .15s, box-shadow .15s;
+  cursor: text;
+  min-width: 20px;
+  min-height: 1em;
+}
+
+.editable-text:hover {
+  background: rgba(232,255,60,.06);
+  box-shadow: inset 0 0 0 1px rgba(232,255,60,.2);
+}
+
+.editable-text:focus {
+  background: rgba(232,255,60,.1);
+  box-shadow: inset 0 0 0 1px rgba(232,255,60,.4);
+}
+
+/* DELETE CARD BUTTON */
+.delete-card-btn {
+  position: absolute;
+  top: .4rem;
+  right: .4rem;
+  width: 22px;
+  height: 22px;
+  background: rgba(255,107,60,.15);
+  border: 1px solid rgba(255,107,60,.3);
+  color: var(--run);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: .75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all .15s;
+  padding: 0;
+}
+
+[dir="rtl"] .delete-card-btn {
+  right: auto;
+  left: .4rem;
+}
+
+.delete-card-btn:hover {
+  background: var(--run);
+  color: #000;
+  border-color: var(--run);
+}
+
+/* DELETE SESSION BUTTON (inline) */
+.delete-session-btn {
+  display: inline-block;
+  margin-right: .3rem;
+  width: 16px;
+  height: 16px;
+  background: rgba(255,107,60,.15);
+  border: 1px solid rgba(255,107,60,.25);
+  color: var(--run);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: .6rem;
+  line-height: 1;
+  vertical-align: middle;
+  padding: 0;
+  transition: all .15s;
+}
+
+.delete-session-btn:hover {
+  background: var(--run);
+  color: #000;
+}
+
+/* DELETE CHECKLIST ITEM BUTTON */
+.delete-li-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: rgba(255,107,60,.12);
+  border: 1px solid rgba(255,107,60,.2);
+  color: var(--run);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: .6rem;
+  padding: 0;
+  margin-right: .4rem;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+
+.delete-li-btn:hover {
+  background: var(--run);
+  color: #000;
+}
+
+/* ADD CARD BUTTON (ex-grid) */
+.add-card-btn {
+  background: rgba(232,255,60,.05);
+  border: 1px dashed rgba(232,255,60,.25);
+  color: var(--cal);
+  padding: 1.5rem;
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .75rem;
+  letter-spacing: 2px;
+  transition: all .2s;
+  text-align: center;
+  width: 100%;
+}
+
+.add-card-btn:hover {
+  background: rgba(232,255,60,.1);
+  border-color: var(--cal);
+}
+
+/* ADD SESSION BUTTON */
+.add-session-btn {
+  display: block;
+  width: 100%;
+  padding: .3rem;
+  background: rgba(232,255,60,.04);
+  border: 1px dashed rgba(232,255,60,.15);
+  color: var(--cal);
+  cursor: pointer;
+  font-size: .8rem;
+  margin-top: .3rem;
+  border-radius: 1px;
+  transition: all .2s;
+}
+
+.add-session-btn:hover {
+  background: rgba(232,255,60,.1);
+  border-color: var(--cal);
+}
+
+/* ADD MEAL / ACTION BUTTONS */
+.add-meal-btn,
+.edit-action-btn,
+.add-checklist-btn,
+.add-mealday-btn {
+  display: block;
+  width: 100%;
+  padding: .7rem 1rem;
+  margin-top: .5rem;
+  background: rgba(60,255,180,.04);
+  border: 1px dashed rgba(60,255,180,.2);
+  color: var(--gym);
+  cursor: pointer;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .7rem;
+  letter-spacing: 2px;
+  border-radius: 1px;
+  transition: all .2s;
+  text-align: center;
+}
+
+.add-meal-btn:hover,
+.edit-action-btn:hover,
+.add-checklist-btn:hover,
+.add-mealday-btn:hover {
+  background: rgba(60,255,180,.1);
+  border-color: var(--gym);
+}
+
+/* PROGRESS SLIDER (edit mode) */
+.prog-slider {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  margin: 0;
+}
+
+.progress-bar:hover .prog-slider {
+  opacity: .5;
+}
+
+/* HIGHLIGHT EDITABLE CONTAINERS IN EDIT MODE */
+body.edit-mode .ex-card,
+body.edit-mode .phase,
+body.edit-mode .mt-item,
+body.edit-mode .meal-item,
+body.edit-mode .tip,
+body.edit-mode .budget-item {
+  outline: 1px dashed rgba(255,255,255,.06);
+  transition: outline .2s;
+}
+
+body.edit-mode .ex-card:hover,
+body.edit-mode .phase:hover,
+body.edit-mode .mt-item:hover,
+body.edit-mode .meal-item:hover,
+body.edit-mode .tip:hover,
+body.edit-mode .budget-item:hover {
+  outline-color: rgba(232,255,60,.2);
+}
+
+/* STAT VALUES editable highlight */
+body.edit-mode .stat-val,
+body.edit-mode .stat-lbl {
+  cursor: text;
+}
+
+/* MEAL-KCAL editable in header */
+body.edit-mode .meal-kcal {
+  cursor: text;
+  border-radius: 2px;
+}
+
+body.edit-mode .meal-kcal:hover {
+  background: rgba(192,132,252,.1);
+}
+
+/* MUSCLE GROUP HEADER edit mode */
+body.edit-mode .muscle-group-header {
+  cursor: text;
 }
