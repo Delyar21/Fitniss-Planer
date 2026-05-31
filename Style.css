@@ -670,3 +670,298 @@ body::before {
   color: var(--accent2);
   background: rgba(60,255,180,.05);
 }
+
+/* ══════════════════════════════════════════════════════════
+   UNIVERSAL EDIT ENGINE – UI STYLES
+   ══════════════════════════════════════════════════════════ */
+
+/* Edit toolbar */
+.toolbar-sep {
+  width: 1px;
+  background: var(--border);
+  height: 24px;
+  align-self: center;
+}
+
+.edit-mode-btn {
+  padding: .4rem 1rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: .8rem;
+  transition: all .2s;
+  white-space: nowrap;
+}
+
+.edit-mode-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.edit-mode-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.edit-mode-btn.reset-btn:hover {
+  border-color: var(--run);
+  color: var(--run);
+}
+
+/* Editable hover highlight */
+body.edit-active .editable-hover {
+  outline: 1px dashed rgba(232, 255, 60, .35);
+  border-radius: 2px;
+  cursor: text;
+  transition: outline .15s;
+}
+
+body.edit-active .editable-hover:hover {
+  outline: 1px solid var(--accent);
+  background: rgba(232, 255, 60, .05);
+}
+
+.editing-now {
+  outline: 2px solid var(--accent) !important;
+  background: rgba(232, 255, 60, .06) !important;
+}
+
+/* Inline edit widget */
+.inline-edit-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: .3rem;
+  width: 100%;
+}
+
+.inline-edit-input {
+  flex: 1;
+  min-width: 60px;
+  padding: .25rem .4rem;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: inherit;
+  border-radius: 2px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.inline-edit-ok,
+.inline-edit-cancel {
+  padding: .2rem .45rem;
+  border: 1px solid;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: .75rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.inline-edit-ok {
+  background: rgba(60, 255, 180, .15);
+  border-color: var(--gym);
+  color: var(--gym);
+}
+
+.inline-edit-cancel {
+  background: rgba(255, 107, 60, .1);
+  border-color: var(--run);
+  color: var(--run);
+}
+
+/* Delete button on cards/items */
+.edit-delete-btn {
+  position: absolute;
+  top: .3rem;
+  right: .3rem;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 107, 60, .85);
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: .6rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: background .15s;
+}
+
+[dir="rtl"] .edit-delete-btn {
+  right: auto;
+  left: .3rem;
+}
+
+.edit-delete-btn:hover { background: var(--run); }
+
+/* Elements that host a delete btn need relative positioning */
+.phase, .ex-card, .session, .meal-item,
+.mt-item, .checklist li, .tip {
+  position: relative;
+}
+
+/* Section add buttons */
+.section-add-btn {
+  display: none;
+  padding: .45rem 1rem;
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: .78rem;
+  border-radius: 2px;
+  margin: .5rem .25rem;
+  transition: all .2s;
+}
+
+.section-add-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(232, 255, 60, .05);
+}
+
+.section-add-btn.gym-add:hover {
+  border-color: var(--gym);
+  color: var(--gym);
+  background: rgba(60, 255, 180, .05);
+}
+
+.section-add-btn.cali-add:hover {
+  border-color: var(--cal);
+  color: var(--cal);
+  background: rgba(232, 255, 60, .05);
+}
+
+.ex-add-wrap {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+  padding: .25rem 0;
+}
+
+/* Day-body add buttons */
+.day-add-btns {
+  display: none;
+  gap: .2rem;
+  flex-wrap: wrap;
+  padding: .25rem 0;
+}
+
+body.edit-active .day-add-btns { display: flex; }
+
+.mini-add-btn {
+  padding: .2rem .35rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: .75rem;
+  transition: all .15s;
+}
+
+.mini-add-btn:hover {
+  border-color: var(--accent);
+  background: rgba(232, 255, 60, .1);
+}
+
+/* Stats bar double-click to edit */
+.stat-val { user-select: none; }
+
+.stat-edit-input {
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  color: var(--accent2);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  width: 80px;
+  text-align: center;
+  border-radius: 2px;
+  padding: 0 .2rem;
+}
+
+/* Save toast */
+#save-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #1e1e2e;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: .6rem 1.4rem;
+  border-radius: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .8rem;
+  letter-spacing: 2px;
+  z-index: 9000;
+  transition: transform .3s ease;
+  pointer-events: none;
+}
+
+#save-toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Budget controls (ensure visible) */
+.budget-controls {
+  display: flex;
+  gap: .5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  flex-wrap: wrap;
+}
+
+.budget-add-btn,
+.budget-save-btn {
+  padding: .5rem 1rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: 'Cairo', sans-serif;
+  font-size: .8rem;
+  transition: all .2s;
+}
+
+.budget-add-btn:hover  { border-color: var(--cal);    color: var(--cal);    background: rgba(232,255,60,.05); }
+.budget-save-btn:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(60,255,180,.05); }
+
+/* Budget suggestions grid */
+.budget-suggestions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.suggestion-btn {
+  padding: .4rem .6rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: .75rem;
+  transition: all .2s;
+  font-family: 'Cairo', sans-serif;
+}
+
+.suggestion-btn:hover {
+  background: rgba(232, 255, 60, .1);
+  border-color: var(--cal);
+  color: var(--cal);
+}
