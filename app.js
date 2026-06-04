@@ -574,3 +574,294 @@ window.addEventListener('load', () => {
     });
   }, 300);
 });
+
+
+(function () {
+  'use strict';
+ 
+  const PLAN_CONFIG = {
+    START_DATE: '2026-05-01',
+    PHASES: [
+      { id: 1, durationMonths: 3, label: { ar: 'المرحلة الأولى', de: 'Phase 1', en: 'Phase 1' }, name: { ar: 'إعادة التأهيل', de: 'Rehabilitation', en: 'Rehabilitation' } },
+      { id: 2, durationMonths: 3, label: { ar: 'المرحلة الثانية', de: 'Phase 2', en: 'Phase 2' }, name: { ar: 'البناء + الجري', de: 'Aufbau + Laufen', en: 'Build + Run' } },
+      { id: 3, durationMonths: 4, label: { ar: 'المرحلة الثالثة', de: 'Phase 3', en: 'Phase 3' }, name: { ar: 'التحضير للماراثون', de: 'Marathon-Vorbereitung', en: 'Marathon Prep' } },
+      { id: 4, durationMonths: 2, label: { ar: 'المرحلة الرابعة', de: 'Phase 4', en: 'Phase 4' }, name: { ar: 'التحديد والسباق', de: 'Tapering & Rennen', en: 'Taper & Race' } },
+    ],
+  };
+ 
+  const STORAGE_KEY_CHECKINS = 'fitnessPlan_checkIns';
+ 
+  function todayStr() { return new Date().toISOString().slice(0, 10); }
+ 
+  function addMonths(dateStr, months) {
+    const d = new Date(dateStr);
+    d.setMonth(d.getMonth() + months);
+    return d.toISOString().slice(0, 10);
+  }
+ 
+  function computeActivePhase() {
+    const now = todayStr();
+    let cursor = PLAN_CONFIG.START_DATE;
+    for (let i = 0; i < PLAN_CONFIG.PHASES.length; i++) {
+      const phaseEnd = addMonths(cursor, PLAN_CONFIG.PHASES[i].durationMonths);
+      if (now < phaseEnd) return i + 1;
+      cursor = phaseEnd;
+    }
+    return PLAN_CONFIG.PHASES.length;
+  }
+ 
+  function loadCheckIns() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY_CHECKINS) || '{}'); }
+    catch { return {}; }
+  }
+ 
+  function saveCheckIns(data) { localStorage.setItem(STORAGE_KEY_CHECKINS, JSON.stringify(data)); }
+  function hasCheckedInToday() { return !!loadCheckIns()[todayStr()]; }
+ 
+  function doCheckIn(type) {
+    const data = loadCheckIns();
+    data[todayStr()] = { type, timestamp: Date.now() };
+    saveCheckIns(data);
+  }
+ 
+  function computeStreak() {
+    const data = loadCheckIns();
+    let streak = 0;
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    while (true) {
+      const key = d.toISOString().slice(0, 10);
+      const entry = data[key];
+      if (!entry || entry.type === 'missed') break;
+      streak++;
+      d.setDate(d.getDate() - 1);
+    }
+    if (data[todayStr()] && data[todayStr()].type !== 'missed') streak++;
+    return streak;
+  }
+ 
+  function weekStats() {
+    const data = loadCheckIns();
+    const now = new Date();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    let count = 0;
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const key = d.toISOString().slice(0, 10);
+      const e = data[key];
+      if (e && e.type !== 'missed') count++;
+    }
+    return count;
+  }
+ 
+  const T = {
+    checkInTitle:    { ar: '✅ سجّل يوم اليوم', de: '✅ Heutigen Tag eintragen', en: '✅ Log Today' },
+    alreadyChecked:  { ar: '🎉 سجّلت اليوم بالفعل!', de: '🎉 Heute bereits eingecheckt!', en: '🎉 Already checked in today!' },
+    streak:          { ar: 'يوم متتالي 🔥', de: 'Tage in Folge 🔥', en: 'day streak 🔥' },
+    weekDays:        { ar: 'أيام هذا الأسبوع', de: 'Tage diese Woche', en: 'days this week' },
+    liveSyncLabel:   { ar: '🕒 الوقت الحالي:', de: '🕒 Aktuelle Uhrzeit:', en: '🕒 Current time:' },
+    dailyReminder:   { ar: '🔔 تذكير يومي: سجّل التحديث اليومي لتبقى الخطة دقيقة.', de: '🔔 Tägliche Erinnerung: Trage dein Update heute ein, damit der Plan aktuell bleibt.', en: '🔔 Daily reminder: log your update today to keep the schedule accurate.' },
+    dailyCheckLabel: { ar: 'تدقيق يومي', de: 'Tagescheck', en: 'Daily Check' },
+    phaseLockedMsg:  { ar: 'تُفتح بعد إنهاء المرحلة الحالية', de: 'Wird nach der aktuellen Phase freigeschaltet', en: 'Unlocks after current phase is complete' },
+    phaseActiveLabel:{ ar: 'المرحلة النشطة', de: 'Aktive Phase', en: 'Active Phase' },
+    locked:          { ar: '🔒 مقفل', de: '🔒 Gesperrt', en: '🔒 Locked' },
+    sessionTypes: {
+      gym:    { ar: '🏋️ صالة', de: '🏋️ Gym', en: '🏋️ Gym' },
+      cali:   { ar: '🤸 كاليستانيكس', de: '🤸 Calisthenics', en: '🤸 Calisthenics' },
+      run:    { ar: '🏃 جري', de: '🏃 Laufen', en: '🏃 Run' },
+      rest:   { ar: '😴 راحة', de: '😴 Ruhe', en: '😴 Rest' },
+      missed: { ar: '❌ تخطيت', de: '❌ Verpasst', en: '❌ Missed' },
+    },
+  };
+ 
+  function t(key, lang) { return (T[key] && T[key][lang]) || T[key]?.en || key; }
+
+  function formatLiveTime(date, lang) {
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    };
+    return new Intl.DateTimeFormat(lang === 'ar' ? 'ar-EG' : lang === 'de' ? 'de-DE' : 'en-GB', options).format(date);
+  }
+
+  function tSessionType(type, lang) {
+    return T.sessionTypes[type]?.[lang] || T.sessionTypes[type]?.en || type;
+  }
+
+  function markTodayDayCard() {
+    const todayIndex = (new Date().getDay() + 6) % 7;
+    const checkedToday = hasCheckedInToday();
+    const lang = currentLang || 'ar';
+    const label = t('dailyCheckLabel', lang);
+
+    document.querySelectorAll('.week-grid').forEach(grid => {
+      Array.from(grid.children).forEach((dayCol, index) => {
+        const isToday = index === todayIndex;
+        dayCol.classList.toggle('today-day', isToday);
+
+        let chip = dayCol.querySelector('.daily-check-chip');
+        if (isToday) {
+          if (!chip) {
+            chip = document.createElement('span');
+            chip.className = 'daily-check-chip';
+            dayCol.querySelector('.day-head')?.appendChild(chip);
+          }
+          chip.textContent = checkedToday ? `✓ ${label}` : `• ${label}`;
+          chip.classList.toggle('done', checkedToday);
+        } else if (chip) {
+          chip.remove();
+        }
+      });
+    });
+  }
+
+  // ─── PHASE LOCK ────────────────────────────────────────────
+  function applyPhaseLock() {
+    const activePhase = computeActivePhase();
+    const sec = document.getElementById('sec-weekly');
+    if (!sec) return;
+ 
+    sec.querySelectorAll('[data-lang]').forEach(langDiv => {
+      const sectionLang = langDiv.dataset.lang || currentLang || 'ar';
+      const children = Array.from(langDiv.children);
+      const phaseBlocks = [];
+      let block = null;
+      children.forEach(el => {
+        if (el.classList.contains('sec-title')) {
+          block = { elements: [el], phaseNum: phaseBlocks.length + 1 };
+          phaseBlocks.push(block);
+        } else if (block) {
+          block.elements.push(el);
+        }
+      });
+ 
+      phaseBlocks.forEach(pb => {
+        const isLocked = pb.phaseNum > activePhase;
+        pb.elements.forEach(el => {
+          el.classList.toggle('phase-locked-el', isLocked);
+        });
+        const grid = pb.elements.find(e => e.classList && e.classList.contains('week-grid'));
+        if (grid) {
+          grid.style.position = 'relative';
+          let overlay = grid.querySelector('.lock-overlay');
+          if (isLocked) {
+            if (!overlay) {
+              overlay = document.createElement('div');
+              overlay.className = 'lock-overlay';
+              grid.appendChild(overlay);
+            }
+            overlay.innerHTML = `<div class="lock-content"><div class="lock-icon">🔒</div><div class="lock-text">${t('phaseLockedMsg', sectionLang)}</div><div class="lock-phase">Phase ${pb.phaseNum}</div></div>`;
+          } else if (overlay) {
+            overlay.remove();
+          }
+        }
+      });
+    });
+ 
+    updatePhaseIndicator(activePhase, currentLang || 'ar');
+  }
+ 
+  function updatePhaseIndicator(activePhase, lang) {
+    let el = document.getElementById('active-phase-stat');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'active-phase-stat';
+      el.className = 'stat';
+      const bar = document.querySelector('.stats-bar');
+      if (bar) bar.appendChild(el);
+    }
+    el.innerHTML = `<div class="stat-val run">${activePhase}/${PLAN_CONFIG.PHASES.length}</div><div class="stat-lbl">${t('phaseActiveLabel', lang)}</div>`;
+  }
+ 
+  // ─── CHECK-IN PANEL ────────────────────────────────────────
+  function renderCheckInPanel() {
+    const lang = currentLang || 'ar';
+    const checked = hasCheckedInToday();
+    const streak = computeStreak();
+    const days = weekStats();
+    const todayEntry = loadCheckIns()[todayStr()];
+    const types = ['gym', 'cali', 'run', 'rest', 'missed'];
+ 
+    let panel = document.getElementById('checkin-panel');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = 'checkin-panel';
+      const statsBar = document.querySelector('.stats-bar');
+      if (statsBar && statsBar.parentNode) statsBar.parentNode.insertBefore(panel, statsBar.nextSibling);
+    }
+ 
+    panel.innerHTML = `
+      <div class="checkin-inner">
+        <div class="checkin-meta">
+          <span><strong>${streak}</strong> ${t('streak', lang)}</span>
+          <span><strong>${days}/7</strong> ${t('weekDays', lang)}</span>
+        </div>
+        <div class="checkin-sync">${t('liveSyncLabel', lang)} ${formatLiveTime(new Date(), lang)}</div>
+        ${checked
+          ? `<div class="checkin-done">${t('alreadyChecked', lang)} <span class="ci-badge ci-${todayEntry?.type}">${tSessionType(todayEntry?.type, lang)}</span></div>`
+          : `<div class="checkin-title">${t('checkInTitle', lang)}</div>
+             <div class="checkin-buttons">${types.map(tp => `<button class="ci-btn ci-${tp}" data-type="${tp}">${tSessionType(tp, lang)}</button>`).join('')}</div>`
+        }
+      </div>`;
+ 
+    panel.querySelectorAll('.ci-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        doCheckIn(btn.dataset.type);
+        renderCheckInPanel();
+        markTodayDayCard();
+        applyPhaseLock();
+        const msgs = { ar: '✅ تم تسجيل يومك!', de: '✅ Tag eingetragen!', en: '✅ Day logged!' };
+        showToast(msgs[lang] || msgs.en);
+      });
+    });
+
+    markTodayDayCard();
+  }
+ 
+  function maybePromptDailyCheckIn() {
+    const lang = currentLang || 'ar';
+    if (hasCheckedInToday()) return;
+    const key = 'fitnessPlan_dailyPrompt_' + todayStr();
+    if (localStorage.getItem(key) === 'shown') return;
+    localStorage.setItem(key, 'shown');
+    showToast(t('dailyReminder', lang));
+  }
+
+  // ─── HOOKS ─────────────────────────────────────────────────
+  const _origSetLang = window.setLang;
+  window.setLang = function(lang, btn) {
+    if (_origSetLang) _origSetLang(lang, btn);
+    setTimeout(() => { renderCheckInPanel(); markTodayDayCard(); applyPhaseLock(); }, 50);
+  };
+ 
+  const _origSetTab = window.setTab;
+  window.setTab = function(tab) {
+    if (_origSetTab) _origSetTab(tab);
+    if (tab === 'weekly') setTimeout(applyPhaseLock, 50);
+  };
+ 
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      renderCheckInPanel();
+      markTodayDayCard();
+      applyPhaseLock();
+      maybePromptDailyCheckIn();
+    }, 250);
+  });
+ 
+  window.PhaseSystem = {
+    getActivePhase: computeActivePhase,
+    getStreak: computeStreak,
+    getWeekStats: weekStats,
+    getCheckIns: loadCheckIns,
+    forceRefresh: () => { renderCheckInPanel(); applyPhaseLock(); },
+    devSetDate: (dateStr) => { PLAN_CONFIG.START_DATE = dateStr; renderCheckInPanel(); applyPhaseLock(); },
+  };
+ 
+})();

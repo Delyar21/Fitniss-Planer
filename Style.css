@@ -1,4 +1,5 @@
 :root {
+  --font-scale: 1.06;
   --bg: #0a0a0f;
   --surface: #111118;
   --surface2: #1a1a24;
@@ -14,10 +15,16 @@
   --food: #c084fc;
 }
 
+html {
+  font-size: calc(16px * var(--font-scale));
+}
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Cairo', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -216,13 +223,13 @@ body::before {
   font-size:3rem;
   line-height:1;
   opacity:.15;
-  position:absolute;
+ /* position:absolute; */
   top:.5rem; right:1rem;
 }
 
 .phase-label {
   font-family:'IBM Plex Mono', monospace;
-  font-size:.6rem;
+  font-size:.9rem;
   letter-spacing:3px;
   text-transform:uppercase;
   margin-bottom:.3rem;
@@ -245,7 +252,23 @@ body::before {
   margin-bottom:2rem;
 }
 
-.day-col { background: var(--surface); }
+.day-col {
+  background: var(--surface);
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  padding-bottom: .25rem;
+}
+.day-col:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.24);
+}
+.day-col.today-day {
+  background: linear-gradient(180deg, rgba(60,255,180,.10), var(--surface));
+  box-shadow: 0 10px 24px rgba(60,255,180,.12), inset 0 0 0 1px rgba(60,255,180,.22);
+}
 
 .day-head {
   padding:.6rem .4rem;
@@ -260,13 +283,35 @@ body::before {
 
 .day-body { padding:.5rem .4rem; min-height:120px; }
 
+.daily-check-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  margin-top: .35rem;
+  padding: .22rem .55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color: var(--muted);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+.daily-check-chip.done {
+  background: linear-gradient(135deg, rgba(60,255,180,.18), rgba(60,255,180,.08));
+  color: var(--gym);
+  box-shadow: inset 0 0 0 1px rgba(60,255,180,.22), 0 4px 12px rgba(60,255,180,.12);
+}
+
 .session {
   display:block;
-  padding:.3rem .4rem;
-  margin-bottom:.3rem;
-  border-radius:1px;
-  font-size:.72rem;
-  line-height:1.3;
+  padding:.35rem .45rem;
+  margin-bottom:.35rem;
+  border-radius:6px;
+  font-size:.82rem;
+  line-height:1.35;
   font-weight:600;
 }
 
@@ -421,7 +466,7 @@ body::before {
   background: rgba(255,107,60,.1);
   border:1px solid rgba(255,107,60,.2);
   color: var(--run);
-  font-size:.65rem;
+  font-size:.8rem;
   font-family:'IBM Plex Mono', monospace;
 }
 
@@ -439,7 +484,7 @@ body::before {
 
 .budget-cat {
   font-family:'IBM Plex Mono', monospace;
-  font-size:.6rem;
+  font-size:.9rem;
   letter-spacing:2px;
   text-transform:uppercase;
   color: var(--muted);
@@ -485,6 +530,7 @@ body::before {
   .week-grid { grid-template-columns: repeat(4,1fr); }
   .week-grid .day-col:nth-child(n+5) { display:none; }
   .hero h1 { font-size:2.5rem; }
+  .day-col { padding: .15rem; }
 }
 
 /* TRANSLATION RENDERING ENGINE RULES */
@@ -1012,3 +1058,192 @@ body.edit-mode .meal-kcal:hover {
 body.edit-mode .muscle-group-header {
   cursor: text;
 }
+
+
+/* ============================================================
+   ERWEITERUNG: Textgrössen + Phase Lock + Daily Check-In
+   ============================================================ */
+ 
+/* ─── GLOBALE TEXTGRÖSSEN-SKALIERUNG ─────────────────────────*/
+html { font-size: calc(16px * var(--font-scale)); }
+
+body, p, li, .tip-text, .phase p, .ex-detail, .meal-desc, .budget-desc, .checklist li {
+  font-size: 0.95rem;
+}
+
+.sec-sub            { font-size: .95rem; }
+.tip-text           { font-size: .92rem; }
+.meal-desc          { font-size: .88rem; }
+.ex-detail          { font-size: .88rem; }
+.mt-detail          { font-size: .88rem; }
+.budget-desc        { font-size: .88rem; }
+.checklist li       { font-size: .92rem; }
+.hero-sub           { font-size: 1.1rem; }
+.ex-name            { font-size: 1.08rem; }
+.meal-name          { font-size: 1.0rem; }
+.mt-focus           { font-size: .92rem; }
+.phase h3           { font-size: 1.08rem; }
+.session            { font-size: .82rem; }
+.tab                { font-size: .92rem; }
+.ex-type            { font-size: .9rem; }
+.meal-time          { font-size: .68rem; }
+.hero-tag           { font-size: .75rem; }
+.stat-lbl           { font-size: .72rem; }
+.stat-val           { font-size: 2rem; }
+.sec-title          { font-size: 2.2rem; }
+.budget-val         { font-size: 1.75rem; }
+.muscle-group-header{ font-size: 1.42rem; }
+.mt-month           { font-size: 1.55rem; }
+.meal-head h3       { font-size: 1.05rem; }
+.day-head           { font-size: .72rem; }
+ 
+@media (max-width: 600px) {
+  html { font-size: 15.5px; }
+}
+ 
+/* ─── PHASE LOCK STYLES ──────────────────────────────────────*/
+.phase-locked-el {
+  opacity: .28;
+  filter: blur(.6px);
+  pointer-events: none;
+  user-select: none;
+  transition: opacity .3s, filter .3s;
+}
+
+.week-grid {
+  position: relative;
+  gap: .65rem;
+  padding: .35rem;
+  border-radius: 12px;
+}
+
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(10, 10, 15, .88), rgba(18, 18, 24, .92));
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border: 1px dashed rgba(255, 107, 60, .35);
+  border-radius: 10px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+.lock-content {
+  text-align: center;
+  padding: 1.3rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  box-shadow: 0 10px 24px rgba(0,0,0,.32);
+}
+.lock-icon    { font-size: 2rem; margin-bottom: .5rem; opacity: .55; }
+.lock-text    { font-size: .85rem; color: var(--muted); line-height: 1.6; max-width: 260px; }
+.lock-phase   {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; letter-spacing: 2px;
+  color: var(--run); margin-top: .6rem; opacity: .7;
+}
+ 
+#active-phase-stat {
+  background: linear-gradient(135deg, rgba(255,107,60,.08), transparent);
+  border-left: 2px solid var(--run);
+}
+[dir="rtl"] #active-phase-stat { border-left: none; border-right: 2px solid var(--run); }
+ 
+/* ─── DAILY CHECK-IN PANEL ───────────────────────────────────*/
+#checkin-panel {
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: .75rem 1rem;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  margin: 0 auto 1rem;
+  max-width: 1120px;
+}
+ 
+.checkin-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+ 
+.checkin-meta {
+  display: flex;
+  gap: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: 1px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.checkin-meta strong { color: var(--accent); font-size: .9rem; }
+ 
+.checkin-title {
+  font-size: .75rem;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+ 
+.checkin-buttons { display: flex; gap: .4rem; flex-wrap: wrap; }
+ 
+.ci-btn {
+  padding: .32rem .8rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Cairo', sans-serif;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+  white-space: nowrap;
+}
+.ci-btn:hover { transform: translateY(-1px); }
+ 
+.ci-btn.ci-gym   { border-color: rgba(60,255,180,.35); color: var(--gym); }
+.ci-btn.ci-gym:hover { background: rgba(60,255,180,.12); border-color: var(--gym); box-shadow: 0 0 8px rgba(60,255,180,.2); }
+ 
+.ci-btn.ci-cali  { border-color: rgba(232,255,60,.35); color: var(--cal); }
+.ci-btn.ci-cali:hover { background: rgba(232,255,60,.1); border-color: var(--cal); box-shadow: 0 0 8px rgba(232,255,60,.2); }
+ 
+.ci-btn.ci-run   { border-color: rgba(255,107,60,.35); color: var(--run); }
+.ci-btn.ci-run:hover { background: rgba(255,107,60,.1); border-color: var(--run); box-shadow: 0 0 8px rgba(255,107,60,.2); }
+ 
+.ci-btn.ci-rest  { border-color: rgba(255,255,255,.1); color: var(--muted); }
+.ci-btn.ci-rest:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.25); }
+ 
+.ci-btn.ci-missed { border-color: rgba(255,60,60,.25); color: rgba(255,80,80,.7); }
+.ci-btn.ci-missed:hover { background: rgba(255,60,60,.08); border-color: rgba(255,60,60,.5); }
+ 
+.checkin-done {
+  display: flex; align-items: center; gap: .7rem;
+  font-size: .85rem; color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace; letter-spacing: .5px;
+}
+ 
+.ci-badge {
+  padding: .2rem .6rem; border-radius: 2px;
+  font-size: .72rem; font-weight: 700;
+}
+.ci-badge.ci-gym    { background: rgba(60,255,180,.12);  color: var(--gym); }
+.ci-badge.ci-cali   { background: rgba(232,255,60,.1);   color: var(--cal); }
+.ci-badge.ci-run    { background: rgba(255,107,60,.1);   color: var(--run); }
+.ci-badge.ci-rest   { background: rgba(255,255,255,.05); color: var(--muted); }
+.ci-badge.ci-missed { background: rgba(255,60,60,.08);   color: rgba(255,80,80,.8); }
+ 
+[dir="rtl"] .checkin-inner { flex-direction: row-reverse; }
+ 
+@media (max-width: 600px) {
+  .checkin-inner { flex-direction: column; align-items: flex-start; gap: .55rem; }
+  .ci-btn { font-size: .76rem; padding: .28rem .6rem; }
+}
+ 
