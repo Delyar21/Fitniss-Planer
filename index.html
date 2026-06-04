@@ -1,948 +1,409 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Fitness Master Plan</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Planner - Dashboard Menu</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-purple: #a855f7;
+            --accent-rose: #f43f5e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .intro-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .intro-banner h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
+        .intro-banner p { color: var(--text-muted); font-size: 1.05rem; }
+
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .workspace-grid { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        /* Form Controls */
+        .form-group { display: flex; flex-direction: column; margin-bottom: 12px; }
+        .form-group label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; }
+        .form-group input {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .form-group input:focus { outline: none; border-color: var(--accent-blue); }
+
+        /* Stats Bar Layout */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .stat-box {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-box .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .stat-box .value { font-size: 1.2rem; font-weight: 700; margin-top: 4px; color: #fff; }
+        
+        .remove-stat-btn {
+            position: absolute;
+            top: 2px;
+            right: 5px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: none;
+            background: none;
+        }
+        .remove-stat-btn:hover { color: var(--accent-rose); }
+
+        .btn {
+            background-color: var(--accent-emerald);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: auto;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-blue { background-color: var(--accent-blue); }
+
+        /* Plan List styles */
+        .plan-list { list-style: none; }
+
+        .plan-item {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-purple);
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plan-item.default-plan { border-left-color: var(--accent-blue); }
+        .plan-clickable { cursor: pointer; flex-grow: 1; }
+        .plan-item:hover .plan-clickable strong { color: var(--accent-blue); }
+        .plan-details { font-size: 0.85rem; color: var(--text-muted); }
+        
+        .btn-delete-plan {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .btn-delete-plan:hover {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: var(--accent-rose);
+            border-color: var(--accent-rose);
+        }
+    </style>
 </head>
 <body>
 
-  <div class="hero">
-    <div class="hero-tag">MASTER FITNESS PLAN</div>
-    <div class="hero-sub" id="hero-sub">خطتك الكاملة | الصالة + كاليستانيكس + ماراتون</div>
-  </div>
+<div class="container">
 
-  <div class="stats-bar">
-    <div class="stat"><div class="stat-val gym">94</div><div class="stat-lbl">KG CURRENT</div></div>
-    <div class="stat"><div class="stat-val cal">31.4</div><div class="stat-lbl">BMI</div></div>
-    <div class="stat"><div class="stat-val run">11</div><div class="stat-lbl">MONTHS TO MARATHON</div></div>
-    <div class="stat"><div class="stat-val food">~75</div><div class="stat-lbl">KG TARGET</div></div>
-    <div class="stat"><div class="stat-val gym">173</div><div class="stat-lbl">CM HEIGHT</div></div>
-    <div class="stat"><div class="stat-val run">42.2</div><div class="stat-lbl">KM MARATHON</div></div>
-  </div>
+    <header class="intro-banner">
+        <h1>Fitness Planner Pro</h1>
+        <p>A data-driven infrastructure built to track structural routines, calculate biometric targets baseline values, and manage progressive training mesocycles.</p>
+    </header>
 
-  <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('ar', this)">🇸🇦 عربي</button>
-    <button class="lang-btn" onclick="setLang('de', this)">🇩🇪 Deutsch</button>
-    <button class="lang-btn" onclick="setLang('en', this)">🇬🇧 English</button>
-  </div>
+    <div class="workspace-grid">
+        <div class="panel">
+            <div class="panel-title">Initialize New Workout Plan</div>
+            
+            <div class="form-group">
+                <label for="planName">Plan Name</label>
+                <input type="text" id="planName" placeholder="e.g., Push/Pull/Legs Split">
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                    <label for="age">Age (yrs)</label>
+                    <input type="number" id="age" value="25">
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" value="180">
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" value="75">
+                </div>
+            </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="setTab('overview')" id="tab-overview">
-      <span data-lang-inline="ar" class="show">نظرة عامة</span>
-      <span data-lang-inline="de">Überblick</span>
-      <span data-lang-inline="en">Overview</span>
-    </button>
-    <button class="tab" onclick="setTab('weekly')" id="tab-weekly">
-      <span data-lang-inline="ar" class="show">الجدول الأسبوعي</span>
-      <span data-lang-inline="de">Wochenplan</span>
-      <span data-lang-inline="en">Weekly Schedule</span>
-    </button>
-    <button class="tab" onclick="setTab('exercises')" id="tab-exercises">
-      <span data-lang-inline="ar" class="show">التمارين</span>
-      <span data-lang-inline="de">Übungen</span>
-      <span data-lang-inline="en">Exercises</span>
-    </button>
-    <button class="tab" onclick="setTab('nutrition')" id="tab-nutrition">
-      <span data-lang-inline="ar" class="show">التغذية</span>
-      <span data-lang-inline="de">Ernährung</span>
-      <span data-lang-inline="en">Nutrition</span>
-    </button>
-    <button class="tab" onclick="setTab('marathon')" id="tab-marathon">
-      <span data-lang-inline="ar" class="show">الماراثون</span>
-      <span data-lang-inline="de">Marathon</span>
-      <span data-lang-inline="en">Marathon</span>
-    </button>
-    <button class="tab" onclick="setTab('budget')" id="tab-budget">
-      <span data-lang-inline="ar" class="show">الميزانية</span>
-      <span data-lang-inline="de">Budget</span>
-      <span data-lang-inline="en">Budget</span>
-    </button>
-  </div>
+            <div class="form-group">
+                <label>Add Extra Stat Box Field</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="customStatName" placeholder="e.g., Body Fat %" style="flex: 1;">
+                    <button type="button" class="btn btn-blue" style="margin: 0; padding: 0 15px;" onclick="addNewStatBox()">+ Add Field</button>
+                </div>
+            </div>
 
-  <div class="section active" id="sec-overview">
-    <div class="content">
-      <div class="show" data-lang="ar">
-        <div class="sec-title">المراحل الأربع</div>
-        <div class="sec-sub">خطتك مقسمة على 4 مراحل تدريجية على مدى 11 شهراً</div>
-        <div class="timeline">
-          <div class="phase p1">
-            <div class="phase-num">01</div>
-            <div class="phase-label">المرحلة الأولى</div>
-            <h3>إعادة التأهيل</h3>
-            <p>مايو – يوليو 2026 (3 أشهر)<br>إعادة الجسم للتمرين، بناء قاعدة عضلية، خسارة أولى للدهون. 4 أيام في الأسبوع.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--gym)"></div></div>
-          </div>
-          <div class="phase p2">
-            <div class="phase-num">02</div>
-            <div class="phase-label">المرحلة الثانية</div>
-            <h3>البناء + الجري</h3>
-            <p>أغسطس – أكتوبر 2026 (3 أشهر)<br>تكثيف الكاليستانيكس، إضافة الجري 3×/أسبوع، 5 أيام تدريب.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--cal)"></div></div>
-          </div>
-          <div class="phase p3">
-            <div class="phase-num">03</div>
-            <div class="phase-label">المرحلة الثالثة</div>
-            <h3>التحضير للماراثون</h3>
-            <p>نوفمبر 2026 – فبراير 2027 (4 أشهر)<br>التركيز على الجري التدريجي، الحجم الأسبوعي يرتفع من 25 إلى 45 كم.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--run)"></div></div>
-          </div>
-          <div class="phase p4">
-            <div class="phase-num">04</div>
-            <div class="phase-label">المرحلة الرابعة</div>
-            <h3>التحديد والسباق</h3>
-            <p>مارس – أبريل 2027 (2 شهر)<br>تقليل الحجم، الحفاظ على القوة، التحضير النفسي والغذائي للماراثون.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--food)"></div></div>
-          </div>
+            <div class="stats-bar" id="dynamicStatsBar">
+                <div class="stat-box" id="bmiStaticBox">
+                    <div class="label">Calculated BMI</div>
+                    <div class="value" id="liveBmi">--</div>
+                </div>
+            </div>
+
+            <button class="btn" style="margin-top: 20px;" onclick="generateWorkoutPlan()">Commit & Save New Plan</button>
         </div>
-        <div class="sec-title">المبادئ الأساسية</div>
-        <div class="tip"><div class="tip-icon">🔥</div><div class="tip-text"><strong>عجز السعرات:</strong> هدفك خسارة 0.5-0.8 كغ في الأسبوع. لا تقل عن 1800 سعرة يومياً لأن التدريب عالٍ.</div></div>
-        <div class="tip"><div class="tip-icon">💧</div><div class="tip-text"><strong>الماء:</strong> 3-4 لتر يومياً على الأقل. في أيام الجري ارفع إلى 4-5 لتر مع إلكتروليت.</div></div>
-        <div class="tip"><div class="tip-icon">😴</div><div class="tip-text"><strong>النوم:</strong> 7-9 ساعات إلزامية. عضلاتك تنمو أثناء النوم، لا أثناء التمرين.</div></div>
-        <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>القياسات:</strong> زن نفسك مرة بالأسبوع صباح الإثنين على معدة فارغة. قس محيط البطن كل شهر.</div></div>
-        <div class="tip"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>الألم:</strong> تعب العضلة = طبيعي. ألم في المفاصل أو الأوتار = توقف وراجع طبيباً. الفرق مهم جداً.</div></div>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">DIE VIER PHASEN</div>
-        <div class="sec-sub">Dein Plan ist in 4 progressive Phasen über 11 Monate aufgeteilt</div>
-        <div class="timeline">
-          <div class="phase p1">
-            <div class="phase-num">01</div>
-            <div class="phase-label">Phase 1</div>
-            <h3>Rehabilitation</h3>
-            <p>Mai – Juli 2026 (3 Monate)<br>Körper ans Training gewöhnen, Muskelgrundlage aufbauen, erster Fettverlust. 4 Tage/Woche.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--gym)"></div></div>
-          </div>
-          <div class="phase p2">
-            <div class="phase-num">02</div>
-            <div class="phase-label">Phase 2</div>
-            <h3>Aufbau + Laufen</h3>
-            <p>Aug – Okt 2026 (3 Monate)<br>Calisthenics intensivieren, Laufen 3×/Woche hinzufügen, 5 Trainingstage.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--cal)"></div></div>
-          </div>
-          <div class="phase p3">
-            <div class="phase-num">03</div>
-            <div class="phase-label">Phase 3</div>
-            <h3>Marathon-Vorbereitung</h3>
-            <p>Nov 2026 – Feb 2027 (4 Monate)<br>Fokus auf progressives Laufen, Wochenvolumen steigt von 25 auf 45 km.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--run)"></div></div>
-          </div>
-          <div class="phase p4">
-            <div class="phase-num">04</div>
-            <div class="phase-label">Phase 4</div>
-            <h3>Tapering & Rennen</h3>
-            <p>März – April 2027 (2 Monate)<br>Volumen pflegen, Kraft erhalten, mentale und ernährungstechnische Vorbereitung.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--food)"></div></div>
-          </div>
+
+        <div class="panel">
+            <div class="panel-title">Your Created Active Plans</div>
+            <div id="plansContainer">
+                <ul class="plan-list" id="savedPlansList">
+                    </ul>
+            </div>
         </div>
-        <div class="sec-title">GRUNDPRINZIPIEN</div>
-        <div class="tip"><div class="tip-icon">🔥</div><div class="tip-text"><strong>Kaloriendefizit:</strong> Ziel: 0,5-0,8 kg Verlust pro Woche. Niemals unter 1800 kcal/Tag, da das Training intensiv ist.</div></div>
-        <div class="tip"><div class="tip-icon">💧</div><div class="tip-text"><strong>Wasser:</strong> Mindestens 3-4 Liter täglich. An Lauftagen 4-5 Liter mit Elektrolyten.</div></div>
-        <div class="tip"><div class="tip-icon">😴</div><div class="tip-text"><strong>Schlaf:</strong> 7-9 Stunden sind Pflicht. Muskeln wachsen im Schlaf, nicht beim Training.</div></div>
-        <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>Messungen:</strong> Jeden Montag morgens nüchtern wiegen. Bauchumfang monatlich messen.</div></div>
-        <div class="tip"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>Schmerz:</strong> Muskelermüdung = normal. Gelenk- oder Sehnenschmerz = stoppen und Arzt aufsuchen. Der Unterschied ist extrem wichtig.</div></div>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">THE FOUR PHASES</div>
-        <div class="sec-sub">Your plan is split into 4 progressive phases over 11 months</div>
-        <div class="timeline">
-          <div class="phase p1">
-            <div class="phase-num">01</div>
-            <div class="phase-label">Phase 1</div>
-            <h3>Rehabilitation</h3>
-            <p>May – Jul 2026 (3 months)<br>Re-introduce body to training, build muscle base, initial fat loss. 4 days/week.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--gym)"></div></div>
-          </div>
-          <div class="phase p2">
-            <div class="phase-num">02</div>
-            <div class="phase-label">Phase 2</div>
-            <h3>Build + Run</h3>
-            <p>Aug – Oct 2026 (3 months)<br>Intensify calisthenics, add running 3×/week, 5 training days.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--cal)"></div></div>
-          </div>
-          <div class="phase p3">
-            <div class="phase-num">03</div>
-            <div class="phase-label">Phase 3</div>
-            <h3>Marathon Prep</h3>
-            <p>Nov 2026 – Feb 2027 (4 months)<br>Focus on progressive running, weekly volume rises from 25 to 45 km.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:50%;background:var(--run)"></div></div>
-          </div>
-          <div class="phase p4">
-            <div class="phase-num">04</div>
-            <div class="phase-label">Phase 4</div>
-            <h3>Taper & Race</h3>
-            <p>Mar – Apr 2027 (2 months)<br>Reduce volume, maintain strength, mental and nutritional marathon prep.</p>
-            <div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--food)"></div></div>
-          </div>
-        </div>
-        <div class="sec-title">CORE PRINCIPLES</div>
-        <div class="tip"><div class="tip-icon">🔥</div><div class="tip-text"><strong>Calorie deficit:</strong> Target 0.5-0.8 kg loss per week. Never go below 1800 kcal/day given high training load.</div></div>
-        <div class="tip"><div class="tip-icon">💧</div><div class="tip-text"><strong>Water:</strong> 3-4 liters daily minimum. On running days push to 4-5 liters with electrolytes.</div></div>
-        <div class="tip"><div class="tip-icon">😴</div><div class="tip-text"><strong>Sleep:</strong> 7-9 hours mandatory. Muscles grow during sleep, not during training.</div></div>
-        <div class="tip"><div class="tip-icon">📏</div><div class="tip-text"><strong>Measurements:</strong> Weigh every Monday morning fasted. Measure waist circumference monthly.</div></div>
-        <div class="tip"><div class="tip-icon">⚠️</div><div class="tip-text"><strong>Pain:</strong> Muscle fatigue = normal. Joint or tendon pain = stop and see a doctor. The difference is vital.</div></div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <div class="section" id="sec-weekly">
-    <div class="content">
-      <div class="show" data-lang="ar">
-        <div class="sec-title">المرحلة 1: الجدول الأسبوعي</div>
-        <div class="sec-sub">مايو – يوليو 2026 · 4 أيام تمرين + 3 راحة</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session gym">🏋️ صالة<br>صدر + ترايسبس</span></div></div>
-          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>تمهيدي</span></div></div>
-          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session rest">😴 راحة نشطة<br>مشي 30 دق</span></div></div>
-          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session gym">🏋️ صالة<br>ظهر + بايسبس</span></div></div>
-          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session gym">🏋️ صالة<br>أرجل + أكتاف</span></div></div>
-          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
-          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة / تمدد</span></div></div>
-        </div>
-        <div class="sec-title">المرحلة 2: الجدول الأسبوعي</div>
-        <div class="sec-sub">أغسطس – أكتوبر 2026 · 5 أيام تمرين</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session gym">🏋️ صالة<br>أعلى الجسم</span></div></div>
-          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session run">🏃 جري<br>5-8 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>متوسط</span></div></div>
-          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session run">🏃 جري<br>6-10 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session gym">🏋️ صالة<br>أسفل الجسم</span></div></div>
-          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session run">🏃 جري طويل<br>12-16 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
-        </div>
-        <div class="sec-title">المرحلة 3: الجدول الأسبوعي</div>
-        <div class="sec-sub">نوفمبر 2026 – فبراير 2027 · التركيز على الجري</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session rest">😴 راحة نشطة</span></div></div>
-          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session run">🏃 جري متوسط<br>8-12 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session gym">🏋️ صالة<br>قوة (خفيف)</span></div></div>
-          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session run">🏃 إيقاع سريع<br>6-8 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>للمحافظة</span></div></div>
-          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session run">🏃 الجري الطويل<br>18-32 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
-        </div>
-        <div class="sec-title">المرحلة 4: الجدول الأسبوعي</div>
-        <div class="sec-sub">مارس – أبريل 2027 · تقليل الحجم والتحضير</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">الإثنين</div><div class="day-body"><span class="session rest">😴 راحة نشطة</span></div></div>
-          <div class="day-col"><div class="day-head">الثلاثاء</div><div class="day-body"><span class="session run">🏃 جري قصير<br>6-8 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الأربعاء</div><div class="day-body"><span class="session gym">🏋️ صالة<br>قوة خفيفة</span></div></div>
-          <div class="day-col"><div class="day-head">الخميس</div><div class="day-body"><span class="session run">🏃 جري إيقاعي<br>6 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الجمعة</div><div class="day-body"><span class="session cali">🤸 كاليستانيكس<br>المحافظة</span></div></div>
-          <div class="day-col"><div class="day-head">السبت</div><div class="day-body"><span class="session run">🏃 جري متوسط<br>10-18 كم</span></div></div>
-          <div class="day-col"><div class="day-head">الأحد</div><div class="day-body"><span class="session rest">😴 راحة كاملة</span></div></div>
-        </div>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">PHASE 1: WOCHENPLAN</div>
-        <div class="sec-sub">Mai – Juli 2026 · 4 Trainingstage + 3 Ruhetage</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Brust + Trizeps</span></div></div>
-          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Anfänger</span></div></div>
-          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session rest">😴 Aktive Erholung<br>30 Min Spazieren</span></div></div>
-          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Rücken + Bizeps</span></div></div>
-          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Beine + Schultern</span></div></div>
-          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
-          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Ruhe / Dehnen</span></div></div>
-        </div>
-        <div class="sec-title">PHASE 2: WOCHENPLAN</div>
-        <div class="sec-sub">August – Oktober 2026 · 5 Trainingstage</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Oberkörper</span></div></div>
-          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session run">🏃 Laufen<br>5-8 km</span></div></div>
-          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Mittel</span></div></div>
-          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session run">🏃 Laufen<br>6-10 km</span></div></div>
-          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Unterkörper</span></div></div>
-          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session run">🏃 Langer Lauf<br>12-16 km</span></div></div>
-          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
-        </div>
-        <div class="sec-title">PHASE 3: WOCHENPLAN</div>
-        <div class="sec-sub">Nov 2026 – Feb 2027 · Fokus Laufen</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session rest">😴 Aktive Erholung</span></div></div>
-          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session run">🏃 Laufen<br>8-12 km</span></div></div>
-          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Kraft (leicht)</span></div></div>
-          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session run">🏃 Tempo<br>6-8 km</span></div></div>
-          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Erhaltung</span></div></div>
-          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session run">🏃 Langer Lauf<br>18-32 km</span></div></div>
-          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
-        </div>
-        <div class="sec-title">PHASE 4: WOCHENPLAN</div>
-        <div class="sec-sub">März – April 2027 · Tapering / Erholung</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MO</div><div class="day-body"><span class="session rest">😴 Aktive Erholung</span></div></div>
-          <div class="day-col"><div class="day-head">DI</div><div class="day-body"><span class="session run">🏃 Kurzer Lauf<br>6-8 km</span></div></div>
-          <div class="day-col"><div class="day-head">MI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Kraft (leicht)</span></div></div>
-          <div class="day-col"><div class="day-head">DO</div><div class="day-body"><span class="session run">🏃 Kurzer Tempo<br>6 km</span></div></div>
-          <div class="day-col"><div class="day-head">FR</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Erhaltung</span></div></div>
-          <div class="day-col"><div class="day-head">SA</div><div class="day-body"><span class="session run">🏃 Mittlerer Lauf<br>10-18 km</span></div></div>
-          <div class="day-col"><div class="day-head">SO</div><div class="day-body"><span class="session rest">😴 Vollständige Ruhe</span></div></div>
-        </div>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">PHASE 1: WEEKLY SCHEDULE</div>
-        <div class="sec-sub">May – July 2026 · 4 training days + 3 rest days</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Chest + Triceps</span></div></div>
-          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Beginner</span></div></div>
-          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session rest">😴 Active Rest<br>30 min walk</span></div></div>
-          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Back + Biceps</span></div></div>
-          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Legs + Shoulders</span></div></div>
-          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
-          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Rest / Stretch</span></div></div>
-        </div>
-        <div class="sec-title">PHASE 2: WEEKLY SCHEDULE</div>
-        <div class="sec-sub">August – October 2026 · 5 training days</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Upper Body</span></div></div>
-          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session run">🏃 Run<br>5-8 km</span></div></div>
-          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Intermediate</span></div></div>
-          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session run">🏃 Run<br>6-10 km</span></div></div>
-          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Lower Body</span></div></div>
-          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session run">🏃 Long Run<br>12-16 km</span></div></div>
-          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
-        </div>
-        <div class="sec-title">PHASE 3: WEEKLY SCHEDULE</div>
-        <div class="sec-sub">Nov 2026 – Feb 2027 · Focus on running</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session rest">😴 Active Rest</span></div></div>
-          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session run">🏃 Run<br>8-12 km</span></div></div>
-          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Strength (light)</span></div></div>
-          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session run">🏃 Tempo Run<br>6-8 km</span></div></div>
-          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Maintenance</span></div></div>
-          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session run">🏃 Long Run<br>18-32 km</span></div></div>
-          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
-        </div>
-        <div class="sec-title">PHASE 4: WEEKLY SCHEDULE</div>
-        <div class="sec-sub">Mar – Apr 2027 · Tapering / Recovery</div>
-        <div class="week-grid">
-          <div class="day-col"><div class="day-head">MON</div><div class="day-body"><span class="session rest">😴 Active Rest</span></div></div>
-          <div class="day-col"><div class="day-head">TUE</div><div class="day-body"><span class="session run">🏃 Short Run<br>6-8 km</span></div></div>
-          <div class="day-col"><div class="day-head">WED</div><div class="day-body"><span class="session gym">🏋️ Gym<br>Strength (light)</span></div></div>
-          <div class="day-col"><div class="day-head">THU</div><div class="day-body"><span class="session run">🏃 Short Tempo<br>6 km</span></div></div>
-          <div class="day-col"><div class="day-head">FRI</div><div class="day-body"><span class="session cali">🤸 Calisthenics<br>Maintenance</span></div></div>
-          <div class="day-col"><div class="day-head">SAT</div><div class="day-body"><span class="session run">🏃 Medium Run<br>10-18 km</span></div></div>
-          <div class="day-col"><div class="day-head">SUN</div><div class="day-body"><span class="session rest">😴 Full Rest</span></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
+<script>
+    // In-memory data store initializing with index.html recognized as "My Plan"
+    let createdPlans = [
+        {
+            id: 'default_index',
+            name: 'My Plan',
+            age: '--',
+            height: '--',
+            weight: '--',
+            bmi: 'Link Active',
+            isDefault: true,
+            url: 'workspace.html' // Changed from index.html
+        }
+    ];
 
-  <div class="section" id="sec-exercises">
-    <div class="content">
+    function calculateBmiMetric(weight, height) {
+        if (!weight || !height || height <= 0) return "--";
+        const heightM = height / 100;
+        return (weight / (heightM * heightM)).toFixed(1);
+    }
 
-      <!-- ===== ARABIC ===== -->
-      <div class="show" data-lang="ar">
+    // Interactive helper: Appends user custom-defined measurement nodes with a removal button
+    function addNewStatBox() {
+        const inputField = document.getElementById('customStatName');
+        const labelText = inputField.value.trim();
 
-        <!-- MUSCLE GROUP FILTER HINT -->
-        <div class="tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>كيف تستخدم هذه الصفحة:</strong> كل مجموعة عضلية تحتوي على تمرين صالة + تمرين كاليستانيكس. اختر واحداً من كل نوع لكل مجموعة عضلية في جلستك. ابدأ بالتمارين المركبة أولاً ثم العزل.</div></div>
+        if (!labelText) {
+            alert("Please enter a custom statistic parameter label.");
+            return;
+        }
 
-        <!-- CHEST -->
-        <div class="muscle-group-header gym-header">💪 الصدر – Chest</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">صالة · صدر</div><div class="ex-name">بنش برس بالبار</div><div class="ex-detail">التمرين الملكي للصدر. ظهرك على المقعد، قدماك مثبتتان. انزل 3 ثوان، ادفع بقوة. المدى الكامل ضروري.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · صدر</div><div class="ex-name">بنش برس بالدامبل</div><div class="ex-detail">مدى أعمق من البار. في أعلى الحركة الدامبل يقتربان ولكن لا يلمسان. يعالج الفرق بين الجانبين.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · صدر علوي</div><div class="ex-name">إنكلاين بنش برس</div><div class="ex-detail">زاوية 30-45 درجة. يستهدف الصدر العلوي والكتف الأمامي. لا ترفع الزاوية أكثر من 45° لأنها تصبح تمرين كتف.</div><div class="ex-sets"><span class="set-badge gym">3 × 10</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · صدر</div><div class="ex-name">كيبل فلاي (Cable Fly)</div><div class="ex-detail">حركة قوسية من الجانبين نحو المنتصف. يعزل الصدر بشكل كامل. ابقَ ثانيتين في الضغط للحصول على أقصى تقلص.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · صدر</div><div class="ex-name">بوش آب تقدمي</div><div class="ex-detail">م1: على الركبتين → م2: عادي → م3: إيقاع بطيء 3-1-3 → م4: آرشر بوش آب → م5: بوش آب بيد واحدة (هدف بعيد المدى).</div><div class="ex-sets"><span class="set-badge cali">4 × ماكس</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · صدر</div><div class="ex-name">ديبس على البارالل بار</div><div class="ex-detail">انحنِ للأمام قليلاً لاستهداف الصدر. م1: كرسي → م2: قدم مستقيمة → م3: بارالل بار كامل. الكوعان يتفتحان للخارج قليلاً.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · صدر</div><div class="ex-name">Pike Push-Up (أكتاف/صدر علوي)</div><div class="ex-detail">جسمك على شكل مثلث، اسفل للأمام. يستهدف الصدر العلوي والكتف الأمامي. م1: ساق على كرسي → م2: ساق مرفوعة عالياً.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-        </div>
+        const bar = document.getElementById('dynamicStatsBar');
+        
+        const box = document.createElement('div');
+        box.className = 'stat-box';
+        
+        // Add delete trigger to custom fields
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-stat-btn';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.title = "Remove this stat field";
+        removeBtn.onclick = function() { box.remove(); };
+        
+        const lbl = document.createElement('div');
+        lbl.className = 'label';
+        lbl.innerText = labelText;
+        
+        const val = document.createElement('div');
+        val.className = 'value';
+        val.contentEditable = "true";
+        val.innerText = "- -";
+        val.style.outline = "none";
+        
+        box.appendChild(removeBtn);
+        box.appendChild(lbl);
+        box.appendChild(val);
+        bar.appendChild(box);
+        
+        inputField.value = "";
+    }
 
-        <!-- BACK -->
-        <div class="muscle-group-header gym-header">🦾 الظهر – Back</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">صالة · ظهر</div><div class="ex-name">تجديف بالبار (Bent Row)</div><div class="ex-detail">الملك. انحنِ 45°، اسحب نحو السرة. الأكواع قريبة من الجسم. الكتفان تتقاربان في الأعلى. ظهر مستقيم دائماً.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ظهر</div><div class="ex-name">لات بول داون (Lat Pulldown)</div><div class="ex-detail">اسحب نحو الصدر لا الرقبة. أهم تمرين لبناء V-shape. انحنِ للخلف قليلاً عند السحب. تحكم في الإرجاع.</div><div class="ex-sets"><span class="set-badge gym">4 × 10</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ظهر</div><div class="ex-name">تجديف بالدامبل على مقعد</div><div class="ex-detail">ركبة ويد على المقعد، اسحب الدامبل نحو الورك. يعزل كل جانب بشكل مستقل. المدى الكامل أسفلاً أساسي.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12 لكل جانب</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ظهر سفلي</div><div class="ex-name">ديد ليفت (Deadlift)</div><div class="ex-detail">تمرين الجسم الكامل. ابدأ بأوزان خفيفة جداً وتعلم التقنية أولاً. ظهرك دائماً محايد، الحزام إذا كان الوزن ثقيلاً.</div><div class="ex-sets"><span class="set-badge gym">3 × 5</span><span class="set-badge gym">راحة 3 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ظهر</div><div class="ex-name">كيبل رو (Seated Cable Row)</div><div class="ex-detail">اجلس مستقيماً، اسحب نحو البطن. الكتفان تنضمان في الأعلى. لا تتأرجح بجسمك. يستهدف وسط الظهر.</div><div class="ex-sets"><span class="set-badge gym">3 × 12</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · ظهر</div><div class="ex-name">بول آب تقدمي (Pull-Up)</div><div class="ex-detail">م1: تعليق ثابت 30ث → م2: نيغاتف (نزول بطيء) → م3: بمساعدة حزام → م4: بول آب كامل → م5: بول آب بطيء 3-1-3. الهدف: 10 تكرارات نظيفة.</div><div class="ex-sets"><span class="set-badge cali">4 × ماكس</span><span class="set-badge cali">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · ظهر</div><div class="ex-name">تشين آب (Chin-Up – باطن اليد)</div><div class="ex-detail">اليدان للداخل (سوبيناشن). يستهدف البايسبس والظهر السفلي أكثر من البول آب. أسهل للمبتدئين للوصول للأعلى.</div><div class="ex-sets"><span class="set-badge cali">3 × ماكس</span><span class="set-badge cali">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · ظهر</div><div class="ex-name">Australian Pull-Up (افقي)</div><div class="ex-detail">جسمك أفقي تحت بار أو طاولة، اسحب صدرك للأعلى. أسهل من البول آب. مثالي للمبتدئين وتقوية الظهر الوسطي.</div><div class="ex-sets"><span class="set-badge cali">4 × 10-15</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-        </div>
+    // Core validation and compilation tool for new structural routines
+    function generateWorkoutPlan() {
+        const nameField = document.getElementById('planName');
+        const planName = nameField.value.trim();
+        const age = parseInt(document.getElementById('age').value);
+        const height = parseFloat(document.getElementById('height').value);
+        const weight = parseFloat(document.getElementById('weight').value);
 
-        <!-- SHOULDERS -->
-        <div class="muscle-group-header gym-header">🏔️ الأكتاف – Shoulders</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">صالة · كتف</div><div class="ex-name">أوفرهيد برس بالبار/دامبل</div><div class="ex-detail">اضغط فوق الرأس حتى تمتد الذراعان. لا تقوس الظهر. ابدأ بوزن خفيف. أقوى تمرين للكتف الأمامي والجانبي.</div><div class="ex-sets"><span class="set-badge gym">4 × 8-10</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · كتف جانبي</div><div class="ex-name">لاترال ريز (Lateral Raise)</div><div class="ex-detail">ارفع الدامبل للجانبين حتى مستوى الكتف. الكوعان منحنيان قليلاً. لا ترفع أكثر من 90°. يستهدف الكتف الجانبي حصراً.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · كتف خلفي</div><div class="ex-name">ريير ديلت فلاي (Rear Delt Fly)</div><div class="ex-detail">انحنِ للأمام، ارفع الدامبل للجانبين. الكتف الخلفي هو الأكثر إهمالاً وسبب آلام الرقبة. أسقطه لا تنسه.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · كتف/ظهر علوي</div><div class="ex-name">أبرايت رو (Upright Row)</div><div class="ex-detail">اسحب البار نحو الذقن، الكوعان يرتفعان للأعلى والخارج. يستهدف الكتف الجانبي والمصيدة. لا ترفع الكوعان أعلى من الأذنين.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كتف</div><div class="ex-name">Pike Push-Up تقدمي</div><div class="ex-detail">م1: عادي → م2: ساق على كرسي → م3: ساق على جدار (شبه عمودي) → م4: هاندستاند بوش آب (بالجدار). يستهدف الكتف الكامل.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كتف</div><div class="ex-name">هاندستاند هولد (Handstand)</div><div class="ex-detail">م1: زاوية 45° على الجدار → م2: هاندستاند بالجدار → م3: هاندستاند حر. يبني قوة استثنائية في الكتف والكور. تمرين طويل المدى.</div><div class="ex-sets"><span class="set-badge cali">3 × 10-30 ثا</span><span class="set-badge cali">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كتف/صدر</div><div class="ex-name">بوش آب بعرض يدين واسع</div><div class="ex-detail">ضع اليدين أعرض من الكتفين. يستهدف الصدر الخارجي والكتف الأمامي. المدى أصعب لكن التأثير على الكتف أكبر.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-        </div>
+        if (!planName) {
+            alert("Please supply an identifying title name for your Workout Plan.");
+            return;
+        }
 
-        <!-- BICEPS & TRICEPS -->
-        <div class="muscle-group-header gym-header">💪 البايسبس والترايسبس – Arms</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">صالة · بايسبس</div><div class="ex-name">كيبل كيرل + بار كيرل</div><div class="ex-detail">كيبل: مدى أكثر استمرارية. بار: وزن أثقل. اسحب ببطء، عصر العضلة في الأعلى 1 ثانية. لا تتأرجح أبداً.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · بايسبس</div><div class="ex-name">هامر كيرل (Hammer Curl)</div><div class="ex-detail">اليد محايدة (إبهام للأعلى). يستهدف البراكياليس (تحت البايسبس) وساعد اليد. يجعل الذراع تبدو أكبر وأكثر سماكة.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ترايسبس</div><div class="ex-name">ترايسبس بوش داون (Pushdown)</div><div class="ex-detail">اسحب الكيبل للأسفل. الكوع ثابت بجانب الجسم. مد الذراع بالكامل وعصر الترايسبس في الأسفل. أكثر تمارين الترايسبس فعالية.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ترايسبس</div><div class="ex-name">سكال كراشر (Skull Crusher)</div><div class="ex-detail">استلقِ، أنزل البار نحو الجبهة ببطء، مد الذراعين. الكوعان ثابتان ولا يتحركان. يستهدف الرأس الطويل للترايسبس.</div><div class="ex-sets"><span class="set-badge gym">3 × 10</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · بايسبس</div><div class="ex-name">تشين آب + بول آب (باطن اليد)</div><div class="ex-detail">اليدان قريبتان وللداخل = تشين آب. يشغّل البايسبس بشكل مكثف مع الظهر. الأفضل لتضخيم البايسبس دون أوزان. م1: مساعدة → م2: كامل.</div><div class="ex-sets"><span class="set-badge cali">4 × ماكس</span><span class="set-badge cali">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · ترايسبس</div><div class="ex-name">ديبس ضيق + بنش ديبس</div><div class="ex-detail">يدان قريبتان = ترايسبس. م1: كرسي → م2: قدم مستقيمة → م3: بارالل بار ضيق → م4: ديبس حلقات. الكوعان للخلف لا للخارج.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · ترايسبس</div><div class="ex-name">بوش آب ضيق الذراعين</div><div class="ex-detail">يدان تحت الصدر مباشرة، أصابعهما تتلاقى. الكوعان قريبان من الجسم عند الانزال. يعزل الترايسبس بشدة. أصعب من العادي.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-        </div>
+        const finalBmi = calculateBmiMetric(weight, height);
+        document.getElementById('liveBmi').innerText = finalBmi;
 
-        <!-- LEGS -->
-        <div class="muscle-group-header gym-header">🦵 الأرجل – Legs</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">صالة · أرجل (كوادز + أرداف)</div><div class="ex-name">سكوات بالبار (Back Squat)</div><div class="ex-detail">الملك. ركبتيك باتجاه أصابع قدميك. الفخذ موازٍ للأرض في الأسفل. الصدر مرفوع. وزن على الكعبين لا على أصابع القدم.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">راحة 2-3 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · أرجل</div><div class="ex-name">ليغ برس (Leg Press)</div><div class="ex-detail">بديل مناسب للمبتدئين. ضع قدميك في أعلى اللوحة لاستهداف الأرداف، أسفلها للكوادز. لا تقفل الركبة في الأعلى.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · أرداف + هامسترينغ</div><div class="ex-name">لانج (Lunges) بالدامبل</div><div class="ex-detail">خطوة للأمام، ركبة خلفية تقترب من الأرض. الجذع مستقيم. يستهدف الأرداف والفخذ بشكل منفصل. ممتاز للتوازن.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 لكل رجل</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · هامسترينغ</div><div class="ex-name">ليغ كيرل (Leg Curl)</div><div class="ex-detail">استلقِ أو اجلس، اسحب الساق للخلف. الهامسترينغ من أكثر العضلات إهمالاً عند المبتدئين. أساسي لحماية الركبة.</div><div class="ex-sets"><span class="set-badge gym">3 × 12</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · ربلة الساق</div><div class="ex-name">كالف ريز (Calf Raise)</div><div class="ex-detail">قف على حافة درجة، ارفع على أصابع قدميك، انزل ببطء. تمرين بسيط لكن أساسي خصوصاً لتجنب إصابات الجري.</div><div class="ex-sets"><span class="set-badge gym">4 × 15-20</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · أرجل</div><div class="ex-name">سكوات بجسم الجسم + جامب سكوات</div><div class="ex-detail">م1: سكوات عادي → م2: سكوات بطيء 3-1-3 → م3: جامب سكوات (للقوة الانفجارية) → م4: سكوات على حافة درجة (مدى أعمق). الكعبان مرفوعان إن لم تستطع الوصول للأسفل.</div><div class="ex-sets"><span class="set-badge cali">4 × 15-20</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · أرجل</div><div class="ex-name">بيستول سكوات تقدمي</div><div class="ex-detail">م1: بمساعدة جدار → م2: على كرسي (Box Pistol) → م3: بيستول سكوات كامل. يحتاج قوة + مرونة + توازن. أصعب تمرين للرجل.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-10 كل رجل</span><span class="set-badge cali">راحة 2 دق</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · أرجل</div><div class="ex-name">بولغاريان سبليت سكوات</div><div class="ex-detail">قدم خلفية على كرسي أو درجة، قدم أمامية تنزل للركوع. قريب من البيستول لكن أسهل. يركز على الأردافم والكوادز.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12 كل رجل</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · أرداف</div><div class="ex-name">جلوت بريدج + هيب ثرست</div><div class="ex-detail">م1: جلوت بريدج (الظهر على الأرض) → م2: واحدة رجل → م3: هيب ثرست على كرسي. يستهدف الأرداف والهامسترينغ. أساسي لصحة الورك والركبة.</div><div class="ex-sets"><span class="set-badge cali">3 × 15-20</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
-        </div>
+        const extraStats = [];
+        const extraBoxes = document.querySelectorAll('#dynamicStatsBar .stat-box');
+        extraBoxes.forEach(box => {
+            if (box.id === 'bmiStaticBox') return; // Skip base BMI module
+            const label = box.querySelector('.label').innerText;
+            const value = box.querySelector('.value').innerText;
+            extraStats.push({ label, value });
+        });
 
-        <!-- CORE -->
-        <div class="muscle-group-header gym-header">🎯 الكور والبطن – Core & Abs</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">صالة · كور</div><div class="ex-name">كيبل كرانش (Cable Crunch)</div><div class="ex-detail">اركع أمام الكيبل، اسحب نحو الأسفل مع ثني الجذع. يضيف مقاومة للكور على خلاف الكرانش العادي على الأرض.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · كور جانبي</div><div class="ex-name">وود شوب (Wood Chop)</div><div class="ex-detail">حركة قطرية بالكيبل من أعلى إلى أسفل. يستهدف المائل الخارجي والداخلي وعضلات التدوير. أهم تمرين للكور الوظيفي.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 لكل جانب</span><span class="set-badge gym">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">صالة · كور</div><div class="ex-name">Ab Rollout بالعجلة</div><div class="ex-detail">اركع وادفع العجلة للأمام حتى يمتد جسمك، اسحب للخلف. من أصعب وأفضل تمارين الكور. م1: مسافة قصيرة → م2: مسافة كاملة.</div><div class="ex-sets"><span class="set-badge gym">3 × 8-12</span><span class="set-badge gym">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">بلانك تقدمي</div><div class="ex-detail">م1: بلانك عادي → م2: بلانك يد واحدة → م3: بلانك مع رفع ساق → م4: ووك آوت → م5: بلانك على حلقات. الجسم كله خط مستقيم.</div><div class="ex-sets"><span class="set-badge cali">3 × 30-60 ثا</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">رفع الساقين معلقاً (Hanging Leg Raise)</div><div class="ex-detail">م1: رفع الركبتين → م2: رفع الركبتين للصدر → م3: ساقان ممدودتان → م4: ساقان ممدودتان + تدوير. أقوى تمرين للبطن السفلي.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">L-Sit تقدمي</div><div class="ex-detail">م1: تك تحت ركبتين → م2: رجل واحدة ممدودة → م3: L-Sit كامل 10 ثا → م4: L-Sit طويل +30ث. الكتفان مكبوستان، الظهر مستقيم.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-30 ثا</span><span class="set-badge cali">راحة 90 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور جانبي</div><div class="ex-name">سايد بلانك + هيب ديب</div><div class="ex-detail">م1: سايد بلانك ثابت → م2: سايد بلانك مع رفع الورك → م3: سايد بلانك ساق مرفوعة. يستهدف المائل والكور الجانبي ضروري لتوازن الجري.</div><div class="ex-sets"><span class="set-badge cali">3 × 20-40 ثا لكل جانب</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">كاليستانيكس · كور</div><div class="ex-name">ماونتن كلايمبر (Mountain Climber)</div><div class="ex-detail">وضعية البلانك، سحب الركبتين بالتناوب للصدر بسرعة. يجمع بين الكور وتمرين القلب. م1: بطيء → م2: سريع جداً 30 ثا. ممتاز كإحماء.</div><div class="ex-sets"><span class="set-badge cali">3 × 20-30 ثا</span><span class="set-badge cali">راحة 60 ثا</span></div></div>
-        </div>
+        const newPlan = {
+            id: 'plan_' + Date.now(),
+            name: planName,
+            age: age,
+            height: height,
+            weight: weight,
+            bmi: finalBmi,
+            customMetrics: extraStats,
+            isDefault: false,
+            url: '#'
+        };
 
-        <!-- TIPS -->
-        <div class="sec-title">نصائح تنظيم التمرين</div>
-        <div class="tip"><div class="tip-icon">🔢</div><div class="tip-text"><strong>ترتيب التمارين:</strong> ابدأ بالتمارين المركبة (سكوات، بنش برس، ديدليفت، بول آب) ثم انتقل لتمارين العزل (كيرل، فلاي، ليغ كيرل). الجسم أقوى في البداية.</div></div>
-        <div class="tip"><div class="tip-icon">📈</div><div class="tip-text"><strong>التحميل التدريجي:</strong> ارفع الوزن بـ 2.5-5 كغ كل 2 أسبوع في التمارين الكبيرة. في الكاليستانيكس انتقل للمرحلة التالية حين تستطيع 3 سيتات كاملة بشكل نظيف.</div></div>
-        <div class="tip"><div class="tip-icon">⚙️</div><div class="tip-text"><strong>كيف تختار بين الصالة والكاليستانيكس:</strong> في أيام الصالة: ركز على الصالة مع 1-2 تمرين كاليستانيكس للكور. في أيام الكاليستانيكس: ركز عليه كاملاً. الاثنان يكملان بعضهما.</div></div>
-      </div>
+        createdPlans.push(newPlan);
+        renderPlansDashboard();
 
-      <!-- ===== GERMAN ===== -->
-      <div data-lang="de">
+        nameField.value = "";
+    }
 
-        <div class="tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>So nutzt du diese Seite:</strong> Jede Muskelgruppe hat Gym- und Calisthenics-Varianten. Wähle für deine Session eine Übung aus jeder Kategorie. Beginne immer mit Verbundübungen, dann Isolationsübungen.</div></div>
+    // Function to safely delete a user-created plan layout
+    function deletePlan(planId) {
+        createdPlans = createdPlans.filter(p => p.id !== planId);
+        renderPlansDashboard();
+    }
 
-        <!-- CHEST DE -->
-        <div class="muscle-group-header gym-header">💪 Brust – Chest</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Brust</div><div class="ex-name">Bankdrücken (Langhantel)</div><div class="ex-detail">Die Königsübung der Brust. Rücken flach, Füße am Boden. 3 Sek. runter, explosiv hoch. Voller Bewegungsradius entscheidend.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">2 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Brust</div><div class="ex-name">Bankdrücken (Kurzhantel)</div><div class="ex-detail">Tieferer Bewegungsradius als Langhantel. Kurzhanteln treffen sich oben, aber kein Kontakt. Ideal zum Ausgleichen von Asymmetrien.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Obere Brust</div><div class="ex-name">Schrägbankdrücken (Incline Press)</div><div class="ex-detail">30-45° Neigung. Zielt auf die obere Brust und vorderen Schultermuskel. Über 45° wird es eine Schulterübung – Winkel beachten!</div><div class="ex-sets"><span class="set-badge gym">3 × 10</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Brust</div><div class="ex-name">Kabelzug Fly (Cable Fly)</div><div class="ex-detail">Bogenförmige Bewegung von der Seite zur Mitte. Isoliert die Brust vollständig. 2 Sekunden Halt oben für maximale Kontraktion.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Brust</div><div class="ex-name">Liegestütze (progressiv)</div><div class="ex-detail">S1: Knieend → S2: Normal → S3: 3-1-3 Tempo → S4: Archer-Liegestütz → S5: Einarmiger Liegestütz (Fernziel). Vollständige Brustentwicklung ohne Geräte.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Brust</div><div class="ex-name">Dips (Brust-Fokus)</div><div class="ex-detail">Leicht nach vorne geneigt = Brust. S1: Stuhl → S2: gestrecktes Bein → S3: Parallettes. Ellbogen leicht nach außen für Brustaktivierung.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Brust/Schulter</div><div class="ex-name">Pike Push-Up</div><div class="ex-detail">Körper in Dreiecksform, Kopf nach unten. Zielt auf obere Brust und vorderen Schultermuskel. S1: Bein auf Stuhl → S2: Bein hoch erhöht.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-        </div>
+    // Render active plans list tracking rows
+    function renderPlansDashboard() {
+        const listContainer = document.getElementById('savedPlansList');
+        listContainer.innerHTML = "";
 
-        <!-- BACK DE -->
-        <div class="muscle-group-header gym-header">🦾 Rücken – Back</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Rücken</div><div class="ex-name">Langhantelrudern (Bent-Over Row)</div><div class="ex-detail">König der Rückenübungen. 45° vorgebeugt, zur Hüfte ziehen. Schulterblätter oben zusammendrücken. Rücken immer neutral.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">2 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Rücken</div><div class="ex-name">Latzug (Lat Pulldown)</div><div class="ex-detail">Stange zur Brust – nicht zum Nacken! Leicht zurückgelehnt beim Ziehen. Wichtigste Übung für die V-Form. Langsame Rückführung.</div><div class="ex-sets"><span class="set-badge gym">4 × 10</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Rücken</div><div class="ex-name">Einarmiges Rudern (Kurzhantel)</div><div class="ex-detail">Knie und Hand auf der Bank, Kurzhantel zur Hüfte ziehen. Isoliert jede Seite getrennt. Voller Bewegungsradius nach unten nötig.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12 je Seite</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Unterer Rücken</div><div class="ex-name">Kreuzheben (Deadlift)</div><div class="ex-detail">Die ultimative Ganzkörperübung. Unbedingt mit leichtem Gewicht beginnen und Technik perfektionieren. Rücken immer neutral, Gürtel bei schweren Gewichten.</div><div class="ex-sets"><span class="set-badge gym">3 × 5</span><span class="set-badge gym">3 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Rücken</div><div class="ex-name">Sitzrudern (Seated Cable Row)</div><div class="ex-detail">Aufrecht sitzen, zum Bauch ziehen. Schulterblätter oben zusammenführen. Nicht mit dem Körper schwingen. Zielt auf mittleren Rücken.</div><div class="ex-sets"><span class="set-badge gym">3 × 12</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Rücken</div><div class="ex-name">Klimmzüge (progressiv)</div><div class="ex-detail">S1: Statisches Hängen 30s → S2: Negative (langsames Herablassen) → S3: Mit Band → S4: Voller Klimmzug → S5: 3-1-3 Tempo. Ziel: 10 saubere Wiederholungen.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">2 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Rücken</div><div class="ex-name">Australische Klimmzüge (horizontal)</div><div class="ex-detail">Körper horizontal unter einer Stange oder einem Tisch, Brust nach oben ziehen. Einfacher als normale Klimmzüge. Ideal für Anfänger und mittlerer Rücken.</div><div class="ex-sets"><span class="set-badge cali">4 × 10-15</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Rücken/Bizeps</div><div class="ex-name">Klimmzüge Untergriff (Chin-Up)</div><div class="ex-detail">Handinnenflächen zeigen zu dir (Supination). Aktiviert Bizeps und unteren Latissimus stärker als normaler Klimmzug. Für Anfänger leichter zu meistern.</div><div class="ex-sets"><span class="set-badge cali">3 × Max</span><span class="set-badge cali">2 Min Pause</span></div></div>
-        </div>
+        createdPlans.forEach(plan => {
+            const li = document.createElement('li');
+            li.className = plan.isDefault ? 'plan-item default-plan' : 'plan-item';
 
-        <!-- SHOULDERS DE -->
-        <div class="muscle-group-header gym-header">🏔️ Schultern – Shoulders</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Schultern</div><div class="ex-name">Schulterdrücken (OHP)</div><div class="ex-detail">Über den Kopf drücken bis Arme gestreckt. Kein Hohlkreuz! Aktiviert vordere und seitliche Schulter + Trizeps. Grundübung Nummer 1 für Schultern.</div><div class="ex-sets"><span class="set-badge gym">4 × 8-10</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Seitliche Schulter</div><div class="ex-name">Seitheben (Lateral Raise)</div><div class="ex-detail">Kurzhanteln seitlich bis Schulterhöhe heben. Ellbogen leicht gebeugt. Nicht über 90° heben. Isoliert ausschließlich den seitlichen Schultermuskel.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Hintere Schulter</div><div class="ex-name">Reverse Fly (Rear Delt)</div><div class="ex-detail">Vorgebeugt, Kurzhanteln seitlich heben. Hintere Schulter wird häufig vernachlässigt und verursacht Nackenschmerzen. Nicht vergessen!</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Schulter/Trapez</div><div class="ex-name">Upright Row</div><div class="ex-detail">Stange zum Kinn ziehen, Ellbogen gehen hoch und außen. Zielt auf seitliche Schulter und Trapez. Ellbogen nicht höher als Ohrenhöhe heben.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Schultern</div><div class="ex-name">Pike Liegestütz (progressiv)</div><div class="ex-detail">S1: Normal → S2: Bein auf Stuhl → S3: Bein erhöht an Wand (halb vertikal) → S4: Handstand-Liegestütz (an Wand). Vollständige Schulterentwicklung.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Schultern</div><div class="ex-name">Handstand-Halten (progressiv)</div><div class="ex-detail">S1: 45°-Position an Wand → S2: Handstand an Wand → S3: Freier Handstand. Baut außergewöhnliche Schulter- und Core-Kraft auf. Langfristiges Ziel.</div><div class="ex-sets"><span class="set-badge cali">3 × 10-30 Sek</span><span class="set-badge cali">2 Min Pause</span></div></div>
-        </div>
+            // Clickable workspace routing context wrapper
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'plan-clickable';
+            contentWrapper.onclick = () => selectPlanRoute(plan);
+            
+            if (plan.isDefault) {
+                contentWrapper.innerHTML = `
+                    <strong>${plan.name}</strong>
+                    <div class="plan-details">Core configuration root workflow file (index.html)</div>
+                `;
+            } else {
+                contentWrapper.innerHTML = `
+                    <div>
+                        <strong>${plan.name}</strong>
+                        <div class="plan-details">Metrics logged: W: ${plan.weight}kg | H: ${plan.height}cm | <strong>BMI: ${plan.bmi}</strong></div>
+                    </div>
+                `;
+            }
 
-        <!-- ARMS DE -->
-        <div class="muscle-group-header gym-header">💪 Bizeps & Trizeps – Arms</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Bizeps</div><div class="ex-name">Kabel-Curls + Langhantel-Curls</div><div class="ex-detail">Kabel: Gleichmäßiger Widerstand. Langhantel: Mehr Gewicht möglich. Langsam hochziehen, Muskel oben 1 Sek anspannen. Niemals schwingen.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Bizeps</div><div class="ex-name">Hammer Curls</div><div class="ex-detail">Neutraler Griff (Daumen nach oben). Zielt auf den Brachialis (unter Bizeps) und Unterarm. Macht den Arm dicker und voller in der Gesamtheit.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Trizeps</div><div class="ex-name">Trizeps-Pushdown (Kabel)</div><div class="ex-detail">Kabel nach unten drücken. Ellbogen bleibt fest am Körper. Arm vollständig strecken und Trizeps unten anspannen. Effektivste Trizepsübung.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Trizeps</div><div class="ex-name">Skull Crusher (Trizeps-Strecken)</div><div class="ex-detail">Liegend, Stange langsam zur Stirn senken, Arme strecken. Ellbogen bleiben fixiert. Zielt auf den langen Trizepskopf.</div><div class="ex-sets"><span class="set-badge gym">3 × 10</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Bizeps</div><div class="ex-name">Klimmzüge Untergriff (Bizeps-Fokus)</div><div class="ex-detail">Enger Untergriff = maximale Bizepsaktivierung. Beste Möglichkeit, Bizeps ohne Gewichte aufzubauen. S1: Unterstützt → S2: Voll. Langsame Ausführung.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">2 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Trizeps</div><div class="ex-name">Enge Liegestütze (Diamond Push-Up)</div><div class="ex-detail">Hände direkt unter der Brust, Finger zeigen aufeinander zu. Ellbogen bleiben beim Absenken nah am Körper. Isoliert den Trizeps stark.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Trizeps</div><div class="ex-name">Dips (enger Griff, Trizeps-Fokus)</div><div class="ex-detail">Enger Griff + aufrechter Körper = Trizeps. S1: Stuhl → S2: Parallettes eng → S3: Ringdips. Ellbogen zeigen nach hinten, nicht außen.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-        </div>
+            li.appendChild(contentWrapper);
 
-        <!-- LEGS DE -->
-        <div class="muscle-group-header gym-header">🦵 Beine – Legs</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Oberschenkel + Gesäß</div><div class="ex-name">Kniebeuge (Back Squat)</div><div class="ex-detail">Knie in Richtung Zehenspitzen. Oberschenkel parallel zum Boden im Tief. Brust hoch. Gewicht auf den Fersen, nicht den Zehen.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">2-3 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Beine</div><div class="ex-name">Beinpresse (Leg Press)</div><div class="ex-detail">Füße oben auf der Plattform = Gesäß-Fokus; unten = Quadrizeps-Fokus. Gute Squat-Alternative für Anfänger. Knie nie ganz durchstrecken.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">2 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Gesäß + Hamstrings</div><div class="ex-name">Ausfallschritte (Lunges)</div><div class="ex-detail">Schritt nach vorne, hinteres Knie nähert sich dem Boden. Oberkörper aufrecht. Zielt isoliert auf Gesäß und Oberschenkel. Hervorragend für Balance.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 je Bein</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Hamstrings</div><div class="ex-name">Beinbeuger (Leg Curl)</div><div class="ex-detail">Liegend oder sitzend, Bein nach hinten ziehen. Hamstrings werden von Anfängern stark vernachlässigt. Essenziell für Knieschutz beim Laufen.</div><div class="ex-sets"><span class="set-badge gym">3 × 12</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Waden</div><div class="ex-name">Wadenheben (Calf Raise)</div><div class="ex-detail">Auf Treppenkante stehen, auf Zehenspitzen heben, langsam senken. Einfach aber essenziell – besonders für Laufverletzungsprävention.</div><div class="ex-sets"><span class="set-badge gym">4 × 15-20</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Beine</div><div class="ex-name">Kniebeuge Körpergewicht + Sprungkniebeuge</div><div class="ex-detail">S1: Normal → S2: Langsam 3-1-3 → S3: Sprungkniebeuge (Explosivkraft) → S4: Tiefe Kniebeuge mit erhöhten Fersen. Fersen erhöhen wenn Mobilität fehlt.</div><div class="ex-sets"><span class="set-badge cali">4 × 15-20</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Beine</div><div class="ex-name">Pistol Squat (progressiv)</div><div class="ex-detail">S1: Wandunterstützt → S2: Box-Pistol → S3: Voller Pistol. Erfordert Kraft, Mobilität und Balance gleichzeitig. Schwierigste Beinübung im Calisthenics.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-10 je Bein</span><span class="set-badge cali">2 Min Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Gesäß</div><div class="ex-name">Glute Bridge + Hip Thrust</div><div class="ex-detail">S1: Brücke am Boden → S2: Einbeinig → S3: Hip Thrust auf Stuhl. Zielt auf Gesäß und Hamstrings. Essenziell für Hüft- und Kniegesundheit beim Laufen.</div><div class="ex-sets"><span class="set-badge cali">3 × 15-20</span><span class="set-badge cali">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Beine</div><div class="ex-name">Bulgarische Kniebeuge (Split Squat)</div><div class="ex-detail">Hinterer Fuß auf Stuhl/Treppe, vorderer Fuß führt die Bewegung. Ähnlich dem Pistol, aber einfacher. Fokus auf Gesäß und Quadrizeps.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12 je Bein</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-        </div>
+            // Append delete button ONLY if it is not the structural "My Plan" default module
+            if (!plan.isDefault) {
+                const delBtn = document.createElement('button');
+                delBtn.className = 'btn-delete-plan';
+                delBtn.innerText = 'Delete';
+                delBtn.onclick = (e) => {
+                    e.stopPropagation(); // Stop parent click routine triggers
+                    deletePlan(plan.id);
+                };
+                li.appendChild(delBtn);
+            } else {
+                const badge = document.createElement('span');
+                badge.style.cssText = "color: var(--accent-blue); font-size: 0.8rem; font-weight: 600; padding-right: 5px;";
+                badge.innerText = "Active Root";
+                li.appendChild(badge);
+            }
+            
+            listContainer.appendChild(li);
+        });
+    }
 
-        <!-- CORE DE -->
-        <div class="muscle-group-header gym-header">🎯 Core & Bauch – Core & Abs</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Core</div><div class="ex-name">Kabelzug Crunch</div><div class="ex-detail">Kniend vor dem Kabel, nach unten ziehen mit Rumpfbeugung. Fügt Widerstand hinzu – effektiver als klassisches Crunch am Boden.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Seitliche Core</div><div class="ex-name">Wood Chop (Kabelzug diagonal)</div><div class="ex-detail">Diagonale Bewegung von oben nach unten. Zielt auf äußeren und inneren Schrägen sowie Rotationsmuskeln. Wichtigste funktionelle Core-Übung.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 je Seite</span><span class="set-badge gym">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Core</div><div class="ex-name">Ab-Rollout (mit Rad)</div><div class="ex-detail">Kniend, Rad nach vorne schieben bis Körper gestreckt, zurückziehen. Eine der schwierigsten und besten Core-Übungen. S1: kurze Strecke → S2: voller Auszug.</div><div class="ex-sets"><span class="set-badge gym">3 × 8-12</span><span class="set-badge gym">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Plank (progressiv)</div><div class="ex-detail">S1: Normal → S2: Einarmig → S3: Mit Beinhebenb → S4: Walk-outs → S5: Plank an Ringen. Körper wie ein Brett – kein Durchhängen.</div><div class="ex-sets"><span class="set-badge cali">3 × 30-60 Sek</span><span class="set-badge cali">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Hängendes Beinheben (progressiv)</div><div class="ex-detail">S1: Knieheben → S2: Knie zur Brust → S3: Gestreckte Beine → S4: Gestreckt + drehen. Stärkste Übung für untere Bauchmuskulatur.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">L-Sit (progressiv)</div><div class="ex-detail">S1: Tuck (Knie gebeugt) → S2: Ein Bein gestreckt → S3: Voller L-Sit 10s → S4: L-Sit 30s+. Schultern gedrückt, Rücken gerade.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-30 Sek</span><span class="set-badge cali">90 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Seitlicher Core</div><div class="ex-name">Seitstütz + Hüftheben</div><div class="ex-detail">S1: Statischer Seitstütz → S2: Hüftheben im Seitstütz → S3: Seitstütz mit gehobenem Bein. Zielt auf Schrägmuskeln – wichtig fürs Laufgleichgewicht.</div><div class="ex-sets"><span class="set-badge cali">3 × 20-40 Sek je Seite</span><span class="set-badge cali">60 Sek Pause</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core + Cardio</div><div class="ex-name">Mountain Climber</div><div class="ex-detail">Plankposition, Knie abwechselnd zur Brust ziehen. Kombiniert Core-Training mit Kardio. S1: langsam → S2: schnell 30 Sek. Ideal als Aufwärmen.</div><div class="ex-sets"><span class="set-badge cali">3 × 20-30 Sek</span><span class="set-badge cali">60 Sek Pause</span></div></div>
-        </div>
+    // Updated router configuration inside index.html (formerly menu.html)
+    function selectPlanRoute(plan) {
+        if (plan.isDefault) {
+            // Route to the main root plan baseline workspace
+            window.location.href = 'workspace.html?planId=default'; 
+        } else {
+            // Shift context to workspace.html while carrying metadata parameters
+            window.location.href = `workspace.html?planId=${plan.id}&name=${encodeURIComponent(plan.name)}&age=${plan.age}&height=${plan.height}&weight=${plan.weight}&bmi=${plan.bmi}`;
+        }
+    }
 
-        <div class="sec-title">TRAININGSORGANISATION</div>
-        <div class="tip"><div class="tip-icon">🔢</div><div class="tip-text"><strong>Übungsreihenfolge:</strong> Immer mit Verbundübungen beginnen (Squat, Bankdrücken, Kreuzheben, Klimmzüge), dann zu Isolationsübungen wechseln (Curls, Flys, Beinbeuger). Der Körper ist zu Beginn am stärksten.</div></div>
-        <div class="tip"><div class="tip-icon">📈</div><div class="tip-text"><strong>Progressive Überladung:</strong> Alle 2 Wochen 2,5-5 kg mehr bei großen Übungen. Im Calisthenics zur nächsten Stufe wechseln, wenn 3 Sätze sauber klappen.</div></div>
-      </div>
+    // Initialization lifecycle hook run
+    window.onload = renderPlansDashboard;
+</script>
 
-      <!-- ===== ENGLISH ===== -->
-      <div data-lang="en">
-
-        <div class="tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>How to use this page:</strong> Every muscle group has both gym and calisthenics options. Pick one from each category per session. Always start with compound movements, then finish with isolation exercises.</div></div>
-
-        <!-- CHEST EN -->
-        <div class="muscle-group-header gym-header">💪 Chest</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Chest</div><div class="ex-name">Barbell Bench Press</div><div class="ex-detail">The king of chest. Back flat, feet planted. 3 sec descent, explosive press. Full range of motion is non-negotiable.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">2 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Chest</div><div class="ex-name">Dumbbell Bench Press</div><div class="ex-detail">Deeper range than the barbell. Dumbbells meet at top but don't touch. Great for fixing left-right imbalances in chest development.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Upper Chest</div><div class="ex-name">Incline Bench Press</div><div class="ex-detail">30-45° angle. Targets upper chest and front delt. Keep angle under 45° — above that it becomes a shoulder exercise more than chest.</div><div class="ex-sets"><span class="set-badge gym">3 × 10</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Chest</div><div class="ex-name">Cable Fly</div><div class="ex-detail">Arc movement from the sides to center. Fully isolates the chest. Hold 2 seconds at peak contraction for maximum muscle activation.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Chest</div><div class="ex-name">Push-Up (Progressive)</div><div class="ex-detail">L1: Knee push-up → L2: Full push-up → L3: 3-1-3 tempo → L4: Archer push-up → L5: One-arm push-up (long-term goal). Complete chest development with zero equipment.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Chest</div><div class="ex-name">Dips (Chest Focus)</div><div class="ex-detail">Lean slightly forward = chest activation. L1: Chair dips → L2: Straight leg → L3: Parallel bars. Elbows flare slightly outward for chest engagement.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Upper Chest/Shoulder</div><div class="ex-name">Pike Push-Up</div><div class="ex-detail">Body in triangle shape, head facing down. Targets upper chest and front delt. L1: leg on chair → L2: leg elevated high on wall.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">90 sec rest</span></div></div>
-        </div>
-
-        <!-- BACK EN -->
-        <div class="muscle-group-header gym-header">🦾 Back</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Back</div><div class="ex-name">Bent-Over Barbell Row</div><div class="ex-detail">The king of back exercises. 45° hinge, pull to navel. Squeeze shoulder blades together at top. Neutral spine at all times.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">2 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Back</div><div class="ex-name">Lat Pulldown</div><div class="ex-detail">Pull to chest – never to neck! Lean back slightly as you pull. Essential for V-taper width. Control the return slowly.</div><div class="ex-sets"><span class="set-badge gym">4 × 10</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Back</div><div class="ex-name">Single-Arm Dumbbell Row</div><div class="ex-detail">Knee and hand on bench, pull dumbbell to hip. Trains each side independently. Full stretch at the bottom is key for growth.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12 per side</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Lower Back</div><div class="ex-name">Deadlift</div><div class="ex-detail">The ultimate full-body exercise. Always start very light and master technique first. Neutral spine, belt for heavy loads only.</div><div class="ex-sets"><span class="set-badge gym">3 × 5</span><span class="set-badge gym">3 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Back</div><div class="ex-name">Seated Cable Row</div><div class="ex-detail">Sit tall, pull to abs. Squeeze shoulder blades at the end. No body swinging. Targets the mid-back and rhomboids effectively.</div><div class="ex-sets"><span class="set-badge gym">3 × 12</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Back</div><div class="ex-name">Pull-Up (Progressive)</div><div class="ex-detail">L1: Dead hang 30s → L2: Negative (slow descent) → L3: Band-assisted → L4: Full pull-up → L5: 3-1-3 tempo. Goal: 10 clean, unbroken reps.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">2 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Back</div><div class="ex-name">Australian Pull-Up (horizontal)</div><div class="ex-detail">Body horizontal under a bar or table, pull chest up. Easier than pull-ups. Perfect for beginners and training mid-back thickness.</div><div class="ex-sets"><span class="set-badge cali">4 × 10-15</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Back/Biceps</div><div class="ex-name">Chin-Up (Underhand Grip)</div><div class="ex-detail">Palms facing you (supinated grip). Activates biceps and lower lat more than regular pull-up. Generally easier to master early on.</div><div class="ex-sets"><span class="set-badge cali">3 × Max</span><span class="set-badge cali">2 min rest</span></div></div>
-        </div>
-
-        <!-- SHOULDERS EN -->
-        <div class="muscle-group-header gym-header">🏔️ Shoulders</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Shoulders</div><div class="ex-name">Overhead Press (OHP)</div><div class="ex-detail">Press overhead until arms fully extend. No excessive lower back arch. Activates front and lateral delt + triceps. The #1 shoulder compound lift.</div><div class="ex-sets"><span class="set-badge gym">4 × 8-10</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Lateral Delt</div><div class="ex-name">Lateral Raise</div><div class="ex-detail">Raise dumbbells to shoulder level. Elbows slightly bent. Don't go above 90°. Exclusively isolates the lateral (side) deltoid for width.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Rear Delt</div><div class="ex-name">Rear Delt Fly</div><div class="ex-detail">Bent forward, raise dumbbells sideways. Rear delt is the most neglected muscle and a major cause of neck/shoulder pain. Never skip it.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Shoulder/Trap</div><div class="ex-name">Upright Row</div><div class="ex-detail">Pull bar to chin, elbows go up and out. Targets lateral delt and trapezius. Don't raise elbows above ear level.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Shoulders</div><div class="ex-name">Pike Push-Up (Progressive)</div><div class="ex-detail">L1: Normal → L2: Leg on chair → L3: Leg on wall (semi-vertical) → L4: Handstand push-up (wall). Complete shoulder development through angle progression.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Shoulders</div><div class="ex-name">Handstand Hold (Progressive)</div><div class="ex-detail">L1: 45° wall lean → L2: Wall handstand → L3: Free handstand. Builds exceptional shoulder and core strength. A long-term skill goal worth pursuing.</div><div class="ex-sets"><span class="set-badge cali">3 × 10-30 sec</span><span class="set-badge cali">2 min rest</span></div></div>
-        </div>
-
-        <!-- ARMS EN -->
-        <div class="muscle-group-header gym-header">💪 Biceps & Triceps</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Biceps</div><div class="ex-name">Cable Curl + Barbell Curl</div><div class="ex-detail">Cable: constant tension. Barbell: heavier loads. Pull slowly, squeeze at the top for 1 second. Never swing your torso for momentum.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Biceps</div><div class="ex-name">Hammer Curl</div><div class="ex-detail">Neutral grip (thumbs up). Targets brachialis (under biceps) and forearm. Makes the overall arm look thicker and fuller in all directions.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Triceps</div><div class="ex-name">Triceps Pushdown (Cable)</div><div class="ex-detail">Push cable down. Elbow stays fixed at side. Fully extend arm and squeeze triceps at the bottom. Most effective isolation exercise for triceps.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Triceps</div><div class="ex-name">Skull Crusher</div><div class="ex-detail">Lying down, lower bar slowly to forehead, extend arms back up. Elbows stay completely fixed. Targets the long head of the triceps heavily.</div><div class="ex-sets"><span class="set-badge gym">3 × 10</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Biceps</div><div class="ex-name">Chin-Up (Biceps Focus)</div><div class="ex-detail">Close supinated grip = maximum biceps activation. The best way to build biceps without weights. L1: Assisted → L2: Full. Slow tempo on the way down.</div><div class="ex-sets"><span class="set-badge cali">4 × Max</span><span class="set-badge cali">2 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Triceps</div><div class="ex-name">Diamond / Close-Grip Push-Up</div><div class="ex-detail">Hands directly under chest, fingers form a diamond shape. Elbows stay close to body on descent. Strongly isolates the triceps.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Triceps</div><div class="ex-name">Dips (Triceps Focus)</div><div class="ex-detail">Narrow grip + upright torso = triceps. L1: Chair → L2: Narrow parallettes → L3: Ring dips. Elbows point back, not outward.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">90 sec rest</span></div></div>
-        </div>
-
-        <!-- LEGS EN -->
-        <div class="muscle-group-header gym-header">🦵 Legs</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Quads + Glutes</div><div class="ex-name">Barbell Back Squat</div><div class="ex-detail">Knees track over toes. Thigh parallel to floor at bottom. Chest tall. Weight through heels, not toes. The ultimate lower body compound.</div><div class="ex-sets"><span class="set-badge gym">4 × 6-8</span><span class="set-badge gym">2-3 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Legs</div><div class="ex-name">Leg Press</div><div class="ex-detail">Feet high on platform = glute focus; low = quad focus. Great squat alternative for beginners. Never fully lock the knees at the top.</div><div class="ex-sets"><span class="set-badge gym">3 × 10-12</span><span class="set-badge gym">2 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Glutes + Hamstrings</div><div class="ex-name">Lunges (Dumbbell)</div><div class="ex-detail">Step forward, rear knee approaches floor. Torso upright. Trains glutes and quads independently per leg. Excellent for balance and running prep.</div><div class="ex-sets"><span class="set-badge gym">3 × 10 per leg</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Hamstrings</div><div class="ex-name">Leg Curl (Seated or Lying)</div><div class="ex-detail">Pull leg back against resistance. Hamstrings are the most neglected muscle group by beginners. Critical for knee protection while running.</div><div class="ex-sets"><span class="set-badge gym">3 × 12</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Calves</div><div class="ex-name">Calf Raise</div><div class="ex-detail">Stand on step edge, rise on toes, lower slowly. Simple but essential — especially for preventing running-related lower-leg injuries.</div><div class="ex-sets"><span class="set-badge gym">4 × 15-20</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Legs</div><div class="ex-name">Bodyweight Squat + Jump Squat</div><div class="ex-detail">L1: Regular → L2: Slow 3-1-3 → L3: Jump squat (explosive) → L4: Deep squat on step edge. Elevate heels on plates if mobility is limited at first.</div><div class="ex-sets"><span class="set-badge cali">4 × 15-20</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Legs</div><div class="ex-name">Pistol Squat (Progressive)</div><div class="ex-detail">L1: Wall-assisted → L2: Box pistol → L3: Full pistol. Requires strength, mobility, and balance simultaneously. The hardest leg exercise in calisthenics.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-10 per leg</span><span class="set-badge cali">2 min rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Glutes</div><div class="ex-name">Glute Bridge + Hip Thrust</div><div class="ex-detail">L1: Floor bridge → L2: Single-leg bridge → L3: Hip thrust on bench. Targets glutes and hamstrings. Essential for hip and knee health during running.</div><div class="ex-sets"><span class="set-badge cali">3 × 15-20</span><span class="set-badge cali">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Legs</div><div class="ex-name">Bulgarian Split Squat</div><div class="ex-detail">Rear foot on chair/step, front foot drives the movement. Closer to a pistol but more accessible. Intense focus on glutes and quads.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-12 per leg</span><span class="set-badge cali">90 sec rest</span></div></div>
-        </div>
-
-        <!-- CORE EN -->
-        <div class="muscle-group-header gym-header">🎯 Core & Abs</div>
-        <div class="ex-grid">
-          <div class="ex-card"><div class="ex-type gym">Gym · Core</div><div class="ex-name">Cable Crunch</div><div class="ex-detail">Kneeling in front of cable, pull downward with trunk flexion. Adds resistance unlike floor crunches — far more effective for real ab development.</div><div class="ex-sets"><span class="set-badge gym">3 × 12-15</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Obliques</div><div class="ex-name">Cable Wood Chop</div><div class="ex-detail">Diagonal movement from high to low. Targets external and internal obliques plus rotational muscles. Most important functional core exercise in the gym.</div><div class="ex-sets"><span class="set-badge gym">3 × 12 per side</span><span class="set-badge gym">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type gym">Gym · Core</div><div class="ex-name">Ab Rollout (Ab Wheel)</div><div class="ex-detail">Kneeling, push wheel forward until body extends, pull back. One of the hardest and best core exercises. L1: short range → L2: full extension.</div><div class="ex-sets"><span class="set-badge gym">3 × 8-12</span><span class="set-badge gym">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Plank (Progressive)</div><div class="ex-detail">L1: Regular → L2: One-arm → L3: With leg raise → L4: Walk-outs → L5: Ring plank. Body completely straight — no sagging hips.</div><div class="ex-sets"><span class="set-badge cali">3 × 30-60 sec</span><span class="set-badge cali">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">Hanging Leg Raise (Progressive)</div><div class="ex-detail">L1: Knee raise → L2: Knees to chest → L3: Straight legs → L4: Straight + rotation. The most powerful lower abs exercise available.</div><div class="ex-sets"><span class="set-badge cali">3 × 8-15</span><span class="set-badge cali">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core</div><div class="ex-name">L-Sit (Progressive)</div><div class="ex-detail">L1: Tuck hold → L2: One leg extended → L3: Full L-sit 10s → L4: L-sit 30s+. Shoulders depressed, back straight throughout.</div><div class="ex-sets"><span class="set-badge cali">3 × 5-30 sec</span><span class="set-badge cali">90 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Obliques</div><div class="ex-name">Side Plank + Hip Dip</div><div class="ex-detail">L1: Static side plank → L2: Hip dip in side plank → L3: Side plank with raised leg. Targets obliques — critical for running stability and balance.</div><div class="ex-sets"><span class="set-badge cali">3 × 20-40 sec per side</span><span class="set-badge cali">60 sec rest</span></div></div>
-          <div class="ex-card"><div class="ex-type cali">Calisthenics · Core + Cardio</div><div class="ex-name">Mountain Climber</div><div class="ex-detail">Plank position, drive knees to chest alternately. Blends core training with cardio. L1: slow and controlled → L2: fast 30 sec. Perfect as a warm-up finisher.</div><div class="ex-sets"><span class="set-badge cali">3 × 20-30 sec</span><span class="set-badge cali">60 sec rest</span></div></div>
-        </div>
-
-        <div class="sec-title">TRAINING TIPS</div>
-        <div class="tip"><div class="tip-icon">🔢</div><div class="tip-text"><strong>Exercise order:</strong> Always start with compound lifts (squat, bench press, deadlift, pull-up), then move to isolation (curls, flys, leg curl). Your body is strongest at the beginning of a session.</div></div>
-        <div class="tip"><div class="tip-icon">📈</div><div class="tip-text"><strong>Progressive overload:</strong> Add 2.5-5 kg every 2 weeks on big lifts. In calisthenics, advance to the next level once you can do 3 full, clean sets.</div></div>
-        <div class="tip"><div class="tip-icon">⚙️</div><div class="tip-text"><strong>Gym vs Calisthenics:</strong> On gym days: focus on weights plus 1-2 calisthenics core moves. On calisthenics days: go all in on bodyweight. The two methods complement each other perfectly.</div></div>
-
-        <div class="sec-title">EQUIPMENT CHECKLIST</div>
-        <ul class="checklist">
-          <li><strong>Running shoes:</strong> Most important investment. Spend €80-120. Decathlon or Zalando sale. Bad shoes = guaranteed injuries.</li>
-          <li><strong>Sports socks:</strong> No cotton. Running socks from Decathlon €5-10. Prevent blisters on long runs.</li>
-          <li><strong>Free app:</strong> Strava or Nike Run Club. Track every session, see your progress over time.</li>
-          <li><strong>Calisthenics bar:</strong> Doorframe pull-up bar ~€15-20 from Amazon. Enables pull-ups, hanging leg raises, L-sit at home.</li>
-          <li><strong>Local marathon:</strong> Ruhr Marathon (Essen) or Bochum laufen – entry fee €30-60. Register early for the cheapest price.</li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-
-
-  <div class="section" id="sec-nutrition">
-    <div class="content">
-      <div class="show" data-lang="ar">
-        <div class="sec-title">خطة التغذية اليومية</div>
-        <div class="sec-sub">مبني على ميزانيتك · ~1800-2000 سعرة · اقتصادي وصحي</div>
-        <div class="tip"><div class="tip-icon">💰</div><div class="tip-text"><strong>ميزانية الطعام:</strong> في ألمانيا يمكنك الأكل صحياً بـ 150-180 يورو/شهر. ليدل (LIDL) وألدي (ALDI) هم أفضل خيار. البروتين الرخيص: بيض، تونة، دجاج، كواركه (Quark)، بقوليات.</div></div>
-        <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>الماكروز اليومية:</strong> بروتين 150-170 غ | كربوهيدرات 180-220 غ | دهون 50-70 غ | مجموع ~1900 سعرة</div></div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏋️ يوم التمرين في الصالة</h3><div class="meal-kcal">~2000 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">07:00 · الفطور</div><div class="meal-name">شوفان + بيض</div><div class="meal-desc">80غ شوفان بالماء أو الحليب الخالي الدسم + 3 بيضات مسلوقة أو مقلية بدون زبدة + كوب قهوة بدون سكر</div><div class="kcal-badge">~520 kcal · 35g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">10:00 · سناك</div><div class="meal-name">كواركه + موزة</div><div class="meal-desc">200غ Magerquark (0% دهون) من ليدل + موزة واحدة + ملعقة صغيرة عسل اختياري</div><div class="kcal-badge">~280 kcal · 28g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">13:00 · الغداء</div><div class="meal-name">دجاج + أرز + خضار</div><div class="meal-desc">200غ صدر دجاج مشوي أو مسلوق + 150غ أرز بسمتي مطبوخ + سلطة خضار أو خضار مطبوخ (بروكلي، جزر)</div><div class="kcal-badge">~650 kcal · 48g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">16:00 · قبل التمرين</div><div class="meal-name">موزة + قهوة</div><div class="meal-desc">موزة أو تفاحة + كوب قهوة. الكافيين يحسن الأداء بنسبة 10-15%. تناولهم 30-45 دقيقة قبل التمرين.</div><div class="kcal-badge">~120 kcal</div></div>
-            <div class="meal-item"><div class="meal-time">19:30 · بعد التمرين</div><div class="meal-name">تونة + خبز كامل</div><div class="meal-desc">علبة تونة (185غ) بدون زيت + شريحتان خبز قمح كامل + طماطم + خيار. أو بروتين شيك إذا عندك.</div><div class="kcal-badge">~420 kcal · 42g بروتين</div></div>
-          </div>
-        </div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>😴 يوم الراحة</h3><div class="meal-kcal">~1700 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">08:00 · الفطور</div><div class="meal-name">بيض + خبز</div><div class="meal-desc">3 بيضات مخفوقة بالخضار (فلفل، بصل) + شريحتان خبز قمح كامل + طماطم</div><div class="kcal-badge">~450 kcal · 30g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">13:00 · الغداء</div><div class="meal-name">عدس + سلاطة</div><div class="meal-desc">200غ عدس أحمر مطبوخ مع توابل + سلطة كبيرة (طماطم، خيار، بصل، ليمون، زيتون) + خبز كامل</div><div class="kcal-badge">~520 kcal · 22g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">16:00 · سناك</div><div class="meal-name">مكسرات + تفاحة</div><div class="meal-desc">30غ مكسرات غير محمصة وغير مملحة (لوز أو جوز) + تفاحة واحدة</div><div class="kcal-badge">~230 kcal · 6g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">19:00 · العشاء</div><div class="meal-name">سمك + بطاطا</div><div class="meal-desc">150غ سمك أبيض (تيلابيا أو بولاك من ليدل، رخيص) + 200غ بطاطا مسلوقة + خضار مشوية</div><div class="kcal-badge">~480 kcal · 35g بروتين</div></div>
-          </div>
-        </div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏃 يوم الجري (من المرحلة الثانية)</h3><div class="meal-kcal">~2200 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">07:00 · الفطور</div><div class="meal-name">شوفان محمل بالطاقة</div><div class="meal-desc">100غ شوفان + موزة + ملعقة كبيرة زبدة فول سوداني + 3 بيضات. وجبة الطاقة الكاملة.</div><div class="kcal-badge">~700 kcal · 38g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">10:00 · قبل الجري</div><div class="meal-name">تمر + ماء</div><div class="meal-desc">3-5 حبات تمر (سريع الامتصاص) + 500مل ماء. ارتدِ ولا تجري على معدة فارغة أو ممتلئة.</div><div class="kcal-badge">~120 kcal</div></div>
-            <div class="meal-item"><div class="meal-time">13:30 · بعد الجري</div><div class="meal-name">وجبة الاسترداد</div><div class="meal-desc">200غ دجاج + 200غ أرز + خضار. أو بروتين شيك + موزة فوراً بعد الجري، ثم وجبة حقيقية بعد ساعة.</div><div class="kcal-badge">~750 kcal · 50g بروتين</div></div>
-            <div class="meal-item"><div class="meal-time">19:00 · العشاء</div><div class="meal-name">مكرونة + تونة</div><div class="meal-desc">150غ مكرونة كاملة + علبتا تونة + صلصة طماطم بدون سكر + زيت زيتون. لتعبئة الغليكوجين.</div><div class="kcal-badge">~620 kcal · 45g بروتين</div></div>
-          </div>
-        </div>
-        <div class="sec-title">قائمة التسوق الأسبوعية</div>
-        <div class="sec-sub">~35-40 يورو في الأسبوع · ليدل أو ألدي</div>
-        <ul class="checklist">
-          <li><strong>بروتين رخيص:</strong> 10 بيضات (1.5€) + علبتا تونة (1.5€) + 1 كغ صدر دجاج (4.5€) + 500غ Magerquark (0.89€)</li>
-          <li><strong>كربوهيدرات:</strong> 1 كغ شوفان (1.5€) + 1 كغ أرز بسمتي (1.5€) + خبز قمح كامل (1.2€)</li>
-          <li><strong>خضار وفواكه:</strong> موز (1.5€) + تفاح (1.5€) + طماطم + خيار + بروكلي + جزر (5€ مجموع)</li>
-          <li><strong>بقوليات:</strong> 500غ عدس أو فاصوليا (0.80€) + سمك مجمد (3€)</li>
-          <li><strong>إضافات:</strong> زيت زيتون بكر (4€ يكفي أسابيع) + توابل متنوعة</li>
-        </ul>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">ERNÄHRUNGSPLAN</div>
-        <div class="sec-sub">Budget-freundlich · ~1800-2000 kcal/Tag · Lebensmittel von LIDL/ALDI</div>
-        <div class="tip"><div class="tip-icon">💰</div><div class="tip-text"><strong>Ernährungsbudget:</strong> Gesund essen in Deutschland kostet 150-180 €/Monat. LIDL und ALDI sind die beste Wahl. Günstiges Protein: Eier, Thunfisch, Hähnchenbrust, Magerquark, Hülsenfrüchte.</div></div>
-        <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Tägliche Makros:</strong> Protein 150-170 g | Kohlenhydrate 180-220 g | Fett 50-70 g | Gesamt ~1900 kcal</div></div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏋️ Trainingstag (Gym)</h3><div class="meal-kcal">~2000 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">07:00 · Frühstück</div><div class="meal-name">Haferflocken + Eier</div><div class="meal-desc">80g Haferflocken mit Wasser oder fettarmer Milch + 3 hartgekochte oder fettfrei gebratene Eier + schwarzer Kaffee ohne Zucker</div><div class="kcal-badge">~520 kcal · 35g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">10:00 · Snack</div><div class="meal-name">Magerquark + Banane</div><div class="meal-desc">200g Magerquark (0% Fett) von LIDL + 1 Banane + optional 1 TL Honig</div><div class="kcal-badge">~280 kcal · 28g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">13:00 · Mittagessen</div><div class="meal-name">Hähnchen + Reis + Gemüse</div><div class="meal-desc">200g gegrillte oder gekochte Hähnchenbrust + 150g gekochter Basmatireis + gemischter Salat oder gedünstetes Gemüse (Brokkoli, Karotten)</div><div class="kcal-badge">~650 kcal · 48g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">16:00 · Vor dem Training</div><div class="meal-name">Banane + Kaffee</div><div class="meal-desc"> Eine Banane oder ein Apfel + eine Tasse schwarzer Kaffee. Koffein steigert die Leistung um 10-15%. 30-45 Min. vor dem Workout einnehmen.</div><div class="kcal-badge">~120 kcal</div></div>
-            <div class="meal-item"><div class="meal-time">19:30 · Nach dem Training</div><div class="meal-name">Thunfisch + Vollkornbrot</div><div class="meal-desc">1 Dose Thunfisch im eigenen Saft (185g) + 2 Scheiben Vollkornbrot + Tomate + Gurke. Oder ein Proteinshake, falls vorhanden.</div><div class="kcal-badge">~420 kcal · 42g Protein</div></div>
-          </div>
-        </div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>😴 Ruhetag</h3><div class="meal-kcal">~1700 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">08:00 · Frühstück</div><div class="meal-name">Eier + Brot</div><div class="meal-desc">3 Rühreier mit Gemüse (Paprika, Zwiebel) + 2 Scheiben Vollkornbrot + Tomaten</div><div class="kcal-badge">~450 kcal · 30g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">13:00 · Mittag</div><div class="meal-name">Linsen + Salat</div><div class="meal-desc">200g gekochte rote Linsen mit Gewürzen + großer Salat (Tomate, Gurke, Zwiebel, Zitrone, Oliven) + Vollkornbrot</div><div class="kcal-badge">~520 kcal · 22g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">16:00 · Snack</div><div class="meal-name">Nüsse + Apfel</div><div class="meal-desc">30g ungeröstete, ungesalzene Nüsse (Mandeln oder Walnüsse) + 1 Apfel</div><div class="kcal-badge">~230 kcal · 6g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">19:00 · Abend</div><div class="meal-name">Fisch + Kartoffeln</div><div class="meal-desc">150g weißer Fisch (z.B. Pangasius oder Kabeljau von LIDL, günstig) + 200g Salzkartoffeln + Ofengemüse</div><div class="kcal-badge">~480 kcal · 35g Protein</div></div>
-          </div>
-        </div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏃 Lauftag (ab Phase 2)</h3><div class="meal-kcal">~2200 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">07:00 · Frühstück</div><div class="meal-name">Energie-Hafer</div><div class="meal-desc">100g Haferflocken + Banane + 1 EL Erdnussbutter + 3 Eier. Perfekter Power-Start in den Tag.</div><div class="kcal-badge">~700 kcal · 38g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">10:00 · Vor dem Lauf</div><div class="meal-name">Datteln + Wasser</div><div class="meal-desc">3-5 Datteln (schnell resorbierbare Carbs) + 500ml Wasser. Nicht mit komplett leerem oder übervollem Magen laufen.</div><div class="kcal-badge">~120 kcal</div></div>
-            <div class="meal-item"><div class="meal-time">13:30 · Nach dem Lauf</div><div class="meal-name">Erholungsmahlzeit</div><div class="meal-desc">200g Hähnchen + 200g Reis + Gemüse. Oder direkt danach ein Proteinshake + Banane und die feste Mahlzeit 1 Std. später.</div><div class="kcal-badge">~750 kcal · 50g Protein</div></div>
-            <div class="meal-item"><div class="meal-time">19:00 · Abend</div><div class="meal-name">Pasta + Thunfisch</div><div class="meal-desc">150g Vollkornpasta + 1 Dose Thunfisch + Tomatensauce ohne Zucker + Olivenöl. Optimal zum Auffüllen der Glykogenspeicher.</div><div class="kcal-badge">~620 kcal · 45g Protein</div></div>
-          </div>
-        </div>
-        <div class="sec-title">WÖCHENTLICHE EINKAUFSLISTE</div>
-        <ul class="checklist">
-          <li><strong>Günstiges Protein:</strong> 10 Eier (1,50€) + 2 Thunfischdosen (1,50€) + 1 kg Hähnchenbrust (4,50€) + 500g Magerquark (0,89€)</li>
-          <li><strong>Kohlenhydrate:</strong> 1 kg Haferflocken (1,50€) + 1 kg Basmatireis (1,50€) + Vollkornbrot (1,20€)</li>
-          <li><strong>Obst & Gemüse:</strong> Bananen (1,50€) + Äpfel (1,50€) + Tomaten, Gurken, Brokkoli, Karotten (~5€)</li>
-          <li><strong>Hülsenfrüchte:</strong> 500g rote Linsen (0,80€) + Tiefkühlfisch (3€)</li>
-          <li><strong>Extras:</strong> Olivenöl (natives extra, hält wochenlang ~4€) + verschiedene Gewürze</li>
-        </ul>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">NUTRITION PLAN</div>
-        <div class="sec-sub">Budget-friendly · ~1800-2000 kcal/day · LIDL/ALDI shopping</div>
-        <div class="tip"><div class="tip-icon">💰</div><div class="tip-text"><strong>Food budget:</strong> You can eat healthy in Germany for 150-180 €/month. LIDL and ALDI are your best friends. Cheap protein sources: eggs, canned tuna, chicken breast, Magerquark (low-fat curd), legumes.</div></div>
-        <div class="tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Daily macros:</strong> Protein 150-170g | Carbs 180-220g | Fat 50-70g | Total ~1900 kcal</div></div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏋️ Training Day (Gym)</h3><div class="meal-kcal">~2000 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">07:00 · Breakfast</div><div class="meal-name">Oats + Eggs</div><div class="meal-desc">80g oats with water or low-fat milk + 3 hard-boiled or fat-free fried eggs + black coffee without sugar</div><div class="kcal-badge">~520 kcal · 35g protein</div></div>
-            <div class="meal-item"><div class="meal-time">10:00 · Snack</div><div class="meal-name">Quark + Banana</div><div class="meal-desc">200g Magerquark (0% fat curd) from LIDL + 1 banana + optional 1 tsp of honey</div><div class="kcal-badge">~280 kcal · 28g protein</div></div>
-            <div class="meal-item"><div class="meal-time">13:00 · Lunch</div><div class="meal-name">Chicken + Rice + Veg</div><div class="meal-desc">200g grilled or boiled chicken breast + 150g cooked basmati rice + side salad or steamed veggies (broccoli, carrots)</div><div class="kcal-badge">~650 kcal · 48g protein</div></div>
-            <div class="meal-item"><div class="meal-time">16:00 · Pre-Workout</div><div class="meal-name">Banana + Coffee</div><div class="meal-desc">One banana or apple + a cup of black coffee. Caffeine improves physical performance by 10-15%. Consume 30-45 mins before your session.</div><div class="kcal-badge">~120 kcal</div></div>
-            <div class="meal-item"><div class="meal-time">19:30 · Post-Workout</div><div class="meal-name">Tuna + Wholegrain Bread</div><div class="meal-desc">1 can of tuna in water (185g) + 2 slices of wholegrain bread + tomato + cucumber. Or a protein shake if available.</div><div class="kcal-badge">~420 kcal · 42g protein</div></div>
-          </div>
-        </div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>😴 Rest Day</h3><div class="meal-kcal">~1700 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">08:00 · Breakfast</div><div class="meal-name">Eggs + Bread</div><div class="meal-desc">3 scrambled eggs with chopped veggies (bell pepper, onion) + 2 slices of wholegrain bread + tomatoes</div><div class="kcal-badge">~450 kcal · 30g protein</div></div>
-            <div class="meal-item"><div class="meal-time">13:00 · Lunch</div><div class="meal-name">Lentils + Salad</div><div class="meal-desc">200g cooked red lentils with spices + large salad (tomato, cucumber, onion, lemon, olives) + whole wheat bread</div><div class="kcal-badge">~520 kcal · 22g protein</div></div>
-            <div class="meal-item"><div class="meal-time">16:00 · Snack</div><div class="meal-name">Nuts + Apple</div><div class="meal-desc">30g raw, unsalted nuts (almonds or walnuts) + 1 fresh apple</div><div class="kcal-badge">~230 kcal · 6g protein</div></div>
-            <div class="meal-item"><div class="meal-time">19:00 · Dinner</div><div class="meal-name">Fish + Potatoes</div><div class="meal-desc">150g white fish (e.g., pollack from LIDL, cheap source) + 200g boiled potatoes + roasted vegetables</div><div class="kcal-badge">~480 kcal · 35g protein</div></div>
-          </div>
-        </div>
-        <div class="meal-day">
-          <div class="meal-head" onclick="toggleMeal(this)"><h3>🏃 Running Day (from Phase 2)</h3><div class="meal-kcal">~2200 kcal <span class="arrow">▼</span></div></div>
-          <div class="meal-body">
-            <div class="meal-item"><div class="meal-time">07:00 · Breakfast</div><div class="meal-name">High-Energy Oats</div><div class="meal-desc">100g oats + 1 banana + 1 tbsp peanut butter + 3 eggs. Ultimate sustained energy meal.</div><div class="kcal-badge">~700 kcal · 38g protein</div></div>
-            <div class="meal-item"><div class="meal-time">10:00 · Pre-Run</div><div class="meal-name">Dates + Water</div><div class="meal-desc">3-5 dates (quick absorb glycogen) + 500ml water. Don't run on a completely empty or stuffed stomach.</div><div class="kcal-badge">~120 kcal</div></div>
-            <div class="meal-item"><div class="meal-time">13:30 · Post-Run</div><div class="meal-name">Recovery Meal</div><div class="meal-desc">200g chicken + 200g rice + veg. Or take a protein shake + banana immediately, followed by a solid meal 1 hour later.</div><div class="kcal-badge">~750 kcal · 50g protein</div></div>
-            <div class="meal-item"><div class="meal-time">19:00 · Dinner</div><div class="meal-name">Pasta + Tuna</div><div class="meal-desc">150g whole wheat pasta + 1 can of tuna + sugar-free tomato sauce + 1 tbsp olive oil. Perfect for refueling glycogen stores.</div><div class="kcal-badge">~620 kcal · 45g protein</div></div>
-          </div>
-        </div>
-        <div class="sec-title">WEEKLY SHOPPING LIST</div>
-        <div class="sec-sub">~€35-40 per week · LIDL or ALDI</div>
-        <ul class="checklist">
-          <li><strong>Cheap protein:</strong> 10 eggs (~€1.50) + 2 cans tuna (~€1.50) + 1 kg chicken breast (~€4.50) + 500g Magerquark (~€0.89)</li>
-          <li><strong>Carbs:</strong> 1 kg oats (~€1.50) + 1 kg basmati rice (~€1.50) + wholegrain bread (~€1.20)</li>
-          <li><strong>Fruits & veg:</strong> bananas (~€1.50) + apples (~€1.50) + tomatoes, cucumber, broccoli, carrots (~€5 total)</li>
-          <li><strong>Legumes & Fish:</strong> 500g lentils (~€0.80) + frozen white fish (~€3)</li>
-          <li><strong>Extras:</strong> extra virgin olive oil (€4 bottle lasts weeks) + assorted spices</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="sec-marathon">
-    <div class="content">
-      <div class="show" data-lang="ar">
-        <div class="sec-title">خطة الماراتون</div>
-        <div class="sec-sub">أبريل 2027 · 42.2 كم · 11 شهراً للتحضير</div>
-        <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>هدف واقعي:</strong> بما أن عمرك 25 وبدأت من الصفر، الهدف الأول هو <strong>إنهاء الماراثون</strong> في 5-6 ساعات. لا تركز على السرعة الآن، ركز على إنهاء المسافة.</div></div>
-        <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>قاعدة 80/20:</strong> 80% من تمارين الجري بوتيرة سهلة (تقدر تتحدث) و20% بوتيرة سريعة. معظم الناس يرتكبون خطأ الجري السريع دائماً.</div></div>
-        <div class="marathon-timeline">
-          <div class="mt-item">
-            <div class="mt-month">مايو – يوليو 2026</div>
-            <div class="mt-focus">المرحلة التأسيسية · بناء القاعدة</div>
-            <div class="mt-detail">المشي السريع 30-45 دقيقة 3 مرات بالأسبوع. في الأسابيع الأخيرة ابدأ بالجري الخفيف 5 دقائق / مشي 5 دقائق (تناوب). الهدف: تعويد الأوتار والمفاصل على الضغط تدريجياً. تجنب الإفراط!</div>
-            <div class="mt-km">5-15 كم/أسبوع</div>
-          </div>
-          <div class="mt-item">
-            <div class="mt-month">أغسطس – أكتوبر 2026</div>
-            <div class="mt-focus">بناء القدرة الهوائية</div>
-            <div class="mt-detail">جري مستمر 3 مرات بالأسبوع. مسافة أسبوع تدريجية: 15←25 كم. أطول جرية واحدة في الأسبوع تصل 12-14 كم. ابدأ بتعلم "الجري البطيء" – سرعتك يجب أن تسمح لك بالحديث.</div>
-            <div class="mt-km">20-30 كم/أسبوع</div>
-          </div>
-          <div class="mt-item">
-            <div class="mt-month">نوفمبر 2026</div>
-            <div class="mt-focus">نصف ماراثون تجريبي</div>
-            <div class="mt-detail">في نهاية نوفمبر اجرِ 21 كم للمرة الأولى! ليس بسرعة - مجرد إكمال المسافة. هذه لحظة مهمة نفسياً ستثبت لك أن الماراثون ممكن.</div>
-            <div class="mt-km">أول 21 كم 🎉</div>
-          </div>
-          <div class="mt-item">
-            <div class="mt-month">ديسمبر 2026 – فبراير 2027</div>
-            <div class="mt-focus">بناء الحجم الأقصى</div>
-            <div class="mt-detail">الجرية الطويلة الأسبوعية: 22→28→32→35 كم. الحجم الأسبوعي الكلي: 40-50 كم. أضف تغذية أثناء الجري (جيل جلوكوز كل 45 دقيقة في الجريات فوق ساعة).</div>
-            <div class="mt-km">40-50 كم/أسبوع</div>
-          </div>
-          <div class="mt-item">
-            <div class="mt-month">مارس 2027</div>
-            <div class="mt-focus">التخفيف التدريجي (Tapering)</div>
-            <div class="mt-detail">قلل الحجم بمقدار 30-40%. آخر جرية طويلة 28 كم في بداية مارس. الأسبوع قبل الأخير: 25 كم فقط. الأسبوع الأخير: 10 كم فقط جري خفيف. جسمك يحتاج راحة لا تدريباً أكثر.</div>
-            <div class="mt-km">25-30 كم/أسبوع</div>
-          </div>
-          <div class="mt-item">
-            <div class="mt-month">أبريل 2027 🏁</div>
-            <div class="mt-focus">يوم الماراثون!</div>
-            <div class="mt-detail">يوم السباق: فطور كربوهيدرات خفيف 3 ساعات قبل. جل ماراثون كل 45 دقيقة. ابدأ ببطء الـ10 كم الأولى! أسرع من المخطط = تعب مبكر. أنهِ الماراثون بفخر!</div>
-            <div class="mt-km">42.2 كم 🎊</div>
-          </div>
-        </div>
-        <div class="sec-title">معدات الجري (بميزانيتك)</div>
-        <ul class="checklist">
-          <li><strong>الحذاء:</strong> الأهم على الإطلاق. استثمر 80-120€. جرب Nike, Asics, Brooks من Decathlon أو zalandoسيل. حذاء سيء = إصابات مضمونة.</li>
-          <li><strong>الجوارب:</strong> جوارب رياضية (لا قطن!) من Decathlon بـ5-10€. تمنع النفاطات (Blasen).</li>
-          <li><strong>تطبيق مجاني:</strong> Strava أو Nike Run Club. تتبع كل جرية، ترى تقدمك، يحفزك.</li>
-          <li><strong>الهاتف:</strong> حامل ذراع رخيص أو سماعات لاسلكية. الموسيقى تحسن الأداء.</li>
-          <li><strong>ماراثون بوخوم/NRW:</strong> ابحث عن "Ruhr Marathon" أو "Essen Marathon" - قريب منك وبالغ التسجيل 30-60€.</li>
-        </ul>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">MARATHON-PLAN</div>
-        <div class="sec-sub">April 2027 · 42,2 km · 11 Monate Vorbereitung</div>
-        <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Realistisches Ziel:</strong> Da du bei Null anfängst, ist das erste Ziel, den Marathon in 5-6 Stunden zu <strong>beenden</strong>. Fokus auf Distanz, nicht auf Tempo.</div></div>
-        <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>80/20-Regel:</strong> 80% des Trainings in einfachem Tempo (du kannst dabei reden), 20% schnell. Fehler Nr. 1 bei Anfängern: immer zu schnell laufen.</div></div>
-        <div class="marathon-timeline">
-          <div class="mt-item"><div class="mt-month">Mai – Juli 2026</div><div class="mt-focus">Aufbauphase · Grundlage legen</div><div class="mt-detail">Zügiges Gehen 30-45 Min, 3×/Woche. Letzte Wochen: 5 Min laufen / 5 Min gehen (Intervalle). Sehnen und Gelenke langsam ans Training gewöhnen. Vermeide Überlastung!</div><div class="mt-km">5-15 km/Woche</div></div>
-          <div class="mt-item"><div class="mt-month">Aug – Okt 2026</div><div class="mt-focus">Aerobe Kapazität aufbauen</div><div class="mt-detail">Kontinuierliches Laufen 3×/Woche. Wochenkilometer progressiv steigern: 15←25 km. Der längste Einzellauf pro Woche erreicht 12-14 km. Lerne "langsam zu laufen" – dein Tempo sollte Gespräche ohne Atemnot erlauben.</div><div class="mt-km">20-30 km/Woche</div></div>
-          <div class="mt-item"><div class="mt-month">November 2026</div><div class="mt-focus">Erster Halbmarathon-Test</div><div class="mt-detail">Ende November läufst du zum ersten Mal die 21 km komplett durch! Vergiss die Geschwindigkeit – das bloße Erreichen der Ziellinie zählt. Ein massiver mentaler Meilenstein, der beweist: Der Marathon is möglich.</div><div class="mt-km">Erster 21 km 🎉</div></div>
-          <div class="mt-item"><div class="mt-month">Dez 2026 – Feb 2027</div><div class="mt-focus">Maximales Volumen aufbauen</div><div class="mt-detail">Die wöchentlichen langen Läufe eskalieren schrittweise: 22→28→32→35 km. Gesamtvolumen pro Woche: 40-50 km. Integriere Verpflegung während des Laufs (Kohlenhydrat-Gels alle 45 Min. bei Läufen über 60 Min.).</div><div class="mt-km">40-50 km/Woche</div></div>
-          <div class="mt-item"><div class="mt-month">März 2027</div><div class="mt-focus">Tapering (Reduktionsphase)</div><div class="mt-detail">Volumen um 30-40% reduzieren. Letzter langer Lauf (28 km) Anfang März. Vorletzte Woche: nur noch 25 km Gesamtvolumen. Letzte Woche: 10 km reines, lockeres Joggen. Dein Körper benötigt jetzt Erholung, kein zusätzliches Training mehr.</div><div class="mt-km">25-30 km/Woche</div></div>
-          <div class="mt-item"><div class="mt-month">April 2027 🏁</div><div class="mt-focus">Der Marathontag!</div><div class="mt-detail">Wettkampftag: Leichtes Carbo-Frühstück 3 Stunden vor dem Start. Alle 45 Minuten ein Energie-Gel. Die ersten 10 km STRENG LANGSAM laufen! Zu schnelles Anlaufen rächt sich frühzeitig. Beende das Rennen voller Stolz!</div><div class="mt-km">42,2 km 🎊</div></div>
-        </div>
-        <div class="sec-title">AUSRÜSTUNG (MIT DEINEM BUDGET)</div>
-        <ul class="checklist">
-          <li><strong>Laufschuhe:</strong> Das Wichtigste überhaupt. Investiere 80-120€. Nike, Asics, Brooks beim Decathlon oder im Zalando-Sale ausprobieren. Schlechte Schuhe = garantierte Verletzungen.</li>
-          <li><strong>Socks:</strong> Spezielle Laufsocken (keine Baumwolle!) von Decathlon für 5-10€. Verhindern Blasenbildung (Blasen).</li>
-          <li><strong>App (kostenlos):</strong> Strava oder Nike Run Club. Jeden Lauf tracken, Fortschritt visualisieren, Motivation sichern.</li>
-          <li><strong>Telefon:</strong> Günstige Oberarmtasche oder kabellose Kopfhörer. Musik optimiert die Performance.</li>
-          <li><strong>Marathon in der Nähe:</strong> Halte Ausschau nach dem "Ruhr Marathon" (Essen) oder dem lokalen Bochum-Lauf. Startgebühren liegen meist bei 30-60€.</li>
-        </ul>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">MARATHON PLAN</div>
-        <div class="sec-sub">April 2027 · 42.2 km · 11 months preparation</div>
-        <div class="tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Realistic goal:</strong> Starting from zero, your initial milestone is simply to <strong>finish</strong> the marathon within 5-6 hours. Focus purely on completing the distance, not on your split times.</div></div>
-        <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>80/20 Rule:</strong> 80% of your runs should be at an easy, conversational pace, and only 20% at a fast tempo. The absolute #1 mistake beginners make is running too fast, too often.</div></div>
-        <div class="marathon-timeline">
-          <div class="mt-item"><div class="mt-month">May – July 2026</div><div class="mt-focus">Foundation Phase · Base Building</div><div class="mt-detail">Brisk walking for 30-45 mins, 3×/week. During the final weeks, initiate light run/walk intervals (5 mins run / 5 mins walk). Target: Gradually condition your tendons and joints to the load. Avoid overtraining!</div><div class="mt-km">5-15 km/week</div></div>
-          <div class="mt-item"><div class="mt-month">Aug – Oct 2026</div><div class="mt-focus">Aerobic Base Expansion</div><div class="mt-detail">Continuous, steady running 3×/week. Scale up weekly totals: 15←25 km. Your weekly long run should max out around 12-14 km. Master the art of the "slow run" – your pace must allow you to talk comfortably.</div><div class="mt-km">20-30 km/week</div></div>
-          <div class="mt-item"><div class="mt-month">November 2026</div><div class="mt-focus">Experimental Half Marathon</div><div class="mt-detail">At the end of November, hit the 21 km mark for the very first time! Disregard speed completely — simply finish the distance. This is a massive psychological breakthrough that proves the full marathon is within reach.</div><div class="mt-km">First 21 km 🎉</div></div>
-          <div class="mt-item"><div class="mt-month">Dec 2026 – Feb 2027</div><div class="mt-focus">Peak Volume Accumulation</div><div class="mt-detail">Your weekly long run escalates: 22-->28-->32-->35 km. Total weekly mileage: 40-50 km. Start practicing mid-run fueling (take a glucose gel every 45 mins on any run exceeding 1 hour).</div><div class="mt-km">40-50 km/week</div></div>
-          <div class="mt-item"><div class="mt-month">March 2027</div><div class="mt-focus">The Taper Phase</div><div class="mt-detail">Cut down mileage volume by 30-40%. Execute your final long run (28 km) in early March. Second-to-last week: 25 km total. Final week: 10 km max of easy jogging. Your body needs rest now, not more stress.</div><div class="mt-km">25-30 km/week</div></div>
-          <div class="mt-item"><div class="mt-month">April 2027 🏁</div><div class="mt-focus">Race Day!</div><div class="mt-detail">Race day: Light carb-loading breakfast 3 hours before start. Take an endurance gel every 45 minutes. Force yourself to run the first 10 km SLOWLY! Going out too fast leads to early bonking. Cross the finish line with pride!</div><div class="mt-km">42.2 km 🎊</div></div>
-        </div>
-        <div class="sec-title">EQUIPMENT (WITH YOUR BUDGET)</div>
-        <ul class="checklist">
-          <li><strong>Running shoes:</strong> The absolute single most critical item. Invest €80-120. Test pairs from Nike, Asics, or Brooks via Decathlon or Zalando sales. Bad shoes = guaranteed injury.</li>
-          <li><strong>Socks:</strong> Specialized sports socks (no cotton allowed!) from Decathlon for €5-10. These prevent painful blisters.</li>
-          <li><strong>Free app:</strong> Strava or Nike Run Club. Track every run to analyze your progress and stay disciplined.</li>
-          <li><strong>Phone:</strong> Grab a cheap running armband or wireless earbuds. Music or podcasts will heavily boost performance.</li>
-          <li><strong>Local events:</strong> Look up the "Ruhr Marathon" (Essen) or the local Bochum run. Early bird registration is usually €30-60.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="sec-budget">
-    <div class="content">
-      <div class="show" data-lang="ar">
-        <div class="sec-title">خطة الميزانية</div>
-        <div class="sec-sub">دخل 1100€ · التزامات 150€ تأمين + 80€ عقود + 700€ دين هذا الشهر فقط</div>
-        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>هذا الشهر (مع الدين):</strong> 1100 - 150 - 80 - 700 = <strong>170€ متاحة</strong>. ضيق لكن ممكن! الجزء الأكبر على الطعام.</div></div>
-        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>الأشهر التالية (بدون الدين):</strong> 1100 - 150 - 80 = <strong>870€ متاحة</strong>. هنا يمكنك الاستثمار في معدات لازمة.</div></div>
-        <div class="budget-grid" id="budget-grid-ar">
-          <div class="budget-item" data-cat="هذا الشهر · طعام" data-val="120€"><div class="budget-cat">هذا الشهر · طعام</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">120€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">ليدل/ألدي · أساسيات · لا رفاهيات</div></div>
-          <div class="budget-item" data-cat="هذا الشهر · نادي" data-val="0-20€"><div class="budget-cat">هذا الشهر · نادي</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">0-20€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">ابدأ بكاليستانيكس في الحديقة مجاناً، أو أرخص نادي (McFit/FitX: 15-20€)</div></div>
-          <div class="budget-item" data-cat="الشهر 2 · حذاء جري" data-val="80€"><div class="budget-cat">الشهر 2 · حذاء جري</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">80€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">أهم استثمار. Decathlon أو Zalando Sale. لا تتهاون.</div></div>
-          <div class="budget-item" data-cat="الشهر 3 · مكملات" data-val="30€"><div class="budget-cat">الشهر 3 · مكملات</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">بروتين واي رخيص (Amazon/Lidl أحياناً) + مغنيسيوم للنوم والعضلات</div></div>
-          <div class="budget-item" data-cat="نادي رياضي شهري" data-val="15-25€"><div class="budget-cat">نادي رياضي شهري</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">15-25€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">McFit أو FitX في بوخوم · أرخص النوادي في ألمانيا</div></div>
-          <div class="budget-item" data-cat="تسجيل الماراثون" data-val="30-60€"><div class="budget-cat">تسجيل الماراثون</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30-60€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">حذف</button></div><div class="budget-desc">سجّل مبكراً · أرخص دائماً · Ruhr Marathon أو Bochum Lauf</div></div>
-        </div>
-        <div class="budget-controls" id="budget-controls-ar">
-          <button class="budget-add-btn" onclick="showSuggestions('ar', this)">+ اقتراح إضافي</button>
-          <button class="budget-save-btn" onclick="saveBudgetChanges()">💾 حفظ التغييرات</button>
-        </div>
-        <div class="budget-suggestions" id="suggestions-ar" style="display:none;">
-          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'نقل/مواصلات', '20-30€', 'مواصلات شهرية أو ركوب دراجة')">نقل</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'هاتف/إنترنت', '15-20€', 'خطة هاتفية + إنترنت منزلي')">الهاتف</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'ملابس رياضية', '40€', 'شورتات + كنزة + جوارب تدريب')">ملابس</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'حقيبة/حذاء إضافي', '25€', 'حقيبة صالة + حذاء عادي إضافي')">حقيبة</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('ar', 'حبل/معدات', '15€', 'أجهزة تمرين صغيرة محمولة')">معدات</button>
-        </div>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">BUDGETPLAN</div>
-        <div class="sec-sub">1100€ Einkommen · Verpflichtungen 150€ + 80€ + 700€ Schulden (nur diesen Monat)</div>
-        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>Diesen Monat (mit Schulden):</strong> 1100 - 150 - 80 - 700 = <strong>170€ verfügbar</strong>. Eng aber machbar. Hauptposten ist Essen.</div></div>
-        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>Nächste Monate (ohne Schulden):</strong> 1100 - 150 - 80 = <strong>870€ verfügbar</strong>. Jetzt kannst du in notwendige Ausrüstung investieren.</div></div>
-        <div class="budget-grid" id="budget-grid-de">
-          <div class="budget-item" data-cat="Diesen Monat · Lebensmittel" data-val="120€"><div class="budget-cat">Diesen Monat · Lebensmittel</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">120€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">LIDL/ALDI · Basics · Keine Extras</div></div>
-          <div class="budget-item" data-cat="Diesen Monat · Gym" data-val="0-20€"><div class="budget-cat">Diesen Monat · Gym</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">0-20€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Calisthenics im Park kostenlos, oder McFit/FitX: 15-20€</div></div>
-          <div class="budget-item" data-cat="Monat 2 · Laufschuhe" data-val="80€"><div class="budget-cat">Monat 2 · Laufschuhe</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">80€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Wichtigste Investition. Decathlon oder Zalando Sale. Nicht sparen!</div></div>
-          <div class="budget-item" data-cat="Gym Monatsbeitrag" data-val="15-25€"><div class="budget-cat">Gym Monatsbeitrag</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">15-25€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">McFit oder FitX in Bochum · Günstigste Studios in DE</div></div>
-          <div class="budget-item" data-cat="Marathon Anmeldung" data-val="30-60€"><div class="budget-cat">Marathon Anmeldung</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30-60€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Früh anmelden · günstiger · Ruhr Marathon / Bochum</div></div>
-          <div class="budget-item" data-cat="Supplemente (optional)" data-val="30€"><div class="budget-cat">Supplemente (optional)</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">30€</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Löschen</button></div><div class="budget-desc">Günstiges Whey-Protein + Magnesium für Schlaf und Muskeln</div></div>
-        </div>
-        <div class="budget-controls" id="budget-controls-de">
-          <button class="budget-add-btn" onclick="showSuggestions('de', this)">+ Vorschlag hinzufügen</button>
-          <button class="budget-save-btn" onclick="saveBudgetChanges()">💾 Änderungen speichern</button>
-        </div>
-        <div class="budget-suggestions" id="suggestions-de" style="display:none;">
-          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Verkehr/Transport', '20-30€', 'Monatliche Fahrkarte oder Fahrrad')">Transport</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Handy/Internet', '15-20€', 'Handyvertrag + Heiminternet')">Handy</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Sportkleidung', '40€', 'Shorts + Hoodie + Socken')">Kleidung</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Tasche/Schuhe', '25€', 'Sporttasche + Freizeitschuhe')">Tasche</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('de', 'Ausrüstung', '15€', 'Kleine tragbare Trainingsgeräte')">Ausrüstung</button>
-        </div>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">BUDGET PLAN</div>
-        <div class="sec-sub">€1100 income · Obligations €150 + €80 + €700 debt (this month only)</div>
-        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>This month (with debt):</strong> 1100 - 150 - 80 - 700 = <strong>€170 available</strong>. Tight but possible. Food is the largest expense.</div></div>
-        <div class="tip"><div class="tip-icon">📋</div><div class="tip-text"><strong>Next months (without debt):</strong> 1100 - 150 - 80 = <strong>€870 available</strong>. You can now invest in necessary equipment.</div></div>
-        <div class="budget-grid" id="budget-grid-en">
-          <div class="budget-item" data-cat="This Month · Food" data-val="€120"><div class="budget-cat">This Month · Food</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€120</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">LIDL/ALDI · Basics only · No luxuries</div></div>
-          <div class="budget-item" data-cat="This Month · Gym" data-val="€0-20"><div class="budget-cat">This Month · Gym</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€0-20</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Free calisthenics in parks, or McFit/FitX: €15-20</div></div>
-          <div class="budget-item" data-cat="Month 2 · Running Shoes" data-val="€80"><div class="budget-cat">Month 2 · Running Shoes</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€80</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Most important investment. Decathlon or Zalando sale. Do not skimp!</div></div>
-          <div class="budget-item" data-cat="Monthly Gym Fee" data-val="€15-25"><div class="budget-cat">Monthly Gym Fee</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€15-25</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">McFit or FitX in Bochum · Cheapest gyms in Germany</div></div>
-          <div class="budget-item" data-cat="Marathon Registration" data-val="€30-60"><div class="budget-cat">Marathon Registration</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€30-60</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Register early for cheapest price · Ruhr Marathon nearby</div></div>
-          <div class="budget-item" data-cat="Supplements (optional)" data-val="€30"><div class="budget-cat">Supplements (optional)</div><div class="budget-val"><span class="budget-val-text" onclick="editBudget(this)">€30</span><button class="remove-budget-btn" onclick="removeBudgetItem(this)">Remove</button></div><div class="budget-desc">Cheap whey protein + magnesium for sleep and muscle recovery</div></div>
-        </div>
-        <div class="budget-controls" id="budget-controls-en">
-          <button class="budget-add-btn" onclick="showSuggestions('en', this)">+ Add suggestion</button>
-          <button class="budget-save-btn" onclick="saveBudgetChanges()">💾 Save changes</button>
-        </div>
-        <div class="budget-suggestions" id="suggestions-en" style="display:none;">
-          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Transport/Commute', '€20-30', 'Monthly bus pass or bike')">Transport</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Phone/Internet', '€15-20', 'Phone contract + home internet')">Phone</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Sports Gear', '€40', 'Shorts + hoodie + socks')">Clothing</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Gym Bag/Extra', '€25', 'Gym bag + casual shoes')">Bag</button>
-          <button class="suggestion-btn" onclick="addBudgetItem('en', 'Equipment', '€15', 'Portable training gear')">Equipment</button>
-        </div>
-      </div>
-
-      <div class="sec-title" data-lang="ar">نوادي رياضية في بوخوم</div>
-      <div class="sec-title" data-lang="de">FITNESSSTUDIOS IN BOCHUM</div>
-      <div class="sec-title" data-lang="en">GYMS IN BOCHUM</div>
-      <ul class="checklist">
-        <li><strong>McFit Bochum:</strong> ~15€/Monat · <span data-lang="ar">الأرخص · 24/7 · معدات كافية تماماً لخطتك</span><span data-lang="de">Günstigste Option · 24/7 · Ausreichend für deinen Plan</span><span data-lang="en">Cheapest option · 24/7 · Perfectly sufficient hardware for your plan</span></li>
-        <li><strong>FitX Bochum:</strong> ~20€/Monat · <span data-lang="ar">أفضل من McFit قليلاً · نوادي متعددة</span><span data-lang="de">Etwas besser ausgestattet · Mehrere Standorte</span><span data-lang="en">Slightly better vibe/equipment · Multiple gym access across Germany</span></li>
-        <li><strong>Stadtbad / Freibad:</strong> <span data-lang="ar">للسباحة (تعافي ممتاز) · ~5€/دخول</span><span data-lang="de">Zum Schwimmen (hervorragende aktive Regeneration) · ~5€/Eintritt</span><span data-lang="en">For swimming (excellent muscle recovery) · ~5€ per entry</span></li>
-        <li><strong>Free:</strong> <span data-lang="ar">حدائق بوخوم للجري + أجهزة الكاليستانيكس في الأماكن العامة (ابحث "Outdoor Fitness Bochum")</span><span data-lang="de">Parkanlagen für Laufen + Outdoor Fitness Bochum (Calisthenics im Freien, suche nach "Outdoor Fitness Bochum")</span><span data-lang="en">Local parks for outdoor cardio + public calisthenics rigs (search for "Outdoor Fitness Bochum")</span></li>
-      </ul>
-      <div class="sec-title" data-lang="ar">نصيحة الدين</div>
-      <div class="sec-title" data-lang="de">WICHTIGER TIPP</div>
-      <div class="sec-title" data-lang="en">IMPORTANT ADVICE</div>
-      <div class="tip">
-        <div class="tip-icon">💡</div>
-        <div class="tip-text">
-          <span data-lang="ar">بعد سداد الـ700€ هذا الشهر، دخلك المتاح سيرتفع لـ870€. استثمر 150-180€ في طعام صحي + 20€ نادي = <strong>700€ يتبقى للإيجار والمعيشة</strong>. الصحة ليست ترفاً، هي استثمار في حياتك ومستقبلك.</span>
-          <span data-lang="de">Nach Abzahlung der 700€ erhöht sich dein verfügbares Einkommen auf 870€. Investiere 150-180€ in gesunde Lebensmittel + 20€ Gym = <strong>700€ verbleibend für Miete und Lebenshaltung</strong>. Gesundheit ist kein Luxus, sondern eine Investition in dein Leben und deine Zukunft.</span>
-          <span data-lang="en">After you pay off the €700 debt this month, your available income rises to €870. Invest €150-180 in healthy food + €20 gym = <strong>€700 left for rent and living expenses</strong>. Health is not a luxury — it's an investment in your life and future.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-  <script src="app.js"></script>
 </body>
 </html>

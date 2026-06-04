@@ -865,3 +865,20 @@ window.addEventListener('load', () => {
   };
  
 })();
+
+function injectBiometricBanner(name, age, height, weight, bmi) {
+    const bodyContainer = document.querySelector('.container') || document.body;
+    
+    const banner = document.createElement('div');
+    banner.style.cssText = "background: #1e293b; border: 1px solid #334155; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 20px; font-size: 0.95rem; color: #f8fafc;";
+    banner.innerHTML = `
+        <div><strong>Active Plan:</strong> ${name}</div>
+        <div><strong>Age:</strong> ${age} yrs</div>
+        <div><strong>Height:</strong> ${height} cm</div>
+        <div><strong>Weight:</strong> ${weight} kg</div>
+        <div><strong>Calculated BMI:</strong> <span style="color: #3b82f6; font-weight: bold;">${bmi}</span></div>
+        <a href="index.html" style="margin-left: auto; color: #94a3b8; text-decoration: none;">&larr; Back to Menu</a>
+    `; // Changed href target from menu.html to index.html
+    
+    bodyContainer.insertBefore(banner, bodyContainer.firstChild);
+}
