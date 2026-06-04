@@ -63,7 +63,7 @@ body::before {
 
 .hero-tag {
   font-family:'IBM Plex Mono', monospace;
-  font-size:.7rem;
+  font-size:1.8rem !important;
   color: var(--accent2);
   letter-spacing:4px;
   text-transform:uppercase;
@@ -82,7 +82,7 @@ body::before {
 }
 
 .hero-sub {
-  font-size:1rem;
+  font-size:1.3rem !important;
   color: var(--muted);
   margin-top:.5rem;
   font-weight:300;

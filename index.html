@@ -1,409 +1,492 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Planner - Dashboard Menu</title>
-    <style>
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --border-color: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-blue: #3b82f6;
-            --accent-emerald: #10b981;
-            --accent-purple: #a855f7;
-            --accent-rose: #f43f5e;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fitness Master Plan - Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Exact CSS Theme Variables and Reset from Workspace */
+    :root {
+      --bg-main: #0a0a0f;
+      --bg-card: #111118;
+      --bg-surface: #1a1a24;
+      --border-color: #2a2a3a;
+      --text-main: #f0f0f0;
+      --text-muted: #888;
+      --gym: #ff4747;
+      --cal: #3cffb4;
+      --run: #3b82f6;
+      --food: #ffb43c;
+      --accent-purple: #c084fc;
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 20px;
-        }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Cairo', -apple-system, sans-serif;
+      padding-bottom: 60px;
+      line-height: 1.6;
+    }
 
-        .container { max-width: 1100px; margin: 0 auto; }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-        .intro-banner {
-            background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
-            border: 1px solid var(--accent-blue);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
+    /* Hero Banner matching Workspace Theme styling */
+    .hero {
+      background: linear-gradient(180deg, #111118 0%, #0a0a0f 100%);
+      border-bottom: 1px solid var(--border-color);
+      padding: 40px 20px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
 
-        .intro-banner h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
-        .intro-banner p { color: var(--text-muted); font-size: 1.05rem; }
+    .hero-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 3px;
+      color: var(--gym);
+      margin-bottom: 5px;
+    }
 
-        .workspace-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
 
-        @media (max-width: 768px) {
-            .workspace-grid { grid-template-columns: 1fr; }
-        }
+    /* Localization Switcher Bar style matching */
+    .lang-bar {
+      display: flex;
+      direction: rtl;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
 
-        .panel {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
+    .lang-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
 
-        .panel-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #fff;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
+    .lang-btn:hover {
+      border-color: var(--text-muted);
+    }
 
-        /* Form Controls */
-        .form-group { display: flex; flex-direction: column; margin-bottom: 12px; }
-        .form-group label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; }
-        .form-group input {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px;
-            color: #fff;
-            font-size: 1rem;
-        }
-        .form-group input:focus { outline: none; border-color: var(--accent-blue); }
+    .lang-btn.active {
+      background: var(--gym);
+      color: #fff;
+      border-color: var(--gym);
+    }
 
-        /* Stats Bar Layout */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
-        }
+    /* Split Dashboard Workspace Panels */
+    .workspace-grid {
+      display: grid;
+      direction: ltr;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
 
-        .stat-box {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 12px;
-            text-align: center;
-            position: relative;
-        }
+    @media (max-width: 768px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+    }
 
-        .stat-box .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-        .stat-box .value { font-size: 1.2rem; font-weight: 700; margin-top: 4px; color: #fff; }
-        
-        .remove-stat-btn {
-            position: absolute;
-            top: 2px;
-            right: 5px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border: none;
-            background: none;
-        }
-        .remove-stat-btn:hover { color: var(--accent-rose); }
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .btn {
-            background-color: var(--accent-emerald);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: auto;
-            text-align: center;
-            text-decoration: none;
-        }
-        .btn:hover { opacity: 0.9; }
-        .btn-blue { background-color: var(--accent-blue); }
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
 
-        /* Plan List styles */
-        .plan-list { list-style: none; }
+    /* Input Element Forms Styling matching Workspace design system */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
 
-        .plan-item {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border-color);
-            border-left: 4px solid var(--accent-purple);
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .form-group label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
 
-        .plan-item.default-plan { border-left-color: var(--accent-blue); }
-        .plan-clickable { cursor: pointer; flex-grow: 1; }
-        .plan-item:hover .plan-clickable strong { color: var(--accent-blue); }
-        .plan-details { font-size: 0.85rem; color: var(--text-muted); }
-        
-        .btn-delete-plan {
-            background-color: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--border-color);
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-left: 10px;
-        }
-        .btn-delete-plan:hover {
-            background-color: rgba(244, 63, 94, 0.1);
-            color: var(--accent-rose);
-            border-color: var(--accent-rose);
-        }
-    </style>
+    .form-group input {
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 12px;
+      color: #fff;
+      font-size: 1rem;
+      font-family: 'Cairo', sans-serif;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--gym);
+    }
+
+    /* Stats Bar Layout Block Module */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .stat-box {
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 15px 10px;
+      text-align: center;
+      position: relative;
+    }
+
+    .stat-box .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-box {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 15px 10px;
+    text-align: center;
+    position: relative; /* Keeps the absolute child contained */
+    }
+
+    .remove-stat-btn {
+    position: absolute;
+    top: 2px;
+    
+    /* Use logical inset instead of physical left/right */
+    inset-inline-end: 6px; 
+    
+    color: var(--text-muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 0.9rem;
+    line-height: 1;
+    }
+
+    .remove-stat-btn:hover { 
+    color: var(--gym); 
+    }
+
+    /* Button Interface Systems styling */
+    .btn {
+      background-color: var(--cal);
+      color: #0a0a0f;
+      border: none;
+      border-radius: 6px;
+      padding: 14px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      margin-top: auto;
+      transition: opacity 0.2s ease;
+      text-align: center;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-blue { background-color: var(--run); color: #fff; }
+
+    /* Plan Rows Ledger List Container styles matching */
+    .plan-list { list-style: none; }
+    
+    .plan-item {
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-purple);
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s ease;
+    }
+    html[dir="rtl"] .plan-item { border-left: none; border-right: 4px solid var(--accent-purple); }
+    
+    .plan-item.default-plan { border-left-color: var(--run); }
+    html[dir="rtl"] .plan-item.default-plan { border-right-color: var(--run); }
+    .plan-item:hover { border-color: var(--text-muted); }
+    
+    .plan-clickable { cursor: pointer; flex-grow: 1; }
+    .plan-clickable strong { color: #fff; font-size: 1.1rem; }
+    .plan-details { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+    
+    .btn-delete-plan {
+      background-color: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    html[dir="rtl"] .btn-delete-plan { margin-left: 0; margin-right: 10px; }
+    .btn-delete-plan:hover {
+      background-color: rgba(255, 71, 71, 0.1);
+      color: var(--gym);
+      border-color: var(--gym);
+    }
+    
+    /* Layout translation control directives */
+    [data-translate] { display: none; }
+    .show-lang { display: block !important; }
+    span.show-lang { display: inline !important; }
+  </style>
 </head>
 <body>
 
-<div class="container">
+  <div class="hero">
+    <div class="hero-tag"> FITNESS PLAN</div>
+    <div class="hero-sub" id="hero-sub" data-translate="appDesc">بنية تحتية متطورة لتتبع الجداول الرياضية، حساب المؤشرات الحيوية الأساسية، وإدارة خطط التدريب.</div>
+  </div>
 
-    <header class="intro-banner">
-        <h1>Fitness Planner Pro</h1>
-        <p>A data-driven infrastructure built to track structural routines, calculate biometric targets baseline values, and manage progressive training mesocycles.</p>
-    </header>
+  <div class="container">
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="switchLanguage('ar')">🇸🇦 عربي</button>
+      <button class="lang-btn" onclick="switchLanguage('de')">🇩🇪 Deutsch</button>
+      <button class="lang-btn" onclick="switchLanguage('en')">🇬🇧 English</button>
+    </div>
 
     <div class="workspace-grid">
-        <div class="panel">
-            <div class="panel-title">Initialize New Workout Plan</div>
-            
-            <div class="form-group">
-                <label for="planName">Plan Name</label>
-                <input type="text" id="planName" placeholder="e.g., Push/Pull/Legs Split">
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                <div class="form-group">
-                    <label for="age">Age (yrs)</label>
-                    <input type="number" id="age" value="25">
-                </div>
-                <div class="form-group">
-                    <label for="height">Height (cm)</label>
-                    <input type="number" id="height" value="180">
-                </div>
-                <div class="form-group">
-                    <label for="weight">Weight (kg)</label>
-                    <input type="number" id="weight" value="75">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Add Extra Stat Box Field</label>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="customStatName" placeholder="e.g., Body Fat %" style="flex: 1;">
-                    <button type="button" class="btn btn-blue" style="margin: 0; padding: 0 15px;" onclick="addNewStatBox()">+ Add Field</button>
-                </div>
-            </div>
-
-            <div class="stats-bar" id="dynamicStatsBar">
-                <div class="stat-box" id="bmiStaticBox">
-                    <div class="label">Calculated BMI</div>
-                    <div class="value" id="liveBmi">--</div>
-                </div>
-            </div>
-
-            <button class="btn" style="margin-top: 20px;" onclick="generateWorkoutPlan()">Commit & Save New Plan</button>
+      <div class="panel">
+        <div class="panel-title" data-translate="panelInit">إنشاء خطة تمرين جديدة</div>
+        
+        <div class="form-group">
+          <label data-translate="labelPlanName">اسم الخطة</label>
+          <input type="text" id="planName" placeholder="e.g., Push/Pull/Legs">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+          <div class="form-group">
+            <label data-translate="labelAge">العمر (سنوات)</label>
+            <input type="number" id="age" value="25">
+          </div>
+          <div class="form-group">
+            <label data-translate="labelHeight">الطول (سم)</label>
+            <input type="number" id="height" value="180">
+          </div>
+          <div class="form-group">
+            <label data-translate="labelWeight">الوزن (كغ)</label>
+            <input type="number" id="weight" value="75">
+          </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-title">Your Created Active Plans</div>
-            <div id="plansContainer">
-                <ul class="plan-list" id="savedPlansList">
-                    </ul>
-            </div>
+        <div class="form-group">
+          <label data-translate="labelCustomField">إضافة حقل مخصص للوح الإحصائيات</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="customStatName" placeholder="e.g., Body Fat %" style="flex: 1;">
+            <button type="button" class="btn btn-blue" style="margin: 0; padding: 0 15px;" onclick="addNewStatBox()" data-translate="btnAddField">إضافة</button>
+          </div>
         </div>
+
+        <div class="stats-bar" id="dynamicStatsBar">
+          <div class="stat-box" id="bmiStaticBox">
+            <div class="label" data-translate="labelBMI">مؤشر كتلة الجسم</div>
+            <div class="value" id="liveBmi" style="color: var(--run)">--</div>
+          </div>
+        </div>
+
+        <button class="btn" style="margin-top: 25px;" onclick="generateWorkoutPlan()" data-translate="btnCommit">حفظ وتثبيت الخطة الجديدة</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title" data-translate="panelActive">خططك التدريبية النشطة</div>
+        <div id="plansContainer">
+          <ul class="plan-list" id="savedPlansList"></ul>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 
 <script>
-    // In-memory data store initializing with index.html recognized as "My Plan"
-    let createdPlans = [
-        {
-            id: 'default_index',
-            name: 'My Plan',
-            age: '--',
-            height: '--',
-            weight: '--',
-            bmi: 'Link Active',
-            isDefault: true,
-            url: 'workspace.html' // Changed from index.html
-        }
-    ];
+  let activeLang = 'ar';
+  
+  const dictionary = {
+    appDesc: { 
+      ar: 'بنية تحتية متطورة لتتبع الجداول الرياضية، حساب المؤشرات الحيوية الأساسية، وإدارة خطط التدريب.', 
+      de: 'Ein datengesteuertes System zur Verfolgung von Routinen, Berechnung von Biometrie-Baselines und Verwaltung progressiver Trainingszyklen.', 
+      en: 'A data-driven infrastructure built to track structural routines, calculate biometric targets baseline values, and manage progressive training mesocycles.' 
+    },
+    panelInit: { ar: 'إنشاء خطة تمرين جديدة', de: 'Neue Trainingsplan initialisieren', en: 'Initialize New Workout Plan' },
+    panelActive: { ar: 'خططك التدريبية النشطة', de: 'Deine erstellten aktiven Pläne', en: 'Your Created Active Plans' },
+    labelPlanName: { ar: 'اسم الخطة', de: 'Name des Plans', en: 'Plan Name' },
+    labelAge: { ar: 'العمر (سنوات)', de: 'Alter (Jahre)', en: 'Age (yrs)' },
+    labelHeight: { ar: 'الطول (سم)', de: 'Größe (cm)', en: 'Height (cm)' },
+    labelWeight: { ar: 'الوزن (كغ)', de: 'Gewicht (kg)', en: 'Weight (kg)' },
+    labelCustomField: { ar: 'إضافة حقل مخصص للوح الإحصائيات', de: 'Zusätzliches Statistikfeld hinzufügen', en: 'Add Extra Stat Box Field' },
+    labelBMI: { ar: 'مؤشر كتلة الجسم', de: 'Berechneter BMI', en: 'Calculated BMI' },
+    btnAddField: { ar: 'إضافة مؤشر مخصص', de: '+ Feld hinzufügen', en: '+ Add Field' },
+    btnCommit: { ar: 'حفظ وتثبيت الخطة الجديدة', de: 'Neuen Plan speichern', en: 'Commit & Save New Plan' },
+    btnDelete: { ar: 'حذف', de: 'Löschen', en: 'Delete' },
+    activeRoot: { ar: 'الخطة الأصلية', de: 'Aktive Basis', en: 'Active Root' }
+  };
 
-    function calculateBmiMetric(weight, height) {
-        if (!weight || !height || height <= 0) return "--";
-        const heightM = height / 100;
-        return (weight / (heightM * heightM)).toFixed(1);
-    }
+  let createdPlans = [
+    { id: 'default_index', name: 'My Plan', age: '--', height: '--', weight: '--', bmi: 'Link Active', isDefault: true, url: 'workspace.html' }
+  ];
 
-    // Interactive helper: Appends user custom-defined measurement nodes with a removal button
-    function addNewStatBox() {
-        const inputField = document.getElementById('customStatName');
-        const labelText = inputField.value.trim();
+  function switchLanguage(lang) {
+    activeLang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+    
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const targetBtn = Array.from(document.querySelectorAll('.lang-btn')).find(b => b.textContent.includes(lang === 'ar' ? 'عربي' : lang === 'de' ? 'Deutsch' : 'English'));
+    if (targetBtn) targetBtn.classList.add('active');
 
-        if (!labelText) {
-            alert("Please enter a custom statistic parameter label.");
-            return;
-        }
+    document.querySelectorAll('[data-translate]').forEach(el => {
+      const key = el.dataset.translate;
+      if (dictionary[key] && dictionary[key][lang]) {
+        el.textContent = dictionary[key][lang];
+        el.classList.add('show-lang');
+      }
+    });
+    renderPlansDashboard();
+  }
 
-        const bar = document.getElementById('dynamicStatsBar');
-        
-        const box = document.createElement('div');
-        box.className = 'stat-box';
-        
-        // Add delete trigger to custom fields
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'remove-stat-btn';
-        removeBtn.innerHTML = '&times;';
-        removeBtn.title = "Remove this stat field";
-        removeBtn.onclick = function() { box.remove(); };
-        
-        const lbl = document.createElement('div');
-        lbl.className = 'label';
-        lbl.innerText = labelText;
-        
-        const val = document.createElement('div');
-        val.className = 'value';
-        val.contentEditable = "true";
-        val.innerText = "- -";
-        val.style.outline = "none";
-        
-        box.appendChild(removeBtn);
-        box.appendChild(lbl);
-        box.appendChild(val);
-        bar.appendChild(box);
-        
-        inputField.value = "";
-    }
+  function calculateBmiMetric(weight, height) {
+    if (!weight || !height || height <= 0) return "--";
+    return (weight / ((height / 100) * (height / 100))).toFixed(1);
+  }
 
-    // Core validation and compilation tool for new structural routines
-    function generateWorkoutPlan() {
-        const nameField = document.getElementById('planName');
-        const planName = nameField.value.trim();
-        const age = parseInt(document.getElementById('age').value);
-        const height = parseFloat(document.getElementById('height').value);
-        const weight = parseFloat(document.getElementById('weight').value);
+  function addNewStatBox() {
+    const inputField = document.getElementById('customStatName');
+    const labelText = inputField.value.trim();
+    if (!labelText) return;
 
-        if (!planName) {
-            alert("Please supply an identifying title name for your Workout Plan.");
-            return;
-        }
+    const bar = document.getElementById('dynamicStatsBar');
+    const box = document.createElement('div');
+    box.className = 'stat-box';
+    
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-stat-btn';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.onclick = function() { box.remove(); };
+    
+    const lbl = document.createElement('div');
+    lbl.className = 'label';
+    lbl.innerText = labelText;
+    
+    const val = document.createElement('div');
+    val.className = 'value';
+    val.contentEditable = "true";
+    val.innerText = "- -";
+    val.style.outline = "none";
+    
+    box.appendChild(removeBtn);
+    box.appendChild(lbl);
+    box.appendChild(val);
+    bar.appendChild(box);
+    inputField.value = "";
+  }
 
-        const finalBmi = calculateBmiMetric(weight, height);
-        document.getElementById('liveBmi').innerText = finalBmi;
+  function generateWorkoutPlan() {
+    const nameField = document.getElementById('planName');
+    const planName = nameField.value.trim();
+    const age = document.getElementById('age').value;
+    const height = document.getElementById('height').value;
+    const weight = document.getElementById('weight').value;
 
-        const extraStats = [];
-        const extraBoxes = document.querySelectorAll('#dynamicStatsBar .stat-box');
-        extraBoxes.forEach(box => {
-            if (box.id === 'bmiStaticBox') return; // Skip base BMI module
-            const label = box.querySelector('.label').innerText;
-            const value = box.querySelector('.value').innerText;
-            extraStats.push({ label, value });
-        });
+    if (!planName) return;
 
-        const newPlan = {
-            id: 'plan_' + Date.now(),
-            name: planName,
-            age: age,
-            height: height,
-            weight: weight,
-            bmi: finalBmi,
-            customMetrics: extraStats,
-            isDefault: false,
-            url: '#'
-        };
+    const finalBmi = calculateBmiMetric(weight, height);
+    document.getElementById('liveBmi').innerText = finalBmi;
 
-        createdPlans.push(newPlan);
-        renderPlansDashboard();
+    const newPlan = {
+      id: 'plan_' + Date.now(),
+      name: planName,
+      age, height, weight, bmi: finalBmi,
+      isDefault: false,
+      url: 'workspace.html'
+    };
 
-        nameField.value = "";
-    }
+    createdPlans.push(newPlan);
+    renderPlansDashboard();
+    nameField.value = "";
+  }
 
-    // Function to safely delete a user-created plan layout
-    function deletePlan(planId) {
-        createdPlans = createdPlans.filter(p => p.id !== planId);
-        renderPlansDashboard();
-    }
+  function renderPlansDashboard() {
+    const listContainer = document.getElementById('savedPlansList');
+    listContainer.innerHTML = "";
 
-    // Render active plans list tracking rows
-    function renderPlansDashboard() {
-        const listContainer = document.getElementById('savedPlansList');
-        listContainer.innerHTML = "";
+    createdPlans.forEach(plan => {
+      const li = document.createElement('li');
+      li.className = plan.isDefault ? 'plan-item default-plan' : 'plan-item';
 
-        createdPlans.forEach(plan => {
-            const li = document.createElement('li');
-            li.className = plan.isDefault ? 'plan-item default-plan' : 'plan-item';
-
-            // Clickable workspace routing context wrapper
-            const contentWrapper = document.createElement('div');
-            contentWrapper.className = 'plan-clickable';
-            contentWrapper.onclick = () => selectPlanRoute(plan);
-            
-            if (plan.isDefault) {
-                contentWrapper.innerHTML = `
-                    <strong>${plan.name}</strong>
-                    <div class="plan-details">Core configuration root workflow file (index.html)</div>
-                `;
-            } else {
-                contentWrapper.innerHTML = `
-                    <div>
-                        <strong>${plan.name}</strong>
-                        <div class="plan-details">Metrics logged: W: ${plan.weight}kg | H: ${plan.height}cm | <strong>BMI: ${plan.bmi}</strong></div>
-                    </div>
-                `;
-            }
-
-            li.appendChild(contentWrapper);
-
-            // Append delete button ONLY if it is not the structural "My Plan" default module
-            if (!plan.isDefault) {
-                const delBtn = document.createElement('button');
-                delBtn.className = 'btn-delete-plan';
-                delBtn.innerText = 'Delete';
-                delBtn.onclick = (e) => {
-                    e.stopPropagation(); // Stop parent click routine triggers
-                    deletePlan(plan.id);
-                };
-                li.appendChild(delBtn);
-            } else {
-                const badge = document.createElement('span');
-                badge.style.cssText = "color: var(--accent-blue); font-size: 0.8rem; font-weight: 600; padding-right: 5px;";
-                badge.innerText = "Active Root";
-                li.appendChild(badge);
-            }
-            
-            listContainer.appendChild(li);
-        });
-    }
-
-    // Updated router configuration inside index.html (formerly menu.html)
-    function selectPlanRoute(plan) {
+      const contentWrapper = document.createElement('div');
+      contentWrapper.className = 'plan-clickable';
+      contentWrapper.onclick = () => {
         if (plan.isDefault) {
-            // Route to the main root plan baseline workspace
-            window.location.href = 'workspace.html?planId=default'; 
+          window.location.href = `${plan.url}?planId=default`;
         } else {
-            // Shift context to workspace.html while carrying metadata parameters
-            window.location.href = `workspace.html?planId=${plan.id}&name=${encodeURIComponent(plan.name)}&age=${plan.age}&height=${plan.height}&weight=${plan.weight}&bmi=${plan.bmi}`;
+          window.location.href = `${plan.url}?planId=${plan.id}&name=${encodeURIComponent(plan.name)}&age=${plan.age}&height=${plan.height}&weight=${plan.weight}&bmi=${plan.bmi}`;
         }
-    }
+      };
+      
+      if (plan.isDefault) {
+        contentWrapper.innerHTML = `<strong>${plan.name === 'My Plan' && activeLang === 'ar' ? 'خطتي التدريبية' : plan.name}</strong><div class="plan-details">Core configuration root layout</div>`;
+      } else {
+        contentWrapper.innerHTML = `<strong>${plan.name}</strong><div class="plan-details">W: ${plan.weight}kg | H: ${plan.height}cm | BMI: ${plan.bmi}</div>`;
+      }
+      li.appendChild(contentWrapper);
 
-    // Initialization lifecycle hook run
-    window.onload = renderPlansDashboard;
+      if (!plan.isDefault) {
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn-delete-plan';
+        delBtn.innerText = dictionary.btnDelete[activeLang];
+        delBtn.onclick = (e) => { e.stopPropagation(); createdPlans = createdPlans.filter(p => p.id !== plan.id); renderPlansDashboard(); };
+        li.appendChild(delBtn);
+      } else {
+        const badge = document.createElement('span');
+        badge.style.cssText = "color: var(--run); font-size: 0.85rem; font-weight: 700;";
+        badge.innerText = dictionary.activeRoot[activeLang];
+        li.appendChild(badge);
+      }
+      listContainer.appendChild(li);
+    });
+  }
+
+  window.onload = () => { switchLanguage('ar'); };
 </script>
-
 </body>
 </html>

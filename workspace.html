@@ -10,7 +10,7 @@
 <body>
 
   <div class="hero">
-    <div class="hero-tag">MASTER FITNESS PLAN</div>
+    <div class="hero-tag">FITNESS PLAN</div>
     <div class="hero-sub" id="hero-sub">خطتك الكاملة | الصالة + كاليستانيكس + ماراتون</div>
   </div>
 
@@ -22,7 +22,15 @@
     <div class="stat"><div class="stat-val gym">173</div><div class="stat-lbl">CM HEIGHT</div></div>
     <div class="stat"><div class="stat-val run">42.2</div><div class="stat-lbl">KM MARATHON</div></div>
   </div>
-
+  <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; padding: 12px 20px; border-radius: 8px; margin: 15px auto; max-width: 1200px; display: flex; justify-content: space-between; align-items: center;" dir="ltr">
+    <div>
+        <span style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Active Session Profile:</span>
+        <strong style="color: #fff; margin-left: 8px;" id="currentActivePlanName">My Plan (Default)</strong>
+    </div>
+    <button onclick="window.location.href='index.html'" style="background: #3b82f6; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">
+        &larr; Switch / Add Custom Plans
+    </button>
+  </div>
   <div class="lang-bar">
     <button class="lang-btn active" onclick="setLang('ar', this)">🇸🇦 عربي</button>
     <button class="lang-btn" onclick="setLang('de', this)">🇩🇪 Deutsch</button>

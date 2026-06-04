@@ -882,3 +882,146 @@ function injectBiometricBanner(name, age, height, weight, bmi) {
     
     bodyContainer.insertBefore(banner, bodyContainer.firstChild);
 }
+
+// Parse all current data out of the URL string on load
+function getPlanContext() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+        planId: urlParams.get('planId') || 'default',
+        name: urlParams.get('name') || 'My Plan',
+        age: urlParams.get('age') || '--',
+        height: urlParams.get('height') || '--',
+        weight: urlParams.get('weight') || '--',
+        bmi: urlParams.get('bmi') || '--',
+        // Exercises are compressed and encoded inside a single string parameter 'data'
+        rawExercises: urlParams.get('data') || ''
+    };
+}
+
+// Decodes the compressed URL data parameter into an array of exercise objects
+function loadExercisesFromUrl() {
+    const context = getPlanContext();
+    if (!context.rawExercises) return [];
+    
+    try {
+        // Base64 decode + JSON parse to unpack the exercise array safely
+        return JSON.parse(atob(context.rawExercises));
+    } catch (e) {
+        console.error("Error parsing exercise context from URL structure:", e);
+        return [];
+    }
+}
+
+// Encodes the exercise array and updates the browser address bar state
+function updateUrlWithExercises(exercisesArray) {
+    const context = getPlanContext();
+    const encodedData = btoa(JSON.stringify(exercisesArray));
+    
+    // Reconstruct the URL string maintaining all biometrics + the new database payload
+    const newUrl = `workspace.html?planId=${context.planId}&name=${encodeURIComponent(context.name)}&age=${context.age}&height=${context.height}&weight=${context.weight}&bmi=${context.bmi}&data=${encodedData}`;
+    
+    // Update the browser history state without forcing a hard page refresh
+    window.history.replaceState({ path: newUrl }, '', newUrl);
+}
+
+// Unified Submit Event Handler to run when adding a new exercise
+function onAddExerciseFormSubmit(event) {
+    event.preventDefault();
+    
+    // Extract current input data values from your HTML inputs
+    const newExercise = {
+        id: 'ex_' + Date.now(),
+        name: document.getElementById('exerciseNameInput').value,
+        sets: document.getElementById('setsInput').value,
+        reps: document.getElementById('repsInput').value
+    };
+    
+    // 1. Fetch current array stack out of the URL parameters
+    const currentExercises = loadExercisesFromUrl();
+    
+    // 2. Append the newly created exercise object
+    currentExercises.push(newExercise);
+    
+    // 3. Serialize and save back to the browser URL string state
+    updateUrlWithExercises(currentExercises);
+    
+    // 4. Render directly to the empty canvas UI interface
+    renderExerciseToUI(newExercise); 
+    
+    // Clear out input fields for subsequent additions
+    document.getElementById('exerciseNameInput').value = '';
+}
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Extract context strings from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const planId = urlParams.get('planId');
+
+    // 2. If it's a freshly initialized custom plan, clear older routine canvases
+    if (planId && planId !== 'default') {
+        const customName = urlParams.get('name');
+        const weight = urlParams.get('weight');
+        const height = urlParams.get('height');
+        const bmi = urlParams.get('bmi');
+
+        // Dynamically alter text content identifiers
+        const subTitle = document.getElementById('hero-sub');
+        if (subTitle) {
+            subTitle.innerText = `${customName} | Customized Target Profile Workspace`;
+        }
+
+        // Update the metric statistics blocks
+        updateStatValue('.stat-val.gym', `${weight} KG`);
+        updateStatValue('.stat-val.cal', bmi);
+        updateStatValue('.stat-val.gym:nth-of-type(2)', `${height} CM`);
+
+        // Flush text arrays inside cards to present an empty canvas for customization
+        clearExerciseCards();
+    }
+});
+
+function updateStatValue(selector, value) {
+    const element = document.querySelector(selector);
+    if (element) element.innerText = value;
+}
+
+function clearExerciseCards() {
+    // Select detail text structures inside your grid items
+    const details = document.querySelectorAll('.ex-detail');
+    details.forEach(box => {
+        box.innerText = "No specific tracking routines initialized. Click to configure customized sets.";
+    });
+
+    const setBadges = document.querySelectorAll('.set-badge');
+    setBadges.forEach(badge => {
+        badge.innerText = "--";
+    });
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const planId = urlParams.get('planId');
+
+    if (planId && planId !== 'default') {
+        const planName = urlParams.get('name');
+        const weight = urlParams.get('weight');
+        const height = urlParams.get('height');
+        const bmi = urlParams.get('bmi');
+
+        // Update main workspace header elements
+        const subSub = document.getElementById('hero-sub');
+        if (subSub) subSub.innerText = `${planName} | Profile Workspace`;
+
+        // Safely push new baseline variables to standard stats elements
+        const statVals = document.querySelectorAll('.stat-val');
+        if(statVals.length >= 5) {
+            statVals[0].innerText = weight; // Updates Current Weight Box
+            statVals[1].innerText = bmi;    // Updates BMI Box
+            statVals[4].innerText = height; // Updates Height Box
+        }
+    }
+});
