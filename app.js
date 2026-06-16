@@ -581,6 +581,10 @@ window.addEventListener('load', () => {
  
   const PLAN_CONFIG = {
     START_DATE: '2026-05-01',
+    // ─── PHASE LOCK TOGGLE ──────────────────────────────────────
+    // Set PHASE_LOCK_ENABLED to false to unlock ALL phases for viewing.
+    // You can also call: PhaseSystem.setLockEnabled(false) from the browser console.
+    PHASE_LOCK_ENABLED: false,
     PHASES: [
       { id: 1, durationMonths: 3, label: { ar: 'المرحلة الأولى', de: 'Phase 1', en: 'Phase 1' }, name: { ar: 'إعادة التأهيل', de: 'Rehabilitation', en: 'Rehabilitation' } },
       { id: 2, durationMonths: 3, label: { ar: 'المرحلة الثانية', de: 'Phase 2', en: 'Phase 2' }, name: { ar: 'البناء + الجري', de: 'Aufbau + Laufen', en: 'Build + Run' } },
@@ -695,9 +699,10 @@ window.addEventListener('load', () => {
   }
 
   function markTodayDayCard() {
-    const todayIndex = (new Date().getDay() + 6) % 7;
+    const todayIndex = (new Date().getDay() + 6) % 7; // Mon=0 … Sun=6
     const checkedToday = hasCheckedInToday();
     const lang = currentLang || 'ar';
+    const todayEntry = loadCheckIns()[todayStr()];
     const label = t('dailyCheckLabel', lang);
 
     document.querySelectorAll('.week-grid').forEach(grid => {
@@ -705,25 +710,41 @@ window.addEventListener('load', () => {
         const isToday = index === todayIndex;
         dayCol.classList.toggle('today-day', isToday);
 
-        let chip = dayCol.querySelector('.daily-check-chip');
-        if (isToday) {
-          if (!chip) {
-            chip = document.createElement('span');
-            chip.className = 'daily-check-chip';
-            dayCol.querySelector('.day-head')?.appendChild(chip);
-          }
-          chip.textContent = checkedToday ? `✓ ${label}` : `• ${label}`;
-          chip.classList.toggle('done', checkedToday);
-        } else if (chip) {
-          chip.remove();
+        // Remove any existing chip first (clean re-render)
+        const existingChip = dayCol.querySelector('.daily-check-chip');
+        if (existingChip) existingChip.remove();
+
+        if (!isToday) return; // Only decorate today's column
+
+        const chip = document.createElement('div');
+        chip.className = 'daily-check-chip' + (checkedToday ? ' done' : '');
+
+        if (checkedToday && todayEntry) {
+          // Show a filled checkbox + the activity type
+          chip.innerHTML = `<span class="ci-checkbox ci-checkbox--checked">✓</span><span class="ci-chip-label">${tSessionType(todayEntry.type, lang)}</span>`;
+        } else {
+          // Show an empty checkbox
+          chip.innerHTML = `<span class="ci-checkbox">○</span><span class="ci-chip-label">${label}</span>`;
         }
+
+        // Clicking the chip on today's column is a shortcut to the check-in panel
+        chip.style.cursor = 'pointer';
+        chip.title = checkedToday ? label : label;
+        chip.addEventListener('click', () => {
+          const panel = document.getElementById('checkin-panel');
+          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        dayCol.querySelector('.day-head')?.appendChild(chip);
       });
     });
   }
 
   // ─── PHASE LOCK ────────────────────────────────────────────
   function applyPhaseLock() {
-    const activePhase = computeActivePhase();
+    const activePhase = PLAN_CONFIG.PHASE_LOCK_ENABLED
+      ? computeActivePhase()
+      : PLAN_CONFIG.PHASES.length; // if disabled → treat all phases as active
     const sec = document.getElementById('sec-weekly');
     if (!sec) return;
  
@@ -742,7 +763,8 @@ window.addEventListener('load', () => {
       });
  
       phaseBlocks.forEach(pb => {
-        const isLocked = pb.phaseNum > activePhase;
+        // When lock is disabled, nothing is ever locked
+        const isLocked = PLAN_CONFIG.PHASE_LOCK_ENABLED && pb.phaseNum > activePhase;
         pb.elements.forEach(el => {
           el.classList.toggle('phase-locked-el', isLocked);
         });
@@ -795,7 +817,11 @@ window.addEventListener('load', () => {
       const statsBar = document.querySelector('.stats-bar');
       if (statsBar && statsBar.parentNode) statsBar.parentNode.insertBefore(panel, statsBar.nextSibling);
     }
- 
+
+    // Labels for the "change" button
+    const changeLabels = { ar: '✏️ تغيير', de: '✏️ Ändern', en: '✏️ Change' };
+    const changeLabel = changeLabels[lang] || changeLabels.en;
+
     panel.innerHTML = `
       <div class="checkin-inner">
         <div class="checkin-meta">
@@ -804,12 +830,17 @@ window.addEventListener('load', () => {
         </div>
         <div class="checkin-sync">${t('liveSyncLabel', lang)} ${formatLiveTime(new Date(), lang)}</div>
         ${checked
-          ? `<div class="checkin-done">${t('alreadyChecked', lang)} <span class="ci-badge ci-${todayEntry?.type}">${tSessionType(todayEntry?.type, lang)}</span></div>`
+          ? `<div class="checkin-done">
+               ${t('alreadyChecked', lang)}
+               <span class="ci-badge ci-${todayEntry?.type}">${tSessionType(todayEntry?.type, lang)}</span>
+               <button class="ci-change-btn" id="ci-change-today">${changeLabel}</button>
+             </div>`
           : `<div class="checkin-title">${t('checkInTitle', lang)}</div>
              <div class="checkin-buttons">${types.map(tp => `<button class="ci-btn ci-${tp}" data-type="${tp}">${tSessionType(tp, lang)}</button>`).join('')}</div>`
         }
       </div>`;
  
+    // Attach check-in button handlers
     panel.querySelectorAll('.ci-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         doCheckIn(btn.dataset.type);
@@ -820,6 +851,18 @@ window.addEventListener('load', () => {
         showToast(msgs[lang] || msgs.en);
       });
     });
+
+    // Attach "Change" button handler — resets today's entry so buttons re-appear
+    const changeBtn = panel.querySelector('#ci-change-today');
+    if (changeBtn) {
+      changeBtn.addEventListener('click', () => {
+        const data = loadCheckIns();
+        delete data[todayStr()];
+        saveCheckIns(data);
+        renderCheckInPanel();
+        markTodayDayCard();
+      });
+    }
 
     markTodayDayCard();
   }
@@ -862,6 +905,14 @@ window.addEventListener('load', () => {
     getCheckIns: loadCheckIns,
     forceRefresh: () => { renderCheckInPanel(); applyPhaseLock(); },
     devSetDate: (dateStr) => { PLAN_CONFIG.START_DATE = dateStr; renderCheckInPanel(); applyPhaseLock(); },
+    // ─── PHASE LOCK CONTROL ────────────────────────────────────
+    // Call PhaseSystem.setLockEnabled(false) in the browser console to unlock all phases.
+    // Call PhaseSystem.setLockEnabled(true) to re-enable the lock.
+    setLockEnabled: (bool) => {
+      PLAN_CONFIG.PHASE_LOCK_ENABLED = !!bool;
+      applyPhaseLock();
+      console.log(`Phase lock ${bool ? 'ENABLED 🔒' : 'DISABLED 🔓'}`);
+    },
   };
  
 })();

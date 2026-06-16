@@ -283,26 +283,79 @@ body::before {
 
 .day-body { padding:.5rem .4rem; min-height:120px; }
 
+/* ─── DAILY CHECK-IN CHIP (checkbox style) ──────────────────*/
 .daily-check-chip {
   display: inline-flex;
   align-items: center;
-  gap: .25rem;
+  gap: .3rem;
   margin-top: .35rem;
-  padding: .22rem .55rem;
+  padding: .2rem .5rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
   color: var(--muted);
-  font-size: .68rem;
-  letter-spacing: .08em;
+  font-size: .65rem;
+  letter-spacing: .06em;
   text-transform: uppercase;
   font-family: 'IBM Plex Mono', monospace;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  transition: background .2s, box-shadow .2s;
+  cursor: pointer;
+}
+
+.daily-check-chip:hover {
+  background: rgba(255,255,255,.1);
 }
 
 .daily-check-chip.done {
   background: linear-gradient(135deg, rgba(60,255,180,.18), rgba(60,255,180,.08));
   color: var(--gym);
-  box-shadow: inset 0 0 0 1px rgba(60,255,180,.22), 0 4px 12px rgba(60,255,180,.12);
+  box-shadow: inset 0 0 0 1px rgba(60,255,180,.25), 0 4px 12px rgba(60,255,180,.12);
+}
+
+.ci-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  font-size: .6rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.ci-checkbox--checked {
+  background: var(--gym);
+  border-color: var(--gym);
+  color: #000;
+}
+
+.ci-chip-label {
+  font-size: .6rem;
+  letter-spacing: .08em;
+}
+
+/* ─── CHECK-IN CHANGE BUTTON ─────────────────────────────────*/
+.ci-change-btn {
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232,255,60,.3);
+  background: transparent;
+  color: var(--cal);
+  font-family: 'Cairo', sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+  white-space: nowrap;
+  margin-inline-start: .5rem;
+}
+
+.ci-change-btn:hover {
+  background: rgba(232,255,60,.12);
+  border-color: var(--cal);
+  box-shadow: 0 0 8px rgba(232,255,60,.2);
 }
 
 .session {
@@ -1246,4 +1299,3 @@ body, p, li, .tip-text, .phase p, .ex-detail, .meal-desc, .budget-desc, .checkli
   .checkin-inner { flex-direction: column; align-items: flex-start; gap: .55rem; }
   .ci-btn { font-size: .76rem; padding: .28rem .6rem; }
 }
- 
