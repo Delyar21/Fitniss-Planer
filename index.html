@@ -271,6 +271,18 @@
     [data-translate] { display: none; }
     .show-lang { display: block !important; }
     span.show-lang { display: inline !important; }
+
+    .form-row-three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 480px) {
+      .form-row-three-col {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -296,7 +308,7 @@
           <input type="text" id="planName" placeholder="e.g., Push/Pull/Legs">
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+        <div class="form-row-three-col">
           <div class="form-group">
             <label data-translate="labelAge">العمر (سنوات)</label>
             <input type="number" id="age" value="25">
