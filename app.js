@@ -116,14 +116,16 @@ function makePageEditable() {
   });
 
   // 3. Progress bars — show sliders
-  document.querySelectorAll('.progress-fill').forEach(bar => {
+  document.querySelectorAll('.progress-bar').forEach(bar => {
     if (bar.querySelector('.prog-slider')) return;
+    const fill = bar.querySelector('.progress-fill');
+    if (!fill) return;
     const slider = document.createElement('input');
     slider.type  = 'range';
     slider.min   = '0'; slider.max = '100';
-    slider.value = parseInt(bar.style.width) || 50;
+    slider.value = parseInt(fill.style.width) || 50;
     slider.className = 'prog-slider';
-    slider.oninput = () => { bar.style.width = slider.value + '%'; };
+    slider.oninput = () => { fill.style.width = slider.value + '%'; };
     bar.appendChild(slider);
   });
 
@@ -260,8 +262,8 @@ function makePageEditable() {
 function removeEditHandles() {
   document.querySelectorAll(
     '.add-card-btn,.add-session-btn,.delete-card-btn,.delete-session-btn,' +
-    '.add-meal-btn,.add-mt-btn,.add-checklist-btn,.delete-li-btn,.prog-slider,' +
-    '.edit-action-btn,.add-phase-btn,.add-mealday-btn'
+    '.add-meal-btn,.add-mt-btn,.add-checklist-btn,.delete-li-btn,' +
+    '.edit-action-btn,.add-phase-btn,.add-mealday-btn,.prog-slider'
   ).forEach(el => el.remove());
 
   document.querySelectorAll('.editable-text').forEach(el => {
@@ -388,13 +390,14 @@ function addPhaseCard(tl) {
   `;
   addDeleteBtn(phase);
   tl.appendChild(phase);
-  // add slider to new bar
-  const bar = phase.querySelector('.progress-fill');
+  // add slider to progress bar (not fill)
+  const progressBar = phase.querySelector('.progress-bar');
+  const fill = phase.querySelector('.progress-fill');
   const slider = document.createElement('input');
   slider.type = 'range'; slider.min = '0'; slider.max = '100'; slider.value = 50;
   slider.className = 'prog-slider';
-  slider.oninput = () => { bar.style.width = slider.value + '%'; };
-  bar.appendChild(slider);
+  slider.oninput = () => { fill.style.width = slider.value + '%'; };
+  progressBar.appendChild(slider);
 }
 
 // ─── ADD CHECKLIST ITEM ──────────────────────────────────────
@@ -499,13 +502,13 @@ function saveAllEdits() {
   state.statsBar = document.querySelector('.stats-bar').innerHTML;
   state.heroTag  = document.querySelector('.hero-tag').textContent;
 
-  localStorage.setItem('fitnessState', JSON.stringify(state));
+  localStorage.setItem(getStorageKey(), JSON.stringify(state));
   showToast(currentLang === 'ar' ? '\u2705 \u062A\u0645 \u062D\u0641\u0638 \u062E\u0637\u062A\u0643!' :
             currentLang === 'de' ? '\u2705 Plan gespeichert!' : '\u2705 Plan saved!');
 }
 
 function loadSavedState() {
-  const state = JSON.parse(localStorage.getItem('fitnessState') || '{}');
+  const state = JSON.parse(localStorage.getItem(getStorageKey()) || '{}');
   if (!state || Object.keys(state).length === 0) return;
 
   ['ar','de','en'].forEach(lang => {
@@ -534,7 +537,7 @@ function resetAllEdits() {
     en: 'Reset all edits and return to the original plan?'
   };
   if (!confirm(labels[currentLang])) return;
-  localStorage.removeItem('fitnessState');
+  localStorage.removeItem(getStorageKey());
   location.reload();
 }
 
@@ -584,7 +587,7 @@ window.addEventListener('load', () => {
     // ─── PHASE LOCK TOGGLE ──────────────────────────────────────
     // Set PHASE_LOCK_ENABLED to false to unlock ALL phases for viewing.
     // You can also call: PhaseSystem.setLockEnabled(false) from the browser console.
-    PHASE_LOCK_ENABLED: false,
+    PHASE_LOCK_ENABLED: true,
     PHASES: [
       { id: 1, durationMonths: 3, label: { ar: 'المرحلة الأولى', de: 'Phase 1', en: 'Phase 1' }, name: { ar: 'إعادة التأهيل', de: 'Rehabilitation', en: 'Rehabilitation' } },
       { id: 2, durationMonths: 3, label: { ar: 'المرحلة الثانية', de: 'Phase 2', en: 'Phase 2' }, name: { ar: 'البناء + الجري', de: 'Aufbau + Laufen', en: 'Build + Run' } },
@@ -1006,73 +1009,170 @@ function onAddExerciseFormSubmit(event) {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Extract context strings from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const planId = urlParams.get('planId');
+// ============================================================
+// INDIVIDUAL PLAN BUILDER — per-plan storage + blank skeleton
+// ============================================================
+(function () {
+  'use strict';
 
-    // 2. If it's a freshly initialized custom plan, clear older routine canvases
-    if (planId && planId !== 'default') {
-        const customName = urlParams.get('name');
-        const weight = urlParams.get('weight');
-        const height = urlParams.get('height');
-        const bmi = urlParams.get('bmi');
+  // ─── Eigener Storage-Key pro Plan (Default-Plan bleibt auf dem alten Key) ───
+  window.getStorageKey = function () {
+    const ctx = getPlanContext();
+    return ctx.planId === 'default' ? 'fitnessState' : 'fitnessState_' + ctx.planId;
+  };
 
-        // Dynamically alter text content identifiers
-        const subTitle = document.getElementById('hero-sub');
-        if (subTitle) {
-            subTitle.innerText = `${customName} | Customized Target Profile Workspace`;
-        }
+  function hasSavedPlan() {
+    return !!localStorage.getItem(getStorageKey());
+  }
 
-        // Update the metric statistics blocks
-        updateStatValue('.stat-val.gym', `${weight} KG`);
-        updateStatValue('.stat-val.cal', bmi);
-        updateStatValue('.stat-val.gym:nth-of-type(2)', `${height} CM`);
-
-        // Flush text arrays inside cards to present an empty canvas for customization
-        clearExerciseCards();
-    }
-});
-
-function updateStatValue(selector, value) {
-    const element = document.querySelector(selector);
-    if (element) element.innerText = value;
-}
-
-function clearExerciseCards() {
-    // Select detail text structures inside your grid items
-    const details = document.querySelectorAll('.ex-detail');
-    details.forEach(box => {
-        box.innerText = "No specific tracking routines initialized. Click to configure customized sets.";
+  // ─── Demo-Inhalt entfernen, nur Gerüst behalten ─────────────────────────────
+  function stripToSkeleton() {
+    // Overview: Phasen-Karten + Tipps leeren, .timeline bleibt für "+ Add Phase"
+    document.querySelectorAll('#sec-overview [data-lang]').forEach(langDiv => {
+      langDiv.querySelectorAll('.timeline .phase').forEach(el => el.remove());
+      langDiv.querySelectorAll('.tip').forEach(el => el.remove());
     });
 
-    const setBadges = document.querySelectorAll('.set-badge');
-    setBadges.forEach(badge => {
-        badge.innerText = "--";
-    });
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const planId = urlParams.get('planId');
-
-    if (planId && planId !== 'default') {
-        const planName = urlParams.get('name');
-        const weight = urlParams.get('weight');
-        const height = urlParams.get('height');
-        const bmi = urlParams.get('bmi');
-
-        // Update main workspace header elements
-        const subSub = document.getElementById('hero-sub');
-        if (subSub) subSub.innerText = `${planName} | Profile Workspace`;
-
-        // Safely push new baseline variables to standard stats elements
-        const statVals = document.querySelectorAll('.stat-val');
-        if(statVals.length >= 5) {
-            statVals[0].innerText = weight; // Updates Current Weight Box
-            statVals[1].innerText = bmi;    // Updates BMI Box
-            statVals[4].innerText = height; // Updates Height Box
+    // Weekly: nur den ersten Phasenblock (sec-title + week-grid) behalten, Sessions leeren
+    document.querySelectorAll('#sec-weekly [data-lang]').forEach(langDiv => {
+      const blocks = [];
+      let current = null;
+      Array.from(langDiv.children).forEach(el => {
+        if (el.classList.contains('sec-title')) { current = [el]; blocks.push(current); }
+        else if (current) current.push(el);
+      });
+      blocks.forEach((block, i) => {
+        if (i === 0) {
+          const grid = block.find(e => e.classList.contains('week-grid'));
+          if (grid) grid.querySelectorAll('.session').forEach(s => s.remove());
+        } else {
+          block.forEach(el => el.remove());
         }
+      });
+    });
+
+    // Exercises: alles weg, ein leerer Starter-Muskelgruppenblock kommt rein
+    document.querySelectorAll('#sec-exercises [data-lang]').forEach(langDiv => {
+      langDiv.querySelectorAll('.tip, .checklist, .sec-title, .sec-sub, .muscle-group-header, .ex-grid')
+        .forEach(el => el.remove());
+      const header = document.createElement('div');
+      header.className = 'muscle-group-header gym-header';
+      header.textContent = '💪 New Muscle Group';
+      const grid = document.createElement('div');
+      grid.className = 'ex-grid';
+      langDiv.appendChild(header);
+      langDiv.appendChild(grid);
+    });
+
+    // Nutrition: Meal-Days + Tipps weg, "+ Add Day Plan" existiert schon
+    document.querySelectorAll('#sec-nutrition [data-lang]').forEach(langDiv => {
+      langDiv.querySelectorAll('.meal-day, .tip').forEach(el => el.remove());
+    });
+
+    // Marathon: Phasen + Tipps weg, Checklist geleert (Container bleibt)
+    document.querySelectorAll('#sec-marathon [data-lang]').forEach(langDiv => {
+      langDiv.querySelectorAll('.mt-item, .tip').forEach(el => el.remove());
+      langDiv.querySelectorAll('.checklist').forEach(list => { list.innerHTML = ''; });
+    });
+
+    // Budget: Items + Tipps weg, Checklist geleert (Vorschlags-Buttons bleiben)
+    document.querySelectorAll('#sec-budget [data-lang]').forEach(langDiv => {
+      langDiv.querySelectorAll('.budget-item, .tip').forEach(el => el.remove());
+      langDiv.querySelectorAll('.checklist').forEach(list => { list.innerHTML = ''; });
+    });
+  }
+
+  // ─── Fehlende "+"-Funktionen für den leeren Start ───────────────────────────
+  function addTipItem(container) {
+    const tip = document.createElement('div');
+    tip.className = 'tip';
+    tip.style.position = 'relative';
+    tip.innerHTML = `
+      <div class="tip-icon">💡</div>
+      <div class="tip-text editable-text" contenteditable="true" spellcheck="false"><strong>Title:</strong> Your tip text...</div>
+    `;
+    addDeleteBtn(tip);
+    container.insertBefore(tip, container.querySelector('.add-tip-btn'));
+  }
+
+  function addMuscleGroupSection(langDiv) {
+    const header = document.createElement('div');
+    header.className = 'muscle-group-header gym-header editable-text';
+    header.setAttribute('contenteditable', 'true');
+    header.setAttribute('spellcheck', 'false');
+    header.textContent = '💪 New Muscle Group';
+
+    const grid = document.createElement('div');
+    grid.className = 'ex-grid';
+    const cardBtn = document.createElement('button');
+    cardBtn.className = 'add-card-btn';
+    cardBtn.textContent = '+ Add Exercise';
+    cardBtn.onclick = () => addExCard(grid);
+    grid.appendChild(cardBtn);
+
+    const addBtn = langDiv.querySelector('.add-musclegroup-btn');
+    langDiv.insertBefore(header, addBtn);
+    langDiv.insertBefore(grid, addBtn);
+  }
+
+  function addBlankPlanButtons() {
+    document.querySelectorAll('#sec-overview [data-lang], #sec-marathon [data-lang]').forEach(langDiv => {
+      if (langDiv.querySelector('.add-tip-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'add-tip-btn edit-action-btn';
+      btn.textContent = '+ Add Tip';
+      btn.onclick = () => addTipItem(langDiv);
+      langDiv.appendChild(btn);
+    });
+
+    document.querySelectorAll('#sec-exercises [data-lang]').forEach(langDiv => {
+      if (langDiv.querySelector('.add-musclegroup-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'add-musclegroup-btn edit-action-btn';
+      btn.textContent = '+ Add Muscle Group';
+      btn.onclick = () => addMuscleGroupSection(langDiv);
+      langDiv.appendChild(btn);
+    });
+  }
+
+  // Hook in den bestehenden Edit-Toggle (gleiches Muster wie PhaseSystem oben)
+  const _origToggle = window.toggleEditMode;
+  window.toggleEditMode = function () {
+    _origToggle();
+    if (editMode) addBlankPlanButtons();
+  };
+
+  // ─── Biometrie-Anzeige (Name, Gewicht, BMI, Größe) ──────────────────────────
+  function applyPlanBiometrics(ctx) {
+    const nameLabel = document.getElementById('currentActivePlanName');
+    if (nameLabel) nameLabel.textContent = ctx.name;
+    if (ctx.planId === 'default') return; // default plan keeps all hardcoded values
+
+    const heroSub = document.getElementById('hero-sub');
+    if (heroSub) heroSub.textContent = ctx.name + ' — Custom Plan';
+
+    // For custom plans: only show weight, bmi, height — hide marathon-specific stats
+    const statWeight = document.querySelector('[data-stat="weight"]');
+    const statBmi    = document.querySelector('[data-stat="bmi"]');
+    const statHeight = document.querySelector('[data-stat="height"]');
+
+    if (statWeight) statWeight.querySelector('.stat-val').textContent = ctx.weight !== '--' ? ctx.weight : '--';
+    if (statBmi)    statBmi.querySelector('.stat-val').textContent    = ctx.bmi    !== '--' ? ctx.bmi    : '--';
+    if (statHeight) statHeight.querySelector('.stat-val').textContent = ctx.height !== '--' ? ctx.height : '--';
+
+    // Hide the marathon-specific stats that don't apply to a generic custom plan
+    ['months', 'target', 'marathon'].forEach(key => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  // ─── Init ────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const ctx = getPlanContext();
+    applyPlanBiometrics(ctx);
+    if (ctx.planId !== 'default' && !hasSavedPlan()) {
+      stripToSkeleton();
     }
-});
+  });
+})();

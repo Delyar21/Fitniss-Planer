@@ -333,6 +333,18 @@
         </div>
 
         <div class="stats-bar" id="dynamicStatsBar">
+          <div class="stat-box" id="ageStaticBox">
+            <div class="label" data-translate="labelAge">العمر (سنوات)</div>
+            <div class="value" id="liveAge" style="color: var(--cal)">25</div>
+          </div>
+          <div class="stat-box" id="heightStaticBox">
+            <div class="label" data-translate="labelHeight">الطول (سم)</div>
+            <div class="value" id="liveHeight" style="color: var(--run)">180</div>
+          </div>
+          <div class="stat-box" id="weightStaticBox">
+            <div class="label" data-translate="labelWeight">الوزن (كغ)</div>
+            <div class="value" id="liveWeight" style="color: var(--gym)">75</div>
+          </div>
           <div class="stat-box" id="bmiStaticBox">
             <div class="label" data-translate="labelBMI">مؤشر كتلة الجسم</div>
             <div class="value" id="liveBmi" style="color: var(--run)">--</div>
@@ -374,9 +386,21 @@
     activeRoot: { ar: 'الخطة الأصلية', de: 'Aktive Basis', en: 'Active Root' }
   };
 
-  let createdPlans = [
-    { id: 'default_index', name: 'My Plan', age: '--', height: '--', weight: '--', bmi: 'Link Active', isDefault: true, url: 'workspace.html' }
-  ];
+  const PLANS_STORAGE_KEY = 'fitnessPlannerPlans';
+
+  function loadPlans() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(PLANS_STORAGE_KEY) || '[]');
+      if (saved && saved.length > 0) return saved;
+    } catch(e) {}
+    return [{ id: 'default_index', name: 'My Plan', age: '--', height: '--', weight: '--', bmi: 'Link Active', isDefault: true, url: 'workspace.html' }];
+  }
+
+  function savePlans() {
+    localStorage.setItem(PLANS_STORAGE_KEY, JSON.stringify(createdPlans));
+  }
+
+  let createdPlans = loadPlans();
 
   function switchLanguage(lang) {
     activeLang = lang;
@@ -454,6 +478,7 @@
     };
 
     createdPlans.push(newPlan);
+    savePlans();
     renderPlansDashboard();
     nameField.value = "";
   }
@@ -487,7 +512,7 @@
         const delBtn = document.createElement('button');
         delBtn.className = 'btn-delete-plan';
         delBtn.innerText = dictionary.btnDelete[activeLang];
-        delBtn.onclick = (e) => { e.stopPropagation(); createdPlans = createdPlans.filter(p => p.id !== plan.id); renderPlansDashboard(); };
+        delBtn.onclick = (e) => { e.stopPropagation(); createdPlans = createdPlans.filter(p => p.id !== plan.id); savePlans(); renderPlansDashboard(); };
         li.appendChild(delBtn);
       } else {
         const badge = document.createElement('span');
@@ -499,7 +524,26 @@
     });
   }
 
-  window.onload = () => { switchLanguage('ar'); };
+  window.onload = () => { 
+    switchLanguage('ar');
+
+    // Live sync inputs to stat boxes
+    document.getElementById('age').addEventListener('input', function() {
+      document.getElementById('liveAge').innerText = this.value || '--';
+    });
+    document.getElementById('height').addEventListener('input', function() {
+      document.getElementById('liveHeight').innerText = this.value || '--';
+      const w = document.getElementById('weight').value;
+      const bmi = calculateBmiMetric(w, this.value);
+      document.getElementById('liveBmi').innerText = bmi;
+    });
+    document.getElementById('weight').addEventListener('input', function() {
+      document.getElementById('liveWeight').innerText = this.value || '--';
+      const h = document.getElementById('height').value;
+      const bmi = calculateBmiMetric(this.value, h);
+      document.getElementById('liveBmi').innerText = bmi;
+    });
+  };
 </script>
 </body>
 </html>
