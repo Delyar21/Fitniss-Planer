@@ -1138,10 +1138,15 @@ body.edit-mode::after {
   opacity: 0;
   cursor: ew-resize;
   margin: 0;
+  z-index: 2;
+}
+
+.progress-bar {
+  position: relative;
 }
 
 .progress-bar:hover .prog-slider {
-  opacity: .5;
+  opacity: .6;
 }
 
 /* HIGHLIGHT EDITABLE CONTAINERS IN EDIT MODE */
