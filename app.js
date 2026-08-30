@@ -952,22 +952,13 @@ function injectBiometricBanner(name, age, height, weight, bmi) {
 // Parse all current data out of the URL string on load
 function getPlanContext() {
     const urlParams = new URLSearchParams(window.location.search);
-    const planId = urlParams.get('planId') || 'default';
-    let savedPlan = null;
-    if (planId !== 'default') {
-      try {
-        const plans = JSON.parse(localStorage.getItem('fitnessPlannerPlans') || '[]');
-        savedPlan = plans.find(p => p.id === planId) || null;
-      } catch (_) {}
-    }
     return {
-        planId,
-        name: savedPlan?.name || urlParams.get('name') || 'My Plan',
-        age: savedPlan?.age ?? urlParams.get('age') ?? '--',
-        height: savedPlan?.height ?? urlParams.get('height') ?? '--',
-        weight: savedPlan?.weight ?? urlParams.get('weight') ?? '--',
-        bmi: savedPlan?.bmi ?? urlParams.get('bmi') ?? '--',
-        customStats: Array.isArray(savedPlan?.customStats) ? savedPlan.customStats : [],
+        planId: urlParams.get('planId') || 'default',
+        name: urlParams.get('name') || 'My Plan',
+        age: urlParams.get('age') || '--',
+        height: urlParams.get('height') || '--',
+        weight: urlParams.get('weight') || '--',
+        bmi: urlParams.get('bmi') || '--',
         // Exercises are compressed and encoded inside a single string parameter 'data'
         rawExercises: urlParams.get('data') || ''
     };
@@ -1191,25 +1182,6 @@ function onAddExerciseFormSubmit(event) {
     ['months', 'target', 'marathon'].forEach(key => {
       const el = document.querySelector(`[data-stat="${key}"]`);
       if (el) el.style.display = 'none';
-    });
-
-    // Restore custom statistic fields created in the plan builder.
-    document.querySelectorAll('.custom-plan-stat').forEach(el => el.remove());
-    const statsBar = document.querySelector('.stats-bar');
-    (ctx.customStats || []).forEach((stat, index) => {
-      if (!statsBar || !stat?.label) return;
-      const box = document.createElement('div');
-      box.className = 'stat custom-plan-stat';
-      box.dataset.customStatIndex = index;
-      const value = document.createElement('div');
-      value.className = 'stat-val cal';
-      value.textContent = String(stat.value ?? '--');
-      const label = document.createElement('div');
-      label.className = 'stat-lbl';
-      label.textContent = String(stat.label);
-      box.appendChild(value);
-      box.appendChild(label);
-      statsBar.appendChild(box);
     });
 
     // Hide Marathon tab for custom plans (marathon is a default-plan feature)
@@ -1508,7 +1480,7 @@ const TabManager = (function() {
    - Exercise library + media
    - Rest timer
    - Web Bluetooth heart-rate integration
-   - Ollama Qwen3 Coach
+   - Qwen3 Coach placeholder (Coming Soon)
    ============================================================ */
 (function () {
   'use strict';
@@ -1523,9 +1495,9 @@ const TabManager = (function() {
     ollamaModel: () => 'fitness_ollama_model_v3_' + planScope()
   };
   const I18N = {
-    ar:{tracker:'متتبع التمرين',timer:'المؤقت',library:'مكتبة التمارين',media:'صور/فيديو التمارين',watch:'ساعة/سوار ذكي',coach:'مدرب Qwen3:8b',reset:'إعادة ضبط اللوحة الشخصية',title:'🏋️ التدريب 2.0',desc:'سجّل المجموعات والتكرارات والوزن وRIR لكل تمرين، أضف الصور والفيديو، واستخدم المؤقت. بيانات كل خطة منفصلة.',search:'ابحث عن تمرين أو مجموعة عضلية',all:'الكل',addExercise:'+ إضافة تمرين',track:'تتبع',mediaBtn:'وسائط',noMedia:'🎯 لا توجد وسائط',save:'💾 حفظ',remove:'حذف',addSet:'＋ مجموعة',completed:'مجموعات مكتملة',volume:'الحجم',reps:'التكرارات',weight:'الوزن كغ',rir:'RIR',done:'تم',set:'المجموعة',custom:'مخصص',send:'إرسال',coachPlaceholder:'اسأل مدرب اللياقة …',url:'رابط Ollama',model:'النموذج',resetConfirm:'حذف بيانات التدريب والوسائط والتمارين المخصصة لهذه الخطة فقط؟',resetDone:'تمت إعادة ضبط بيانات هذه الخطة فقط.',watchReady:'جاهز للاتصال بجهاز قياس نبض عبر Bluetooth.',watchUnsupported:'Web Bluetooth غير مدعوم في هذا المتصفح.',connect:'🔗 اتصال الجهاز',hr:'❤️ معدل نبض القلب'},
-    de:{tracker:'Training-Tracker',timer:'Timer',library:'Übungsbibliothek',media:'Übungsbilder / Videos',watch:'Smartwatch / Fitnessarmband',coach:'Qwen3 Coach',reset:'Persönliches Panel zurücksetzen',title:'🏋️ Training 2.0',desc:'Sätze, Wiederholungen, Gewicht und RIR erfassen, Bilder/Videos hinterlegen und den Timer nutzen. Daten werden pro Plan getrennt gespeichert.',search:'Übung oder Muskelgruppe suchen',all:'Alle',addExercise:'+ Eigene Übung',track:'Tracken',mediaBtn:'Medien',noMedia:'🎯 Keine Medien',save:'💾 Speichern',remove:'Entfernen',addSet:'＋ Satz',completed:'Sätze abgeschlossen',volume:'Volumen',reps:'Wdh.',weight:'Gewicht kg',rir:'RIR',done:'Fertig',set:'Satz',custom:'Benutzerdefiniert',send:'Senden',coachPlaceholder:'Frag deinen Fitness-Coach …',url:'Ollama-URL',model:'Modell',resetConfirm:'Trainingsdaten, Medien und eigene Übungen nur für diesen Plan löschen?',resetDone:'Daten dieses Plans wurden zurückgesetzt.',watchReady:'Bereit für ein Bluetooth-Herzfrequenzgerät.',watchUnsupported:'Web Bluetooth wird in diesem Browser nicht unterstützt.',connect:'🔗 Gerät verbinden',hr:'❤️ Herzfrequenz'},
-    en:{tracker:'Training Tracker',timer:'Timer',library:'Exercise Library',media:'Exercise Media',watch:'Smartwatch / Band',coach:'Qwen3 Coach',reset:'Reset Personal Panel',title:'🏋️ Training 2.0',desc:'Track sets, repetitions, weight and RIR, attach exercise media and use the rest timer. Data is isolated per plan.',search:'Search exercise or muscle group',all:'All',addExercise:'+ Custom Exercise',track:'Track',mediaBtn:'Media',noMedia:'🎯 No media yet',save:'💾 Save',remove:'Remove',addSet:'＋ Set',completed:'sets completed',volume:'Volume',reps:'Reps',weight:'Weight kg',rir:'RIR',done:'Done',set:'Set',custom:'Custom',send:'Send',coachPlaceholder:'Ask your fitness coach …',url:'Ollama URL',model:'Model',resetConfirm:'Delete training data, media and custom exercises for this plan only?',resetDone:'This plan’s data was reset.',watchReady:'Ready for a Bluetooth heart-rate device.',watchUnsupported:'Web Bluetooth is not supported in this browser.',connect:'🔗 Connect device',hr:'❤️ Heart rate'}
+    ar:{tracker:'متتبع التمرين',timer:'المؤقت',library:'مكتبة التمارين',media:'صور/فيديو التمارين',watch:'ساعة/سوار ذكي',coach:'مدرب Qwen3',reset:'إعادة ضبط اللوحة الشخصية',title:'🏋️ التدريب 2.0',desc:'سجّل المجموعات والتكرارات والوزن وRIR لكل تمرين، أضف الصور والفيديو، واستخدم المؤقت. بيانات كل خطة منفصلة.',search:'ابحث عن تمرين أو مجموعة عضلية',all:'الكل',addExercise:'+ إضافة تمرين',track:'تتبع',mediaBtn:'وسائط',noMedia:'🎯 لا توجد وسائط',save:'💾 حفظ',remove:'حذف',addSet:'＋ مجموعة',completed:'مجموعات مكتملة',volume:'الحجم',reps:'التكرارات',weight:'الوزن كغ',rir:'RIR',done:'تم',set:'المجموعة',custom:'مخصص',resetConfirm:'حذف بيانات التدريب والوسائط والتمارين المخصصة لهذه الخطة فقط؟',resetDone:'تمت إعادة ضبط بيانات هذه الخطة فقط.',watchReady:'جاهز للاتصال بجهاز قياس نبض عبر Bluetooth.',watchUnsupported:'Web Bluetooth غير مدعوم في هذا المتصفح.',connect:'🔗 اتصال الجهاز',hr:'❤️ معدل نبض القلب'},
+    de:{tracker:'Training-Tracker',timer:'Timer',library:'Übungsbibliothek',media:'Übungsbilder / Videos',watch:'Smartwatch / Fitnessarmband',coach:'Qwen3 Coach',reset:'Persönliches Panel zurücksetzen',title:'🏋️ Training 2.0',desc:'Sätze, Wiederholungen, Gewicht und RIR erfassen, Bilder/Videos hinterlegen und den Timer nutzen. Daten werden pro Plan getrennt gespeichert.',search:'Übung oder Muskelgruppe suchen',all:'Alle',addExercise:'+ Eigene Übung',track:'Tracken',mediaBtn:'Medien',noMedia:'🎯 Keine Medien',save:'💾 Speichern',remove:'Entfernen',addSet:'＋ Satz',completed:'Sätze abgeschlossen',volume:'Volumen',reps:'Wdh.',weight:'Gewicht kg',rir:'RIR',done:'Fertig',set:'Satz',custom:'Benutzerdefiniert',resetConfirm:'Trainingsdaten, Medien und eigene Übungen nur für diesen Plan löschen?',resetDone:'Daten dieses Plans wurden zurückgesetzt.',watchReady:'Bereit für ein Bluetooth-Herzfrequenzgerät.',watchUnsupported:'Web Bluetooth wird in diesem Browser nicht unterstützt.',connect:'🔗 Gerät verbinden',hr:'❤️ Herzfrequenz'},
+    en:{tracker:'Training Tracker',timer:'Timer',library:'Exercise Library',media:'Exercise Media',watch:'Smartwatch / Band',coach:'Qwen3 Coach',reset:'Reset Personal Panel',title:'🏋️ Training 2.0',desc:'Track sets, repetitions, weight and RIR, attach exercise media and use the rest timer. Data is isolated per plan.',search:'Search exercise or muscle group',all:'All',addExercise:'+ Custom Exercise',track:'Track',mediaBtn:'Media',noMedia:'🎯 No media yet',save:'💾 Save',remove:'Remove',addSet:'＋ Set',completed:'sets completed',volume:'Volume',reps:'Reps',weight:'Weight kg',rir:'RIR',done:'Done',set:'Set',custom:'Custom',resetConfirm:'Delete training data, media and custom exercises for this plan only?',resetDone:'This plan’s data was reset.',watchReady:'Ready for a Bluetooth heart-rate device.',watchUnsupported:'Web Bluetooth is not supported in this browser.',connect:'🔗 Connect device',hr:'❤️ Heart rate'}
   };
   const t = k => (I18N[currentLang] || I18N.en)[k] || I18N.en[k] || k;
 const EXERCISE_I18N = {
@@ -1678,31 +1650,12 @@ const EXERCISE_I18N = {
   function write(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
   function allExercises() {
     const custom = read(STORAGE.library(), []);
-
-    // IMPORTANT: only read exercise cards from the currently selected language.
-    // The old selector collected cards from all three hidden language blocks,
-    // which caused mixed Arabic/German/English exercises in the library.
-    const activeExercisesRoot = document.querySelector(`#sec-exercises [data-lang="${currentLang}"]`);
-    const staticCards = [...(activeExercisesRoot?.querySelectorAll('.ex-card .ex-name') || [])].map((el, i) => {
+    const staticCards = [...document.querySelectorAll('.ex-card .ex-name')].map((el, i) => {
       const card = el.closest('.ex-card');
-      return {
-        id:'page-' + currentLang + '-' + i,
-        name:el.textContent.trim(),
-        muscle:card?.querySelector('.ex-type')?.textContent.trim() || 'General',
-        type:'Plan',
-        target:card?.querySelector('.set-badge')?.textContent.trim() || '',
-        language: currentLang
-      };
+      return { id:'page-' + i, name:el.textContent.trim(), muscle:card?.querySelector('.ex-type')?.textContent.trim() || 'General', type:'Plan', target:card?.querySelector('.set-badge')?.textContent.trim() || '' };
     });
-
-    // Custom exercises are language-scoped. Legacy entries without a language
-    // remain visible so existing user data is not lost.
-    const languageCustom = custom.filter(e => !e.language || e.language === currentLang);
-
     const map = new Map();
-    [...seedExercises, ...staticCards, ...languageCustom].forEach(e => {
-      if (e.name) map.set(e.name.toLowerCase(), e);
-    });
+    [...seedExercises, ...staticCards, ...custom].forEach(e => { if (e.name) map.set(e.name.toLowerCase(), e); });
     return [...map.values()].map(e => ({...e, displayName: exerciseName(e.name), displayMuscle: muscleLabel(e.muscle)}));
   }
   function escapeHtml(s) { return String(s ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
@@ -1766,7 +1719,7 @@ const EXERCISE_I18N = {
   function addCustomExercise(){
     openModal('＋ '+t('addExercise'), `<div class="form-grid"><label>${currentLang==='ar'?'الاسم':currentLang==='de'?'Name':'Name'}<input id="new-ex-name"></label><label>${currentLang==='ar'?'مجموعة عضلية':currentLang==='de'?'Muskelgruppe':'Muscle group'}<input id="new-ex-muscle" placeholder="Biceps"></label><label>${currentLang==='ar'?'النوع':currentLang==='de'?'Typ':'Type'}<select id="new-ex-type"><option>Gym</option><option>Calisthenics</option><option>Cardio</option></select></label><label>${currentLang==='ar'?'النطاق':currentLang==='de'?'Zielbereich':'Target'}<input id="new-ex-target" value="3 × 10-12"></label><div class="form-full"><button class="primary-btn" onclick="FitnessFeatures.saveCustomExercise()">${t('save')}</button></div></div>`);
   }
-  function saveCustomExercise(){const name=document.getElementById('new-ex-name').value.trim();if(!name)return;const list=read(STORAGE.library(),[]);list.push({id:'custom-'+Date.now(),name,muscle:document.getElementById('new-ex-muscle').value||'General',type:document.getElementById('new-ex-type').value,target:document.getElementById('new-ex-target').value||'',language:currentLang});write(STORAGE.library(),list);showToast('✅ '+(currentLang==='ar'?'تمت إضافة التمرين':currentLang==='de'?'Übung hinzugefügt':'Exercise added'));openLibrary();}
+  function saveCustomExercise(){const name=document.getElementById('new-ex-name').value.trim();if(!name)return;const list=read(STORAGE.library(),[]);list.push({id:'custom-'+Date.now(),name,muscle:document.getElementById('new-ex-muscle').value||'General',type:document.getElementById('new-ex-type').value,target:document.getElementById('new-ex-target').value||''});write(STORAGE.library(),list);showToast('✅ '+(currentLang==='ar'?'تمت إضافة التمرين':currentLang==='de'?'Übung hinzugefügt':'Exercise added'));openLibrary();}
 
   function openMediaPicker(exercise){
     const name=exercise || document.querySelector('.ex-card .ex-name')?.textContent.trim() || allExercises()[0]?.name || '';
@@ -1793,26 +1746,45 @@ const EXERCISE_I18N = {
   }
 
   function openChat(){
-    const chat=read(STORAGE.chat(),[]);
-    openModal('🤖 '+t('coach'), `<div class="chat-config"><input id="ollama-url" value="${escapeHtml(localStorage.getItem(STORAGE.ollamaUrl())||'http://localhost:11434')}" placeholder="${t('url')}"><input id="ollama-model" value="${escapeHtml(localStorage.getItem(STORAGE.ollamaModel())||'qwen3:8b')}" placeholder="${t('model')}"></div><div class="chat-messages" id="chat-messages">${chat.map(m=>`<div class="chat-msg ${m.role==='user'?'user':'bot'}">${escapeHtml(m.content)}</div>`).join('')}</div><div class="chat-input"><textarea id="chat-input" placeholder="${t('coachPlaceholder')}"></textarea><button class="primary-btn" onclick="FitnessFeatures.sendChat()">${t('send')}</button></div><p style="color:var(--muted);font-size:.72rem;margin-top:.5rem">Ollama muss erreichbar sein. Standard: localhost:11434 · Modell: qwen3:8b.</p>`);
-    const box=document.getElementById('chat-messages');if(box)box.scrollTop=box.scrollHeight;
+    const comingSoon = {
+      ar: {
+        title: '🤖 مدرب Qwen3',
+        heading: 'Coming Soon',
+        text: 'مدرب الذكاء الاصطناعي سيكون متاحًا قريبًا.'
+      },
+      de: {
+        title: '🤖 Qwen3 Coach',
+        heading: 'Coming Soon',
+        text: 'Der KI-Fitness-Coach wird bald verfügbar sein.'
+      },
+      en: {
+        title: '🤖 Qwen3 Coach',
+        heading: 'Coming Soon',
+        text: 'The AI fitness coach will be available soon.'
+      }
+    }[currentLang] || {
+      title: '🤖 Qwen3 Coach',
+      heading: 'Coming Soon',
+      text: 'The AI fitness coach will be available soon.'
+    };
+
+    openModal(comingSoon.title, `
+      <div class="coach-coming-soon ${currentLang === 'ar' ? 'rtl' : ''}">
+        <div class="coach-coming-icon">🤖</div>
+        <h2>${comingSoon.heading}</h2>
+        <p>${comingSoon.text}</p>
+      </div>
+    `);
   }
+
   async function sendChat(){
-    const input=document.getElementById('chat-input'), msg=input?.value.trim();if(!msg)return;
-    const url=(document.getElementById('ollama-url').value||'http://localhost:11434').replace(/\/$/,'');const model=document.getElementById('ollama-model').value||'qwen3:8b';localStorage.setItem(STORAGE.ollamaUrl(),url);localStorage.setItem(STORAGE.ollamaModel(),model);
-    const history=read(STORAGE.chat(),[]);history.push({role:'user',content:msg});write(STORAGE.chat(),history);openChat();
-    const box=document.getElementById('chat-messages');box.insertAdjacentHTML('beforeend','<div class="chat-msg bot">⏳ Qwen3 denkt …</div>');box.scrollTop=box.scrollHeight;
-    try{
-      const res=await fetch(url+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model,stream:false,messages:[{role:'system',content:'You are a concise fitness coach inside a workout tracker. Give practical training guidance, exercise substitutions, progression ideas, and logging advice. Do not diagnose injuries or provide medical treatment.'},...history.slice(-12)]})});
-      if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();const answer=data.message?.content||'Keine Antwort erhalten.';const updated=read(STORAGE.chat(),[]);updated.push({role:'assistant',content:answer});write(STORAGE.chat(),updated);openChat();
-    }catch(err){const box2=document.getElementById('chat-messages');const last=box2?.lastElementChild;if(last)last.textContent='⚠️ Ollama konnte nicht erreicht werden. Prüfe URL, CORS und ob das Modell verfügbar ist.';}
+    // AI coach is intentionally disabled until the feature is released.
+    openChat();
   }
 
 
   function refreshLanguage(){
     document.querySelectorAll('[data-feature]').forEach(btn=>{const label=btn.querySelector('.feature-label');const key=btn.dataset.feature;if(label&&t(key))label.textContent=t(key);});
-    // If the library is currently open, immediately rebuild it in the new language.
-    if(document.getElementById('fitness-feature-modal')?.classList.contains('open') && document.getElementById('library-grid')) openLibrary();
     document.querySelectorAll('.exercise-media-btn').forEach(b=>b.textContent='🎥 '+(currentLang==='ar'?'وسائط':currentLang==='de'?'Medien':'Media'));
     const title=document.getElementById('training-feature-title'); if(title) title.textContent=t('title');
     const desc=document.getElementById('training-feature-description'); if(desc) desc.textContent=t('desc');
@@ -1823,20 +1795,45 @@ const EXERCISE_I18N = {
   }
   function resetPersonalData(){
     if(!confirm(t('resetConfirm'))) return;
-    [STORAGE.logs(),STORAGE.library(),STORAGE.media(),STORAGE.chat(),STORAGE.ollamaUrl(),STORAGE.ollamaModel()].forEach(k=>localStorage.removeItem(k));
+    [STORAGE.logs(),STORAGE.library(),STORAGE.media()].forEach(k=>localStorage.removeItem(k));
     showToast('↻ '+t('resetDone')); closeModal();
   }
   window.FitnessFeatures={openTracker,addSet,removeSet,saveTracker,openTimer,setTimer,customTimer,toggleTimer,resetTimer,openLibrary,trackExercise,addCustomExercise,saveCustomExercise,openMediaPicker,editMedia,saveMedia,removeMedia,connectHeartRate,pairHeartRate,openChat,sendChat,closeModal,resetPersonalData,refreshLanguage};
 
-  // Modal UX: close when clicking the backdrop (outside the dialog) or pressing Escape.
-  document.addEventListener('click', e => {
+  // ============================================================
+// MODAL UX
+// Bibliothek / andere Fitness-Panels:
+// - Klick außerhalb des Panels → schließen
+// - ESC → schließen
+// ============================================================
+
+document.addEventListener('click', function (event) {
     const modal = document.getElementById('fitness-feature-modal');
-    const dialog = modal?.querySelector('.feature-dialog');
-    if (modal?.classList.contains('open') && e.target === modal && !dialog?.contains(e.target)) closeModal();
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && document.getElementById('fitness-feature-modal')?.classList.contains('open')) closeModal();
-  });
+
+    if (!modal || !modal.classList.contains('open')) {
+        return;
+    }
+
+    const dialog = modal.querySelector('.feature-dialog');
+
+    // Nur schließen, wenn wirklich der Hintergrund
+    // außerhalb des Dialogs angeklickt wurde.
+    if (event.target === modal && !dialog.contains(event.target)) {
+        closeModal();
+    }
+});
+
+document.addEventListener('keydown', function (event) {
+    const modal = document.getElementById('fitness-feature-modal');
+
+    if (
+        event.key === 'Escape' &&
+        modal &&
+        modal.classList.contains('open')
+    ) {
+        closeModal();
+    }
+});
 
   window.addEventListener('load',()=>{
     // Add a media button to every existing exercise card.

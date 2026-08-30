@@ -1501,24 +1501,56 @@ body, p, li, .tip-text, .phase p, .ex-detail, .meal-desc, .budget-desc, .checkli
 
 
 /* ============================================================
-   CUSTOM PLAN STAT BOXES + MODAL BACKDROP UX
+   QWEN3 COACH - COMING SOON
+   The coach button stays visible, but the AI is disabled.
    ============================================================ */
-.custom-stat-box .custom-stat-value {
-  min-height: 1.8rem;
-  padding: .15rem .35rem;
-  cursor: text;
+
+.coach-coming-soon {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  box-sizing: border-box;
 }
-.custom-stat-box .custom-stat-value:focus {
-  outline: 1px solid var(--cal) !important;
-  background: rgba(232,255,60,.06);
+
+.coach-coming-icon {
+  font-size: 4.5rem;
+  margin-bottom: 1.2rem;
+  animation: coachFloat 2.5s ease-in-out infinite;
 }
-.custom-plan-stat {
-  animation: customStatIn .18s ease-out;
+
+.coach-coming-soon h2 {
+  margin: 0 0 .8rem;
+  font-size: 2.2rem;
+  color: var(--accent);
+  letter-spacing: .08em;
 }
-@keyframes customStatIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+
+.coach-coming-soon p {
+  margin: 0;
+  max-width: 600px;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
 }
-.feature-modal { cursor: default; }
-.feature-modal.open { cursor: pointer; }
-.feature-dialog { cursor: default; }
+
+.coach-coming-soon.rtl {
+  direction: rtl;
+}
+
+.coach-coming-soon.rtl h2 {
+  letter-spacing: 0;
+}
+
+@keyframes coachFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}

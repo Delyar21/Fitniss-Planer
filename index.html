@@ -401,7 +401,6 @@
   }
 
   let createdPlans = loadPlans();
-  let pendingCustomStats = [];
 
   function switchLanguage(lang) {
     activeLang = lang;
@@ -430,58 +429,32 @@
   function addNewStatBox() {
     const inputField = document.getElementById('customStatName');
     const labelText = inputField.value.trim();
-    if (!labelText) {
-      inputField.focus();
-      return;
-    }
+    if (!labelText) return;
 
     const bar = document.getElementById('dynamicStatsBar');
     const box = document.createElement('div');
-    box.className = 'stat-box custom-stat-box';
-    box.dataset.customStat = 'true';
+    box.className = 'stat-box';
     
     const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
     removeBtn.className = 'remove-stat-btn';
     removeBtn.innerHTML = '&times;';
-    removeBtn.title = activeLang === 'ar' ? 'حذف' : activeLang === 'de' ? 'Entfernen' : 'Remove';
-    removeBtn.onclick = function() {
-      box.remove();
-      pendingCustomStats = pendingCustomStats.filter(x => x.id !== box.dataset.statId);
-    };
+    removeBtn.onclick = function() { box.remove(); };
     
     const lbl = document.createElement('div');
     lbl.className = 'label';
     lbl.innerText = labelText;
     
     const val = document.createElement('div');
-    val.className = 'value custom-stat-value';
-    val.contentEditable = 'true';
-    val.innerText = '--';
-    val.style.outline = 'none';
-
-    const stat = { id: 'stat_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7), label: labelText, value: '--' };
-    box.dataset.statId = stat.id;
-    pendingCustomStats.push(stat);
-
-    val.addEventListener('input', () => {
-      stat.value = val.innerText.trim() || '--';
-    });
-
+    val.className = 'value';
+    val.contentEditable = "true";
+    val.innerText = "- -";
+    val.style.outline = "none";
+    
     box.appendChild(removeBtn);
     box.appendChild(lbl);
     box.appendChild(val);
     bar.appendChild(box);
-    inputField.value = '';
-    inputField.focus();
-  }
-
-  function collectCustomStats() {
-    return [...document.querySelectorAll('#dynamicStatsBar .custom-stat-box')].map(box => ({
-      id: box.dataset.statId || ('stat_' + Date.now()),
-      label: box.querySelector('.label')?.textContent.trim() || '',
-      value: box.querySelector('.custom-stat-value')?.textContent.trim() || '--'
-    })).filter(x => x.label);
+    inputField.value = "";
   }
 
   function generateWorkoutPlan() {
@@ -500,7 +473,6 @@
       id: 'plan_' + Date.now(),
       name: planName,
       age, height, weight, bmi: finalBmi,
-      customStats: collectCustomStats(),
       isDefault: false,
       url: 'workspace.html'
     };
@@ -508,8 +480,6 @@
     createdPlans.push(newPlan);
     savePlans();
     renderPlansDashboard();
-    pendingCustomStats = [];
-    document.querySelectorAll('#dynamicStatsBar .custom-stat-box').forEach(el => el.remove());
     nameField.value = "";
   }
 
