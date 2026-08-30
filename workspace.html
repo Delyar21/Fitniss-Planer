@@ -15,21 +15,20 @@
   </div>
 
   <div class="stats-bar">
-    <div class="stat"><div class="stat-val gym">94</div><div class="stat-lbl">KG CURRENT</div></div>
-    <div class="stat"><div class="stat-val cal">31.4</div><div class="stat-lbl">BMI</div></div>
-    <div class="stat"><div class="stat-val run">11</div><div class="stat-lbl">MONTHS TO MARATHON</div></div>
-    <div class="stat"><div class="stat-val food">~75</div><div class="stat-lbl">KG TARGET</div></div>
-    <div class="stat"><div class="stat-val gym">173</div><div class="stat-lbl">CM HEIGHT</div></div>
-    <div class="stat"><div class="stat-val run">42.2</div><div class="stat-lbl">KM MARATHON</div></div>
+    <div class="stat" data-stat="weight"><div class="stat-val gym">94</div><div class="stat-lbl" data-stat-label="weight">KG CURRENT</div></div>
+    <div class="stat" data-stat="bmi"><div class="stat-val cal">31.4</div><div class="stat-lbl" data-stat-label="bmi">BMI</div></div>
+    <div class="stat" data-stat="months"><div class="stat-val run">11</div><div class="stat-lbl" data-stat-label="months">MONTHS TO MARATHON</div></div>
+    <div class="stat" data-stat="target"><div class="stat-val food">~75</div><div class="stat-lbl" data-stat-label="target">KG TARGET</div></div>
+    <div class="stat" data-stat="height"><div class="stat-val gym">173</div><div class="stat-lbl" data-stat-label="height">CM HEIGHT</div></div>
+    <div class="stat" data-stat="marathon"><div class="stat-val run">42.2</div><div class="stat-lbl" data-stat-label="marathon">KM MARATHON</div></div>
   </div>
-  <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid #334155; padding: 12px 20px; border-radius: 8px; margin: 15px auto; max-width: 1200px; display: flex; justify-content: space-between; align-items: center;" dir="ltr">
-    <div>
-        <span style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Active Session Profile:</span>
-        <strong style="color: #fff; margin-left: 8px;" id="currentActivePlanName">My Plan</strong>
-    </div>
-    <button onclick="window.location.href='index.html'" style="background: #3b82f6; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600;">
-        &larr; Switch / Add Custom Plans
-    </button>
+  <a id="custom-plan-switch" class="custom-plan-switch" href="index.html" aria-label="Switch or add custom plans">
+    <span class="custom-plan-switch-icon">←</span>
+    <span data-switch-label>Switch / Add Custom Plans</span>
+  </a>
+  <div class="active-profile-bar" dir="ltr">
+    <span class="active-profile-label" data-active-profile-label>Active Session Profile:</span>
+    <strong id="currentActivePlanName">My Plan</strong>
   </div>
   <div class="lang-bar">
     <button class="lang-btn active" onclick="setLang('ar', this)">🇸🇦 عربي</button>
@@ -340,6 +339,20 @@
 
   <div class="section" id="sec-exercises">
     <div class="content">
+
+      <div class="feature-hub" aria-label="Fitness Tools">
+        <button class="feature-btn" data-feature="tracker" onclick="FitnessFeatures.openTracker()"><span class="feature-icon">📊</span><span class="feature-label">Training Tracker</span></button>
+        <button class="feature-btn" data-feature="timer" onclick="FitnessFeatures.openTimer()"><span class="feature-icon">⏱️</span><span class="feature-label">Timer</span></button>
+        <button class="feature-btn" data-feature="library" onclick="FitnessFeatures.openLibrary()"><span class="feature-icon">📚</span><span class="feature-label">Exercise Library</span></button>
+        <button class="feature-btn" data-feature="media" onclick="FitnessFeatures.openMediaPicker()"><span class="feature-icon">🎥</span><span class="feature-label">Exercise Media</span></button>
+        <button class="feature-btn" data-feature="watch" onclick="FitnessFeatures.connectHeartRate()"><span class="feature-icon">⌚</span><span class="feature-label">Smartwatch / Band</span></button>
+        <button class="feature-btn" data-feature="coach" onclick="FitnessFeatures.openChat()"><span class="feature-icon">🤖</span><span class="feature-label">GLM-5.2 Coach</span></button>
+        <button class="feature-btn feature-reset-btn" data-feature="reset" onclick="FitnessFeatures.resetPersonalData()"><span class="feature-icon">↻</span><span class="feature-label">Reset Personal Panel</span></button>
+      </div>
+      <div class="feature-panel" id="training-feature-panel">
+        <h3 id="training-feature-title">🏋️ Training 2.0</h3>
+        <p id="training-feature-description">Track sets, repetitions, weight and RIR per exercise, attach exercise media, browse the exercise library and use the rest timer. Your training data is stored separately for each plan.</p>
+      </div>
 
       <!-- ===== ARABIC ===== -->
       <div class="show" data-lang="ar">
@@ -926,58 +939,18 @@
         </div>
       </div>
 
-      <div class="show" data-lang="ar">
-        <div class="sec-title">نوادي رياضية في بوخوم</div>
-        <ul class="checklist">
-          <li><strong>McFit Bochum:</strong> ~15€/Monat · الأرخص · 24/7 · معدات كافية تماماً لخطتك</li>
-          <li><strong>FitX Bochum:</strong> ~20€/Monat · أفضل من McFit قليلاً · نوادي متعددة</li>
-          <li><strong>Stadtbad / Freibad:</strong> للسباحة (تعافي ممتاز) · ~5€/دخول</li>
-          <li><strong>Free:</strong> حدائق بوخوم للجري + أجهزة الكاليستانيكس في الأماكن العامة (ابحث "Outdoor Fitness Bochum")</li>
-        </ul>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">FITNESSSTUDIOS IN BOCHUM</div>
-        <ul class="checklist">
-          <li><strong>McFit Bochum:</strong> ~15€/Monat · Günstigste Option · 24/7 · Ausreichend für deinen Plan</li>
-          <li><strong>FitX Bochum:</strong> ~20€/Monat · Etwas besser ausgestattet · Mehrere Standorte</li>
-          <li><strong>Stadtbad / Freibad:</strong> Zum Schwimmen (hervorragende aktive Regeneration) · ~5€/Eintritt</li>
-          <li><strong>Free:</strong> Parkanlagen für Laufen + Outdoor Fitness Bochum (Calisthenics im Freien, suche nach "Outdoor Fitness Bochum")</li>
-        </ul>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">GYMS IN BOCHUM</div>
-        <ul class="checklist">
-          <li><strong>McFit Bochum:</strong> ~€15/month · Cheapest option · 24/7 · Perfectly sufficient hardware for your plan</li>
-          <li><strong>FitX Bochum:</strong> ~€20/month · Slightly better vibe/equipment · Multiple gym access across Germany</li>
-          <li><strong>Stadtbad / Freibad:</strong> For swimming (excellent muscle recovery) · ~€5 per entry</li>
-          <li><strong>Free:</strong> Local parks for outdoor cardio + public calisthenics rigs (search for "Outdoor Fitness Bochum")</li>
-        </ul>
-      </div>
-      <div class="show" data-lang="ar">
-        <div class="sec-title">نصيحة الدين</div>
-        <div class="tip">
-          <div class="tip-icon">💡</div>
-          <div class="tip-text">بعد سداد الـ700€ هذا الشهر، دخلك المتاح سيرتفع لـ870€. استثمر 150-180€ في طعام صحي + 20€ نادي = <strong>700€ يتبقى للإيجار والمعيشة</strong>. الصحة ليست ترفاً، هي استثمار في حياتك ومستقبلك.</div>
-        </div>
-      </div>
-      <div data-lang="de">
-        <div class="sec-title">WICHTIGER TIPP</div>
-        <div class="tip">
-          <div class="tip-icon">💡</div>
-          <div class="tip-text">Nach Abzahlung der 700€ erhöht sich dein verfügbares Einkommen auf 870€. Investiere 150-180€ in gesunde Lebensmittel + 20€ Gym = <strong>700€ verbleibend für Miete und Lebenshaltung</strong>. Gesundheit ist kein Luxus, sondern eine Investition in dein Leben und deine Zukunft.</div>
-        </div>
-      </div>
-      <div data-lang="en">
-        <div class="sec-title">IMPORTANT ADVICE</div>
-        <div class="tip">
-          <div class="tip-icon">💡</div>
-          <div class="tip-text">After you pay off the €700 debt this month, your available income rises to €870. Invest €150-180 in healthy food + €20 gym = <strong>€700 left for rent and living expenses</strong>. Health is not a luxury — it's an investment in your life and future.</div>
-        </div>
-      </div>
     </div>
   </div>
 
 
+
+  <!-- FITNESS FEATURE MODALS -->
+  <div id="fitness-feature-modal" class="feature-modal" role="dialog" aria-modal="true">
+    <div class="feature-dialog">
+      <div class="feature-dialog-head"><h2 id="feature-modal-title">Fitness Tool</h2><button class="feature-close" onclick="FitnessFeatures.closeModal()">✕</button></div>
+      <div id="feature-modal-body"></div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
